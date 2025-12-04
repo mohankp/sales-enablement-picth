@@ -24,8 +24,16 @@ src/
 │       └── tables.py
 ├── models/          # Pydantic data models
 │   ├── content.py   # Content models (PageContent, ContentBlock, etc.)
+│   ├── processed.py # Processed content models (features, benefits, etc.)
 │   └── config.py    # Configuration models
-├── processing/      # Content understanding (LLM) [TODO]
+├── llm/             # LLM integration layer
+│   ├── client.py    # Anthropic API client with retry/streaming
+│   ├── config.py    # Model settings and pricing
+│   ├── prompts.py   # Prompt template management
+│   └── parser.py    # Structured output parsing
+├── processing/      # Content understanding (LLM-powered)
+│   ├── processor.py # Main content processor orchestrator
+│   └── chunker.py   # Content chunking strategies
 ├── generation/      # Pitch generation [TODO]
 ├── update/          # Incremental updates [TODO]
 ├── refinement/      # Conversational refinement [TODO]
@@ -81,6 +89,18 @@ python -m src.main check https://example.com/product --product-id myproduct
 python -m src.main list-extractions --product-id myproduct
 ```
 
+### Process extracted content with LLM
+```bash
+python -m src.main process extraction.json --output processed.json
+```
+
+Options:
+- `--output, -o`: Output JSON file path for processed content
+- `--product-name, -n`: Override product name
+- `--aspects, -a`: Comma-separated aspects to process (features,benefits,use_cases,competitive,audience,pricing,technical,summary)
+- `--model, -m`: Model to use (haiku, sonnet, opus)
+- `--verbose, -v`: Enable debug logging
+
 ## Development
 
 ### Running Tests
@@ -94,6 +114,8 @@ pytest tests/
 - **Pydantic**: Data validation and models
 - **Typer/Rich**: CLI interface
 - **aiohttp**: Async HTTP for image downloads
+- **anthropic**: Claude API client
+- **tenacity**: Retry logic for API calls
 
 ### Code Patterns
 
@@ -103,6 +125,8 @@ pytest tests/
 4. **Fingerprinting**: All content is hashed for change detection
 
 ### Example Usage in Code
+
+**Content Extraction:**
 ```python
 from src.acquisition.engine import ContentAcquisitionEngine
 from src.models.config import SiteConfig
@@ -112,6 +136,18 @@ config = SiteConfig.from_url("https://example.com/product")
 async with ContentAcquisitionEngine(config) as engine:
     content = await engine.extract(product_id="myproduct")
     print(f"Extracted {content.total_word_count} words")
+```
+
+**Content Processing:**
+```python
+from src.processing import ContentProcessor, ProcessingConfig
+
+config = ProcessingConfig()
+
+async with ContentProcessor(config) as processor:
+    result = await processor.process(extracted_content)
+    print(f"Found {len(result.features.features)} features")
+    print(f"Executive summary: {result.summary.executive_summary}")
 ```
 
 ## Project Status
@@ -127,12 +163,35 @@ async with ContentAcquisitionEngine(config) as engine:
   - Content fingerprinting for change detection
   - CLI interface
 
+### Completed (Phase 2)
+- [x] LLM Integration Layer
+  - Anthropic API client with async support
+  - Retry logic and rate limiting
+  - Streaming support
+  - Cost tracking
+  - Prompt template system with versioning
+  - Structured output parsing (JSON, Pydantic models)
+
+- [x] Content Processing Layer
+  - ContentProcessor orchestrator
+  - Content chunking strategies (fixed, semantic, hybrid)
+  - Feature extraction and categorization
+  - Benefit identification
+  - Use case extraction
+  - Competitive differentiator analysis
+  - Audience segmentation
+  - Pricing information extraction
+  - Technical specifications extraction
+  - Multi-level summarization
+  - CLI `process` command
+
 ### TODO
-- [ ] Content Processing Layer (LLM integration)
 - [ ] Pitch Generation Engine
 - [ ] Incremental Update System
 - [ ] Refinement Engine (conversational)
 - [ ] Output composers (PPTX, PDF)
+- [ ] LLM result caching
+- [ ] Batch processing optimization
 
 ## Key Design Decisions
 

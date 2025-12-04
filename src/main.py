@@ -17,6 +17,7 @@ from rich.tree import Tree
 
 from src.acquisition.engine import ContentAcquisitionEngine
 from src.models.config import SiteConfig
+from src.models.content import ExtractedContent
 
 # Initialize CLI app
 app = typer.Typer(
@@ -396,6 +397,234 @@ def display_site_analysis(structure, recommendations) -> None:
             console.print(f"  {i}. {page}")
         if len(recommendations['priority_pages']) > 10:
             console.print(f"  ... and {len(recommendations['priority_pages']) - 10} more")
+
+
+@app.command()
+def process(
+    input_file: str = typer.Argument(..., help="Path to extracted content JSON file"),
+    output: Optional[str] = typer.Option(
+        None, "--output", "-o", help="Output file path for processed content (JSON)"
+    ),
+    product_name: Optional[str] = typer.Option(
+        None, "--product-name", "-n", help="Override product name"
+    ),
+    aspects: Optional[str] = typer.Option(
+        None, "--aspects", "-a",
+        help="Comma-separated aspects to process (features,benefits,use_cases,competitive,audience,pricing,technical,summary)"
+    ),
+    model: str = typer.Option(
+        "sonnet", "--model", "-m", help="Model to use (haiku, sonnet, opus)"
+    ),
+    verbose: bool = typer.Option(
+        False, "--verbose", "-v", help="Enable verbose logging"
+    ),
+) -> None:
+    """
+    Process extracted content with LLM to analyze and structure product information.
+
+    Takes extracted content JSON and produces structured analysis including
+    features, benefits, use cases, competitive positioning, audience segments,
+    pricing, and technical specifications.
+
+    Example:
+        pitch-gen process extraction.json --output processed.json
+        pitch-gen process extraction.json --aspects features,benefits
+    """
+    setup_logging(verbose)
+
+    input_path = Path(input_file)
+    if not input_path.exists():
+        console.print(f"[red]Input file not found: {input_file}[/red]")
+        sys.exit(1)
+
+    console.print(Panel.fit(
+        f"[bold blue]Content Processing Engine[/bold blue]\n"
+        f"Processing: {input_file}",
+        title="Sales Pitch Generator",
+    ))
+
+    # Load extracted content
+    try:
+        with open(input_path) as f:
+            data = json.load(f)
+        content = ExtractedContent.model_validate(data)
+    except Exception as e:
+        console.print(f"[red]Failed to load extraction file: {e}[/red]")
+        sys.exit(1)
+
+    # Import processing modules
+    from src.processing import ContentProcessor, ProcessingConfig
+    from src.llm import ModelName
+
+    # Configure processing
+    model_map = {
+        "haiku": ModelName.HAIKU,
+        "sonnet": ModelName.SONNET,
+        "opus": ModelName.OPUS,
+    }
+    selected_model = model_map.get(model.lower(), ModelName.SONNET)
+
+    config = ProcessingConfig(
+        default_model=selected_model,
+        analysis_model=selected_model,
+        extraction_model=selected_model,
+    )
+
+    # Disable aspects not requested
+    if aspects:
+        aspect_list = [a.strip().lower() for a in aspects.split(",")]
+        config.enable_features = "features" in aspect_list
+        config.enable_benefits = "benefits" in aspect_list
+        config.enable_use_cases = "use_cases" in aspect_list
+        config.enable_competitive = "competitive" in aspect_list
+        config.enable_audience = "audience" in aspect_list
+        config.enable_pricing = "pricing" in aspect_list
+        config.enable_technical = "technical" in aspect_list
+
+    async def run_processing():
+        async with ContentProcessor(config) as processor:
+            with Progress(
+                SpinnerColumn(),
+                TextColumn("[progress.description]{task.description}"),
+                TimeElapsedColumn(),
+                console=console,
+            ) as progress:
+                task = progress.add_task("Processing content with LLM...", total=None)
+                result = await processor.process(content, product_name=product_name)
+                progress.update(task, completed=True)
+            return result
+
+    try:
+        result = asyncio.run(run_processing())
+
+        # Display results
+        display_processing_results(result)
+
+        # Save to output file if specified
+        if output:
+            output_path = Path(output)
+            with open(output_path, "w") as f:
+                json.dump(result.model_dump(), f, default=str, indent=2)
+            console.print(f"\n[green]Results saved to: {output_path}[/green]")
+
+    except KeyboardInterrupt:
+        console.print("\n[yellow]Processing cancelled by user[/yellow]")
+        sys.exit(1)
+    except Exception as e:
+        console.print(f"\n[red]Processing failed: {e}[/red]")
+        if verbose:
+            console.print_exception()
+        sys.exit(1)
+
+
+def display_processing_results(result) -> None:
+    """Display processing results in a formatted way."""
+    console.print("\n")
+
+    # Summary panel
+    summary = f"""
+[bold]Product:[/bold] {result.product_name}
+[bold]URL:[/bold] {result.product_url}
+[bold]Processing ID:[/bold] {result.processing_id}
+[bold]Duration:[/bold] {result.processing_duration_ms / 1000:.1f}s
+[bold]Tokens Used:[/bold] {result.total_llm_tokens_used:,}
+[bold]Cost:[/bold] ${result.total_llm_cost_usd:.4f}
+[bold]Confidence:[/bold] {result.overall_confidence * 100:.0f}%
+"""
+    console.print(Panel(summary, title="Processing Summary", border_style="green"))
+
+    # Executive Summary
+    if result.summary.executive_summary:
+        console.print(Panel(
+            result.summary.executive_summary,
+            title="Executive Summary",
+            border_style="blue",
+        ))
+
+    # Key Points
+    if result.summary.key_points:
+        console.print("\n[bold]Key Points:[/bold]")
+        for point in result.summary.key_points:
+            console.print(f"  • {point}")
+
+    # Features table
+    if result.features.features:
+        table = Table(title=f"Features ({len(result.features.features)} found)")
+        table.add_column("Feature", style="cyan", max_width=30)
+        table.add_column("Category", style="magenta")
+        table.add_column("Description", style="white", max_width=50)
+        table.add_column("Flagship", style="green")
+
+        for feature in result.features.features[:10]:
+            table.add_row(
+                feature.name,
+                feature.category.value,
+                feature.description[:100] + "..." if len(feature.description) > 100 else feature.description,
+                "✓" if feature.is_flagship else "",
+            )
+
+        if len(result.features.features) > 10:
+            table.add_row("...", "...", f"(and {len(result.features.features) - 10} more)", "")
+
+        console.print("\n")
+        console.print(table)
+
+    # Benefits
+    if result.benefits.benefits:
+        console.print(f"\n[bold]Top Benefits ({len(result.benefits.benefits)} total):[/bold]")
+        for benefit in result.benefits.benefits[:5]:
+            console.print(f"  • [cyan]{benefit.headline}[/cyan]")
+            console.print(f"    {benefit.description[:150]}...")
+
+    # Use Cases
+    if result.use_cases.use_cases:
+        console.print(f"\n[bold]Use Cases ({len(result.use_cases.use_cases)} found):[/bold]")
+        for uc in result.use_cases.use_cases[:5]:
+            console.print(f"  • [cyan]{uc.title}[/cyan]: {uc.problem_solved[:100]}...")
+
+    # Competitive Differentiators
+    if result.competitive_analysis.differentiators:
+        console.print(f"\n[bold]Differentiators ({len(result.competitive_analysis.differentiators)} found):[/bold]")
+        for diff in result.competitive_analysis.differentiators[:3]:
+            console.print(f"  • [green]{diff.claim}[/green] ({diff.strength})")
+
+    # Audience Segments
+    if result.audience_analysis.segments:
+        console.print(f"\n[bold]Target Audiences ({len(result.audience_analysis.segments)} segments):[/bold]")
+        if result.audience_analysis.primary_audience:
+            console.print(f"  Primary: [cyan]{result.audience_analysis.primary_audience}[/cyan]")
+        for segment in result.audience_analysis.segments[:3]:
+            console.print(f"  • {segment.name} ({segment.segment_type.value})")
+
+    # Pricing
+    if result.pricing.tiers:
+        console.print(f"\n[bold]Pricing ({result.pricing.pricing_model.value}):[/bold]")
+        if result.pricing.has_free_trial:
+            console.print(f"  Free Trial: {result.pricing.trial_duration or 'Yes'}")
+        for tier in result.pricing.tiers[:4]:
+            price_str = tier.price or "Contact Sales"
+            console.print(f"  • [cyan]{tier.name}[/cyan]: {price_str}")
+
+    # Technical Specs
+    if result.technical_specs.platforms_supported or result.technical_specs.integrations:
+        console.print("\n[bold]Technical:[/bold]")
+        if result.technical_specs.platforms_supported:
+            console.print(f"  Platforms: {', '.join(result.technical_specs.platforms_supported[:5])}")
+        if result.technical_specs.api_available:
+            console.print(f"  API: {result.technical_specs.api_type or 'Available'}")
+        if result.technical_specs.security_certifications:
+            console.print(f"  Security: {', '.join(result.technical_specs.security_certifications[:3])}")
+
+    # Warnings/Errors
+    if result.warnings:
+        console.print("\n[yellow]Warnings:[/yellow]")
+        for warning in result.warnings:
+            console.print(f"  - {warning}")
+
+    if result.errors:
+        console.print("\n[red]Errors:[/red]")
+        for error in result.errors:
+            console.print(f"  - {error}")
 
 
 @app.callback()

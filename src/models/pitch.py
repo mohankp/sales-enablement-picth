@@ -2,7 +2,7 @@
 
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Any, Optional
+from typing import Any, Literal, Optional
 
 from pydantic import BaseModel, Field
 
@@ -52,6 +52,55 @@ class SectionType(str, Enum):
 # ============================================================================
 
 
+class SectionVisualAsset(BaseModel):
+    """A visual asset assigned to a pitch section."""
+
+    asset_id: str = Field(description="Unique identifier for the asset")
+    asset_type: Literal["image", "table", "video"] = Field(
+        description="Type of visual asset",
+    )
+    url: str = Field(description="URL or path to the asset")
+    local_path: Optional[str] = Field(
+        default=None,
+        description="Local file path if downloaded",
+    )
+    caption: Optional[str] = Field(
+        default=None,
+        description="Caption for display",
+    )
+    alt_text: Optional[str] = Field(
+        default=None,
+        description="Alt text for accessibility",
+    )
+    placement: Literal["hero", "inline", "sidebar", "comparison", "background"] = Field(
+        default="inline",
+        description="Suggested placement in the section",
+    )
+    relevance_reason: str = Field(
+        default="",
+        description="Why this visual is relevant to the section",
+    )
+
+    # Table-specific: include rendered markdown for easy display
+    table_markdown: Optional[str] = Field(
+        default=None,
+        description="Markdown representation of table content",
+    )
+
+    def to_markdown(self) -> str:
+        """Convert to markdown representation."""
+        if self.asset_type == "image":
+            alt = self.alt_text or self.caption or "Visual"
+            return f"![{alt}]({self.url})"
+        elif self.asset_type == "table" and self.table_markdown:
+            caption_line = f"*{self.caption}*\n\n" if self.caption else ""
+            return f"{caption_line}{self.table_markdown}"
+        elif self.asset_type == "video":
+            caption = self.caption or "Video"
+            return f"[{caption}]({self.url})"
+        return ""
+
+
 class PitchSection(BaseModel):
     """A single section of the pitch."""
 
@@ -68,7 +117,11 @@ class PitchSection(BaseModel):
     )
     visual_suggestions: list[str] = Field(
         default_factory=list,
-        description="Suggested visuals or slides",
+        description="Suggested visuals or slides (text descriptions)",
+    )
+    visual_assets: list[SectionVisualAsset] = Field(
+        default_factory=list,
+        description="Actual visual assets matched to this section",
     )
     duration_seconds: Optional[int] = Field(
         default=None,
@@ -81,6 +134,16 @@ class PitchSection(BaseModel):
         words = len(self.content.split())
         words += sum(len(point.split()) for point in self.key_points)
         return words
+
+    def has_visuals(self) -> bool:
+        """Check if section has actual visual assets assigned."""
+        return len(self.visual_assets) > 0
+
+    def get_visuals_by_type(
+        self, asset_type: Literal["image", "table", "video"]
+    ) -> list[SectionVisualAsset]:
+        """Get visual assets of a specific type."""
+        return [v for v in self.visual_assets if v.asset_type == asset_type]
 
 
 class FeatureHighlight(BaseModel):
@@ -323,13 +386,31 @@ class Pitch(BaseModel):
 
         # Content slides
         for section in sorted(self.sections, key=lambda s: s.order):
-            slides.append({
+            slide: dict[str, Any] = {
                 "slide_type": "content",
                 "title": section.title,
                 "bullets": section.key_points or [section.content],
                 "notes": section.talking_points,
-                "visuals": section.visual_suggestions,
-            })
+                "visual_suggestions": section.visual_suggestions,  # Text suggestions
+            }
+
+            # Add actual visual assets if available
+            if section.visual_assets:
+                slide["visual_assets"] = [
+                    {
+                        "asset_id": va.asset_id,
+                        "type": va.asset_type,
+                        "url": va.url,
+                        "local_path": va.local_path,
+                        "caption": va.caption,
+                        "alt_text": va.alt_text,
+                        "placement": va.placement,
+                        "table_markdown": va.table_markdown,
+                    }
+                    for va in section.visual_assets
+                ]
+
+            slides.append(slide)
 
         # CTA slide
         if self.call_to_action:

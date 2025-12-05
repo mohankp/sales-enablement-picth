@@ -25,8 +25,9 @@ from src.models.pitch import (
     PitchTone,
     SectionType,
 )
-from src.models.processed import ProcessedContent
+from src.models.processed import ProcessedContent, VisualInventory
 
+from .visual_matcher import SectionVisualMatcher
 from .templates import (
     ELEVATOR_PITCH_PROMPT,
     KEY_MESSAGES_PROMPT,
@@ -55,6 +56,9 @@ class GenerationConfig:
     max_concurrent_sections: int = 3
     retry_failed_sections: bool = True
     max_section_retries: int = 2
+
+    # Visual matching
+    enable_visuals: bool = True  # Match visual assets to sections
 
     # Caching
     enable_caching: bool = True
@@ -113,6 +117,7 @@ class PitchGenerator:
         self.config = config or GenerationConfig()
         self._client: Optional[AnthropicClient] = None
         self._cache: Optional[Any] = None
+        self._visual_matcher: Optional[SectionVisualMatcher] = None
 
     async def __aenter__(self) -> "PitchGenerator":
         """Async context manager entry."""
@@ -128,6 +133,10 @@ class PitchGenerator:
         llm_config = self.config.llm_config or LLMConfig()
         self._client = AnthropicClient(llm_config)
         await self._client.start()
+
+        # Initialize visual matcher if enabled
+        if self.config.enable_visuals:
+            self._visual_matcher = SectionVisualMatcher(self._client)
 
         if self.config.enable_caching and self.config.cache_dir:
             from src.processing.cache import ProcessingCache
@@ -184,6 +193,23 @@ class PitchGenerator:
         section_results = await self._generate_sections(
             sections_to_generate, context, pitch_config
         )
+
+        # Match visual assets to sections if enabled and available
+        if (
+            self.config.enable_visuals
+            and self._visual_matcher
+            and processed_content.visual_inventory
+            and processed_content.visual_inventory.total_count > 0
+        ):
+            section_results = await self._add_visuals_to_sections(
+                section_results,
+                processed_content.visual_inventory,
+                processed_content.feature_visuals,
+            )
+            logger.info(
+                f"Matched visuals to sections from inventory of "
+                f"{processed_content.visual_inventory.total_count} assets"
+            )
 
         # Generate supporting content
         elevator_pitch, one_liner, key_messages, objections = await asyncio.gather(
@@ -696,3 +722,53 @@ Return valid JSON only. No markdown formatting."""
         variant.config = variant_config
 
         return variant
+
+    async def _add_visuals_to_sections(
+        self,
+        section_results: list[SectionResult],
+        visual_inventory: VisualInventory,
+        feature_visuals: dict[str, list[str]],
+    ) -> list[SectionResult]:
+        """
+        Add visual assets to generated sections.
+
+        Args:
+            section_results: List of generated section results
+            visual_inventory: Available visual assets
+            feature_visuals: Pre-computed feature-to-visual mappings
+
+        Returns:
+            Updated section results with visual assets
+        """
+        if not self._visual_matcher:
+            return section_results
+
+        # Process sections concurrently
+        semaphore = asyncio.Semaphore(self.config.max_concurrent_sections)
+
+        async def add_visuals_to_section(result: SectionResult) -> SectionResult:
+            if not result.success or not result.section:
+                return result
+
+            async with semaphore:
+                try:
+                    visual_assets = await self._visual_matcher.match_visuals_to_section(
+                        section_type=result.section_type,
+                        section_content=result.section.content,
+                        section_title=result.section.title,
+                        visual_inventory=visual_inventory,
+                        feature_visuals=feature_visuals,
+                    )
+                    result.section.visual_assets = visual_assets
+                except Exception as e:
+                    logger.warning(
+                        f"Failed to match visuals for section {result.section_type}: {e}"
+                    )
+
+            return result
+
+        updated_results = await asyncio.gather(
+            *[add_visuals_to_section(r) for r in section_results]
+        )
+
+        return list(updated_results)

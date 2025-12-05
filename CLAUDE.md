@@ -38,7 +38,11 @@ src/
 │   └── batch.py     # Batch processing with concurrency
 ├── generation/      # Pitch generation
 │   ├── generator.py # Main pitch generator orchestrator
-│   └── templates.py # Section templates and prompts
+│   ├── templates.py # Section templates and prompts
+│   └── composers/   # Output format composers
+│       ├── base.py          # Base composer classes and themes
+│       ├── pptx_composer.py # PowerPoint export
+│       └── pdf_composer.py  # PDF export
 ├── update/          # Incremental updates [TODO]
 ├── refinement/      # Conversational refinement [TODO]
 └── main.py          # CLI entry point
@@ -133,6 +137,33 @@ Options:
 - `--model, -m`: Model to use (haiku, sonnet, opus)
 - `--verbose, -v`: Enable debug logging
 
+### Export to PowerPoint (PPTX)
+```bash
+python -m src.main export-pptx pitch.json --output presentation.pptx --theme corporate_blue
+```
+
+Options:
+- `--output, -o`: Output PPTX file path
+- `--theme, -t`: Color theme (corporate_blue, modern_dark, clean_light, professional_green, executive_gray)
+- `--notes/--no-notes`: Include speaker notes (default: yes)
+- `--images/--no-images`: Include visual assets (default: yes)
+- `--slide-numbers/--no-slide-numbers`: Add slide numbers (default: yes)
+- `--verbose, -v`: Enable debug logging
+
+### Export to PDF
+```bash
+python -m src.main export-pdf pitch.json --output document.pdf --theme executive_gray
+```
+
+Options:
+- `--output, -o`: Output PDF file path
+- `--theme, -t`: Color theme (corporate_blue, modern_dark, clean_light, professional_green, executive_gray)
+- `--page-size, -p`: Page size (letter, a4)
+- `--toc/--no-toc`: Include table of contents (default: yes)
+- `--images/--no-images`: Include visual assets (default: yes)
+- `--justified/--no-justified`: Use justified text (default: yes)
+- `--verbose, -v`: Enable debug logging
+
 ## Development
 
 ### Running Tests
@@ -148,6 +179,8 @@ pytest tests/
 - **aiohttp**: Async HTTP for image downloads
 - **anthropic**: Claude API client
 - **tenacity**: Retry logic for API calls
+- **python-pptx**: PowerPoint generation
+- **reportlab**: PDF generation
 
 ### Code Patterns
 
@@ -200,6 +233,31 @@ async with PitchGenerator(gen_config) as generator:
     print(f"Elevator pitch: {result.pitch.elevator_pitch}")
 ```
 
+**Export to PPTX/PDF:**
+```python
+from src.generation.composers import PPTXComposer, PDFComposer, PPTXConfig, PDFConfig
+from src.generation.composers.base import ThemeColor
+
+# Export to PowerPoint
+pptx_config = PPTXConfig(
+    theme=ThemeColor.EXECUTIVE_GRAY,
+    include_speaker_notes=True,
+)
+pptx_composer = PPTXComposer(pptx_config)
+result = pptx_composer.compose(pitch, Path("presentation.pptx"))
+print(f"Created {result.page_count} slides")
+
+# Export to PDF
+pdf_config = PDFConfig(
+    theme=ThemeColor.CORPORATE_BLUE,
+    page_size="letter",
+    include_table_of_contents=True,
+)
+pdf_composer = PDFComposer(pdf_config)
+result = pdf_composer.compose(pitch, Path("document.pdf"))
+print(f"Created {result.page_count} pages")
+```
+
 ## Project Status
 
 ### Completed (Phase 1)
@@ -250,10 +308,19 @@ async with PitchGenerator(gen_config) as generator:
   - Presentation outline export
   - CLI `generate` command with multiple output formats (JSON, Markdown, text)
 
+### Completed (Phase 4)
+- [x] Output Composers
+  - PPTX composer with python-pptx
+  - PDF composer with reportlab
+  - 5 color themes (corporate_blue, modern_dark, clean_light, professional_green, executive_gray)
+  - Speaker notes support in PPTX
+  - Table of contents in PDF
+  - Visual asset embedding
+  - CLI `export-pptx` and `export-pdf` commands
+
 ### TODO
 - [ ] Incremental Update System
 - [ ] Refinement Engine (conversational)
-- [ ] Output composers (PPTX, PDF)
 
 ## Key Design Decisions
 

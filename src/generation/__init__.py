@@ -11,6 +11,7 @@ from .templates import (
     get_length_config,
     get_sections_for_length,
 )
+from .visual_matcher import SectionVisualMatcher
 
 __all__ = [
     # Generator
@@ -26,4 +27,6 @@ __all__ = [
     "get_tone_guidelines",
     "get_length_config",
     "get_sections_for_length",
+    # Visual matching
+    "SectionVisualMatcher",
 ]

@@ -2,7 +2,7 @@
 
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Any, Optional
+from typing import Any, Literal, Optional
 
 from pydantic import BaseModel, Field
 
@@ -404,6 +404,190 @@ class TechnicalSpecs(BaseModel):
 
 
 # ============================================================================
+# Visual Asset Models
+# ============================================================================
+
+
+class VisualAssetReference(BaseModel):
+    """Reference to a visual asset with context for matching."""
+
+    asset_id: str = Field(description="Unique identifier (hash of URL)")
+    asset_type: Literal["image", "table", "video"] = Field(
+        description="Type of visual asset"
+    )
+    url: str = Field(description="Original URL of the asset")
+    local_path: Optional[str] = Field(
+        default=None,
+        description="Local file path if downloaded",
+    )
+
+    # Metadata for matching
+    alt_text: Optional[str] = Field(
+        default=None,
+        description="Alt text from image",
+    )
+    caption: Optional[str] = Field(
+        default=None,
+        description="Caption or description",
+    )
+    title: Optional[str] = Field(
+        default=None,
+        description="Title attribute",
+    )
+    source_context: Optional[str] = Field(
+        default=None,
+        description="Surrounding text context from page",
+    )
+
+    # Image classification flags
+    is_logo: bool = False
+    is_screenshot: bool = False
+    is_diagram: bool = False
+    is_icon: bool = False
+
+    # Image dimensions
+    width: Optional[int] = None
+    height: Optional[int] = None
+
+    # Table-specific fields
+    table_headers: list[str] = Field(default_factory=list)
+    table_row_count: int = 0
+    table_markdown: Optional[str] = Field(
+        default=None,
+        description="Markdown representation of table",
+    )
+    is_comparison_table: bool = False
+    is_pricing_table: bool = False
+
+    # Video-specific fields
+    video_platform: Optional[str] = Field(
+        default=None,
+        description="Platform (youtube, vimeo, etc.)",
+    )
+    video_duration: Optional[float] = Field(
+        default=None,
+        description="Duration in seconds",
+    )
+    thumbnail_url: Optional[str] = None
+
+    def get_description_for_matching(self) -> str:
+        """Get a text description for LLM matching."""
+        parts = [f"[{self.asset_type.upper()}]"]
+
+        if self.title:
+            parts.append(f"Title: {self.title}")
+        if self.alt_text:
+            parts.append(f"Alt: {self.alt_text}")
+        if self.caption:
+            parts.append(f"Caption: {self.caption}")
+
+        if self.asset_type == "image":
+            classifications = []
+            if self.is_screenshot:
+                classifications.append("screenshot")
+            if self.is_diagram:
+                classifications.append("diagram")
+            if self.is_logo:
+                classifications.append("logo")
+            if self.is_icon:
+                classifications.append("icon")
+            if classifications:
+                parts.append(f"Type: {', '.join(classifications)}")
+            if self.width and self.height:
+                parts.append(f"Size: {self.width}x{self.height}")
+
+        elif self.asset_type == "table":
+            if self.table_headers:
+                parts.append(f"Headers: {', '.join(self.table_headers[:5])}")
+            parts.append(f"Rows: {self.table_row_count}")
+            if self.is_comparison_table:
+                parts.append("(comparison table)")
+            if self.is_pricing_table:
+                parts.append("(pricing table)")
+
+        elif self.asset_type == "video":
+            if self.video_platform:
+                parts.append(f"Platform: {self.video_platform}")
+            if self.video_duration:
+                parts.append(f"Duration: {self.video_duration:.0f}s")
+
+        if self.source_context:
+            parts.append(f"Context: {self.source_context[:100]}...")
+
+        return " | ".join(parts)
+
+
+class VisualInventory(BaseModel):
+    """Complete inventory of visual assets from extraction."""
+
+    images: list[VisualAssetReference] = Field(default_factory=list)
+    tables: list[VisualAssetReference] = Field(default_factory=list)
+    videos: list[VisualAssetReference] = Field(default_factory=list)
+
+    # Categorized asset IDs for quick access
+    screenshots: list[str] = Field(
+        default_factory=list,
+        description="Asset IDs of screenshots",
+    )
+    diagrams: list[str] = Field(
+        default_factory=list,
+        description="Asset IDs of diagrams",
+    )
+    logos: list[str] = Field(
+        default_factory=list,
+        description="Asset IDs of logos",
+    )
+    comparison_tables: list[str] = Field(
+        default_factory=list,
+        description="Asset IDs of comparison tables",
+    )
+    pricing_tables: list[str] = Field(
+        default_factory=list,
+        description="Asset IDs of pricing tables",
+    )
+
+    @property
+    def total_count(self) -> int:
+        """Total number of visual assets."""
+        return len(self.images) + len(self.tables) + len(self.videos)
+
+    def get_asset_by_id(self, asset_id: str) -> Optional[VisualAssetReference]:
+        """Look up an asset by its ID."""
+        for asset in self.images + self.tables + self.videos:
+            if asset.asset_id == asset_id:
+                return asset
+        return None
+
+    def get_assets_by_ids(self, asset_ids: list[str]) -> list[VisualAssetReference]:
+        """Look up multiple assets by their IDs."""
+        return [
+            asset
+            for asset in self.images + self.tables + self.videos
+            if asset.asset_id in asset_ids
+        ]
+
+    def get_candidates_for_section(
+        self, section_type: str
+    ) -> list[VisualAssetReference]:
+        """Get candidate visuals based on section type."""
+        section_mapping: dict[str, list[str]] = {
+            "features": self.screenshots + self.diagrams,
+            "technical": self.diagrams,
+            "pricing": self.pricing_tables,
+            "differentiators": self.comparison_tables,
+            "social_proof": self.logos,
+            "solution": self.screenshots,
+            "benefits": self.screenshots + self.diagrams,
+            "use_cases": self.screenshots,
+        }
+        asset_ids = section_mapping.get(section_type.lower(), [])
+        if not asset_ids:
+            # Default: return all non-logo images
+            return [img for img in self.images if not img.is_logo and not img.is_icon]
+        return self.get_assets_by_ids(asset_ids)
+
+
+# ============================================================================
 # Summary Models
 # ============================================================================
 
@@ -470,6 +654,16 @@ class ProcessedContent(BaseModel):
     pricing: PricingInfo = Field(default_factory=PricingInfo)
     technical_specs: TechnicalSpecs = Field(default_factory=TechnicalSpecs)
 
+    # Visual Assets
+    visual_inventory: Optional[VisualInventory] = Field(
+        default=None,
+        description="Inventory of visual assets from extraction",
+    )
+    feature_visuals: dict[str, list[str]] = Field(
+        default_factory=dict,
+        description="Mapping of feature names to relevant visual asset IDs",
+    )
+
     # Metadata
     source_extraction_id: str = Field(
         default="",
@@ -509,7 +703,7 @@ class ProcessedContent(BaseModel):
         Returns a flattened structure with the most important information
         for generating sales pitches.
         """
-        return {
+        context = {
             "product_name": self.product_name,
             "tagline": self.summary.tagline,
             "value_proposition": self.summary.value_proposition,
@@ -529,3 +723,11 @@ class ProcessedContent(BaseModel):
             "pricing_model": self.pricing.pricing_model.value,
             "has_free_trial": self.pricing.has_free_trial,
         }
+
+        # Add visual inventory if available
+        if self.visual_inventory:
+            context["visual_inventory"] = self.visual_inventory
+            context["feature_visuals"] = self.feature_visuals
+            context["has_visuals"] = self.visual_inventory.total_count > 0
+
+        return context

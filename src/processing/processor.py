@@ -42,9 +42,11 @@ from src.models.processed import (
     TechnicalSpecs,
     UseCase,
     UseCaseSet,
+    VisualInventory,
 )
 from .chunker import ContentChunker, ChunkingStrategy, ContentChunk
 from .cache import ProcessingCache
+from .visuals import VisualInventoryBuilder
 
 logger = logging.getLogger(__name__)
 
@@ -67,6 +69,7 @@ class ProcessingConfig(BaseModel):
     enable_audience: bool = True
     enable_pricing: bool = True
     enable_technical: bool = True
+    enable_visuals: bool = True  # Build visual inventory from extraction
 
     # Chunking
     chunking_strategy: ChunkingStrategy = ChunkingStrategy.HYBRID
@@ -119,6 +122,7 @@ class ContentProcessor:
         )
         self._cache: Optional[ProcessingCache] = None
         self._semaphore: Optional[asyncio.Semaphore] = None
+        self._visual_builder = VisualInventoryBuilder()
 
         # Initialize cache if enabled
         if self.config.enable_cache:
@@ -302,6 +306,31 @@ class ContentProcessor:
             warnings=warnings,
             errors=errors,
         )
+
+        # Build visual inventory if enabled
+        if self.config.enable_visuals:
+            try:
+                visual_inventory = self._visual_builder.build_inventory(content)
+                processed.visual_inventory = visual_inventory
+                logger.info(
+                    f"Built visual inventory: {visual_inventory.total_count} assets "
+                    f"({len(visual_inventory.images)} images, "
+                    f"{len(visual_inventory.tables)} tables, "
+                    f"{len(visual_inventory.videos)} videos)"
+                )
+
+                # Map visuals to features using LLM if we have both
+                if visual_inventory.total_count > 0 and processed.features.features:
+                    feature_visuals = await self._map_visuals_to_features(
+                        processed.features,
+                        visual_inventory,
+                        product_name or "Unknown Product",
+                    )
+                    processed.feature_visuals = feature_visuals
+
+            except Exception as e:
+                logger.warning(f"Failed to build visual inventory: {e}")
+                warnings.append(f"Visual inventory: {str(e)}")
 
         # Compute statistics
         processed.compute_stats()
@@ -1113,3 +1142,85 @@ Return JSON:
             )
 
         return await aspect_map[aspect](combined, name)
+
+    async def _map_visuals_to_features(
+        self,
+        features: FeatureSet,
+        inventory: VisualInventory,
+        product_name: str,
+    ) -> dict[str, list[str]]:
+        """
+        Use LLM to map visual assets to features based on metadata.
+
+        Args:
+            features: Extracted features
+            inventory: Visual asset inventory
+            product_name: Product name for context
+
+        Returns:
+            Dict mapping feature names to lists of asset IDs
+        """
+        client = self._ensure_client()
+
+        # Format visual metadata for LLM
+        visual_descriptions = []
+        for asset in inventory.images + inventory.tables:
+            desc = asset.get_description_for_matching()
+            visual_descriptions.append(f"- {asset.asset_id}: {desc}")
+
+        if not visual_descriptions:
+            return {}
+
+        # Format features
+        feature_names = [f.name for f in features.features]
+
+        prompt = f"""Match visual assets to product features for {product_name}.
+
+## Features
+{chr(10).join(f"- {name}" for name in feature_names)}
+
+## Visual Assets
+{chr(10).join(visual_descriptions[:30])}
+
+## Instructions
+For each feature, identify which visual assets (by ID) would best demonstrate or support it.
+Only match visuals that are clearly relevant based on their metadata.
+Not every feature needs a visual, and not every visual needs to be matched.
+
+Return JSON:
+{{
+  "mappings": {{
+    "Feature Name": ["asset_id_1", "asset_id_2"],
+    "Another Feature": ["asset_id_3"]
+  }}
+}}
+
+Only include features that have relevant visuals."""
+
+        try:
+            settings = ModelSettings(
+                model=ModelName.HAIKU,  # Use fast model for this
+                max_tokens=2000,
+                temperature=0.1,
+            )
+            response = await client.complete(prompt, settings=settings)
+
+            data = parse_json(response.content)
+            mappings = data.get("mappings", {})
+
+            # Validate that asset IDs exist
+            valid_ids = {
+                a.asset_id for a in inventory.images + inventory.tables + inventory.videos
+            }
+            validated_mappings: dict[str, list[str]] = {}
+            for feature, asset_ids in mappings.items():
+                valid_asset_ids = [aid for aid in asset_ids if aid in valid_ids]
+                if valid_asset_ids:
+                    validated_mappings[feature] = valid_asset_ids
+
+            logger.info(f"Mapped visuals to {len(validated_mappings)} features")
+            return validated_mappings
+
+        except Exception as e:
+            logger.warning(f"Feature-visual mapping failed: {e}")
+            return {}

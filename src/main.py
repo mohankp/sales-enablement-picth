@@ -1036,6 +1036,240 @@ def display_generation_results(result) -> None:
             console.print(f"  - {error}")
 
 
+@app.command()
+def export_pptx(
+    input_file: str = typer.Argument(..., help="Path to generated pitch JSON file"),
+    output: Optional[str] = typer.Option(
+        None, "--output", "-o", help="Output PPTX file path"
+    ),
+    theme: str = typer.Option(
+        "corporate_blue", "--theme", "-t",
+        help="Color theme: corporate_blue, modern_dark, clean_light, professional_green, executive_gray"
+    ),
+    include_notes: bool = typer.Option(
+        True, "--notes/--no-notes", help="Include speaker notes"
+    ),
+    include_images: bool = typer.Option(
+        True, "--images/--no-images", help="Include visual assets"
+    ),
+    slide_numbers: bool = typer.Option(
+        True, "--slide-numbers/--no-slide-numbers", help="Add slide numbers"
+    ),
+    verbose: bool = typer.Option(
+        False, "--verbose", "-v", help="Enable verbose logging"
+    ),
+) -> None:
+    """
+    Export a generated pitch to PowerPoint (PPTX) format.
+
+    Creates a professional presentation with title slide, content slides,
+    elevator pitch, and closing slide. Supports multiple color themes.
+
+    Example:
+        pitch-gen export-pptx pitch.json --output presentation.pptx
+        pitch-gen export-pptx pitch.json --theme modern_dark --no-notes
+    """
+    setup_logging(verbose)
+
+    input_path = Path(input_file)
+    if not input_path.exists():
+        console.print(f"[red]Input file not found: {input_file}[/red]")
+        sys.exit(1)
+
+    console.print(Panel.fit(
+        f"[bold blue]PPTX Export[/bold blue]\n"
+        f"Exporting from: {input_file}",
+        title="Sales Pitch Generator",
+    ))
+
+    # Load pitch
+    try:
+        with open(input_path) as f:
+            data = json.load(f)
+        from src.models.pitch import Pitch
+        pitch = Pitch.model_validate(data)
+    except Exception as e:
+        console.print(f"[red]Failed to load pitch file: {e}[/red]")
+        sys.exit(1)
+
+    # Import composer
+    from src.generation.composers import PPTXComposer, PPTXConfig
+    from src.generation.composers.base import ThemeColor
+
+    # Map theme
+    theme_map = {
+        "corporate_blue": ThemeColor.CORPORATE_BLUE,
+        "modern_dark": ThemeColor.MODERN_DARK,
+        "clean_light": ThemeColor.CLEAN_LIGHT,
+        "professional_green": ThemeColor.PROFESSIONAL_GREEN,
+        "executive_gray": ThemeColor.EXECUTIVE_GRAY,
+    }
+    selected_theme = theme_map.get(theme.lower(), ThemeColor.CORPORATE_BLUE)
+
+    # Configure
+    config = PPTXConfig(
+        theme=selected_theme,
+        include_speaker_notes=include_notes,
+        include_visual_assets=include_images,
+        add_slide_numbers=slide_numbers,
+    )
+
+    try:
+        composer = PPTXComposer(config)
+        output_path = Path(output) if output else input_path.with_suffix(".pptx")
+
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            TimeElapsedColumn(),
+            console=console,
+        ) as progress:
+            task = progress.add_task("Generating PPTX...", total=None)
+            result = composer.compose(pitch, output_path)
+            progress.update(task, completed=True)
+
+        if result.success:
+            console.print(f"\n[green]PPTX saved to: {result.output_path}[/green]")
+            console.print(f"  Slides: {result.page_count}")
+            console.print(f"  Size: {result.file_size_bytes / 1024:.1f} KB")
+            console.print(f"  Theme: {selected_theme.value}")
+
+            if result.warnings:
+                console.print("\n[yellow]Warnings:[/yellow]")
+                for warning in result.warnings:
+                    console.print(f"  - {warning}")
+        else:
+            console.print(f"\n[red]Export failed:[/red]")
+            for error in result.errors:
+                console.print(f"  - {error}")
+            sys.exit(1)
+
+    except Exception as e:
+        console.print(f"\n[red]Export failed: {e}[/red]")
+        if verbose:
+            console.print_exception()
+        sys.exit(1)
+
+
+@app.command()
+def export_pdf(
+    input_file: str = typer.Argument(..., help="Path to generated pitch JSON file"),
+    output: Optional[str] = typer.Option(
+        None, "--output", "-o", help="Output PDF file path"
+    ),
+    theme: str = typer.Option(
+        "corporate_blue", "--theme", "-t",
+        help="Color theme: corporate_blue, modern_dark, clean_light, professional_green, executive_gray"
+    ),
+    page_size: str = typer.Option(
+        "letter", "--page-size", "-p", help="Page size: letter or a4"
+    ),
+    include_toc: bool = typer.Option(
+        True, "--toc/--no-toc", help="Include table of contents"
+    ),
+    include_images: bool = typer.Option(
+        True, "--images/--no-images", help="Include visual assets"
+    ),
+    justified: bool = typer.Option(
+        True, "--justified/--no-justified", help="Use justified text alignment"
+    ),
+    verbose: bool = typer.Option(
+        False, "--verbose", "-v", help="Enable verbose logging"
+    ),
+) -> None:
+    """
+    Export a generated pitch to PDF format.
+
+    Creates a professional document with title page, table of contents,
+    all pitch sections, feature highlights, benefits, and call to action.
+
+    Example:
+        pitch-gen export-pdf pitch.json --output document.pdf
+        pitch-gen export-pdf pitch.json --theme executive_gray --page-size a4
+    """
+    setup_logging(verbose)
+
+    input_path = Path(input_file)
+    if not input_path.exists():
+        console.print(f"[red]Input file not found: {input_file}[/red]")
+        sys.exit(1)
+
+    console.print(Panel.fit(
+        f"[bold blue]PDF Export[/bold blue]\n"
+        f"Exporting from: {input_file}",
+        title="Sales Pitch Generator",
+    ))
+
+    # Load pitch
+    try:
+        with open(input_path) as f:
+            data = json.load(f)
+        from src.models.pitch import Pitch
+        pitch = Pitch.model_validate(data)
+    except Exception as e:
+        console.print(f"[red]Failed to load pitch file: {e}[/red]")
+        sys.exit(1)
+
+    # Import composer
+    from src.generation.composers import PDFComposer, PDFConfig
+    from src.generation.composers.base import ThemeColor
+
+    # Map theme
+    theme_map = {
+        "corporate_blue": ThemeColor.CORPORATE_BLUE,
+        "modern_dark": ThemeColor.MODERN_DARK,
+        "clean_light": ThemeColor.CLEAN_LIGHT,
+        "professional_green": ThemeColor.PROFESSIONAL_GREEN,
+        "executive_gray": ThemeColor.EXECUTIVE_GRAY,
+    }
+    selected_theme = theme_map.get(theme.lower(), ThemeColor.CORPORATE_BLUE)
+
+    # Configure
+    config = PDFConfig(
+        theme=selected_theme,
+        page_size=page_size.lower(),
+        include_table_of_contents=include_toc,
+        include_visual_assets=include_images,
+        justified_text=justified,
+    )
+
+    try:
+        composer = PDFComposer(config)
+        output_path = Path(output) if output else input_path.with_suffix(".pdf")
+
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            TimeElapsedColumn(),
+            console=console,
+        ) as progress:
+            task = progress.add_task("Generating PDF...", total=None)
+            result = composer.compose(pitch, output_path)
+            progress.update(task, completed=True)
+
+        if result.success:
+            console.print(f"\n[green]PDF saved to: {result.output_path}[/green]")
+            console.print(f"  Pages: {result.page_count}")
+            console.print(f"  Size: {result.file_size_bytes / 1024:.1f} KB")
+            console.print(f"  Theme: {selected_theme.value}")
+
+            if result.warnings:
+                console.print("\n[yellow]Warnings:[/yellow]")
+                for warning in result.warnings:
+                    console.print(f"  - {warning}")
+        else:
+            console.print(f"\n[red]Export failed:[/red]")
+            for error in result.errors:
+                console.print(f"  - {error}")
+            sys.exit(1)
+
+    except Exception as e:
+        console.print(f"\n[red]Export failed: {e}[/red]")
+        if verbose:
+            console.print_exception()
+        sys.exit(1)
+
+
 @app.callback()
 def main():
     """

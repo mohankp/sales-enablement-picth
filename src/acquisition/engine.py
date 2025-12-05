@@ -297,6 +297,9 @@ class ContentAcquisitionEngine:
                 tables = await self.table_extractor.extract(page)
                 page_content.tables = tables
 
+                # Link downloaded images to content blocks
+                self._link_images_to_blocks(page_content, images)
+
                 # Fingerprint the page
                 ContentFingerprinter.fingerprint_page(page_content)
 
@@ -352,6 +355,58 @@ class ContentAcquisitionEngine:
                 await page.evaluate(script)
             except Exception as e:
                 logger.warning(f"Custom script failed: {e}")
+
+    def _link_images_to_blocks(
+        self,
+        page_content: PageContent,
+        images: list,
+    ) -> None:
+        """Link downloaded images to content blocks based on URL matching.
+
+        This updates the media_assets in content blocks to include local_path
+        from downloaded images, enabling the pitch generation to use local files.
+
+        Args:
+            page_content: The page content with content blocks to update.
+            images: List of ImageAsset objects with local_path set.
+        """
+        # Build URL -> ImageAsset map for quick lookup
+        image_map: dict[str, any] = {}
+        for img in images:
+            if img.url:
+                # Normalize URL for matching (remove trailing slash, etc.)
+                normalized_url = img.url.rstrip("/")
+                image_map[normalized_url] = img
+                image_map[img.url] = img
+
+        # Update media_assets in content blocks
+        for block in page_content.content_blocks:
+            if not block.media_assets:
+                continue
+
+            for i, media in enumerate(block.media_assets):
+                url = media.url
+                if not url:
+                    continue
+
+                # Try to find matching downloaded image
+                matched_image = image_map.get(url) or image_map.get(url.rstrip("/"))
+
+                if matched_image and matched_image.local_path:
+                    # Update the media asset with additional info from downloaded image
+                    block.media_assets[i].local_path = matched_image.local_path
+                    if matched_image.width:
+                        block.media_assets[i].width = matched_image.width
+                    if matched_image.height:
+                        block.media_assets[i].height = matched_image.height
+                    if matched_image.file_size:
+                        block.media_assets[i].file_size = matched_image.file_size
+                    if matched_image.mime_type:
+                        block.media_assets[i].mime_type = matched_image.mime_type
+
+        logger.debug(
+            f"Linked images to content blocks for {page_content.url}"
+        )
 
     async def quick_check(self, url: Optional[str] = None) -> dict:
         """Quick check to see if site content has changed.

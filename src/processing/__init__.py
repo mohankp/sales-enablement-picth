@@ -42,6 +42,7 @@ from .batch import (
     BatchItemResult,
     BatchQueue,
 )
+from .visuals import VisualInventoryBuilder
 
 __all__ = [
     # Core processor
@@ -61,4 +62,6 @@ __all__ = [
     "BatchResult",
     "BatchItemResult",
     "BatchQueue",
+    # Visual processing
+    "VisualInventoryBuilder",
 ]

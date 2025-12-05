@@ -8,7 +8,7 @@ from playwright.async_api import Page
 
 from src.acquisition.extractors.base import BaseExtractor
 from src.models.config import ExtractionConfig
-from src.models.content import ContentBlock, ContentType
+from src.models.content import ContentBlock, ContentType, MediaAsset
 
 logger = logging.getLogger(__name__)
 
@@ -174,6 +174,77 @@ class TextExtractor(BaseExtractor):
                     return el.tagName.toLowerCase();
                 }}
 
+                // Helper to extract images from an element
+                function extractImages(el) {{
+                    const images = [];
+                    el.querySelectorAll('img').forEach(img => {{
+                        const src = img.src || img.dataset?.src || img.dataset?.lazySrc;
+                        if (!src || src.startsWith('data:')) return;
+                        images.push({{
+                            url: src,
+                            alt: img.alt || '',
+                            title: img.title || '',
+                            width: img.naturalWidth || img.width || null,
+                            height: img.naturalHeight || img.height || null,
+                            selector: getSelector(img)
+                        }});
+                    }});
+                    return images;
+                }}
+
+                // Helper to extract links from an element
+                function extractLinks(el) {{
+                    const links = [];
+                    el.querySelectorAll('a[href]').forEach(a => {{
+                        const href = a.href;
+                        if (!href || href.startsWith('javascript:') || href.startsWith('#')) return;
+                        links.push({{
+                            url: href,
+                            text: a.textContent?.trim() || ''
+                        }});
+                    }});
+                    return links;
+                }}
+
+                // Helper to find nearby/associated images for a content block
+                function findNearbyImages(el) {{
+                    const images = [];
+
+                    // Check within the element itself
+                    images.push(...extractImages(el));
+
+                    // Check parent for images (e.g., figure > figcaption pattern)
+                    if (el.parentElement) {{
+                        const parent = el.parentElement;
+                        if (parent.tagName === 'FIGURE' || parent.classList?.contains('card') ||
+                            parent.classList?.contains('feature') || parent.classList?.contains('item')) {{
+                            images.push(...extractImages(parent));
+                        }}
+                    }}
+
+                    // Check previous sibling for images (common pattern: image then text)
+                    const prevSibling = el.previousElementSibling;
+                    if (prevSibling) {{
+                        if (prevSibling.tagName === 'IMG') {{
+                            const src = prevSibling.src || prevSibling.dataset?.src;
+                            if (src && !src.startsWith('data:')) {{
+                                images.push({{
+                                    url: src,
+                                    alt: prevSibling.alt || '',
+                                    title: prevSibling.title || '',
+                                    width: prevSibling.naturalWidth || prevSibling.width || null,
+                                    height: prevSibling.naturalHeight || prevSibling.height || null,
+                                    selector: getSelector(prevSibling)
+                                }});
+                            }}
+                        }} else if (prevSibling.tagName === 'FIGURE') {{
+                            images.push(...extractImages(prevSibling));
+                        }}
+                    }}
+
+                    return images;
+                }}
+
                 // Extract headings
                 document.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach(h => {{
                     if (shouldExclude(h)) return;
@@ -186,6 +257,8 @@ class TextExtractor(BaseExtractor):
                         text: text,
                         html: h.innerHTML,
                         selector: getSelector(h),
+                        images: findNearbyImages(h),
+                        links: extractLinks(h),
                         order: order++
                     }});
                 }});
@@ -213,6 +286,8 @@ class TextExtractor(BaseExtractor):
                         html: p.innerHTML,
                         selector: getSelector(p),
                         parentHeading: parentHeading,
+                        images: findNearbyImages(p),
+                        links: extractLinks(p),
                         order: order++
                     }});
                 }});
@@ -247,6 +322,8 @@ class TextExtractor(BaseExtractor):
                         text: items.join('\\n'),
                         selector: getSelector(list),
                         parentHeading: parentHeading,
+                        images: findNearbyImages(list),
+                        links: extractLinks(list),
                         order: order++
                     }});
                 }});
@@ -262,6 +339,8 @@ class TextExtractor(BaseExtractor):
                         text: text,
                         html: bq.innerHTML,
                         selector: getSelector(bq),
+                        images: findNearbyImages(bq),
+                        links: extractLinks(bq),
                         order: order++
                     }});
                 }});
@@ -280,6 +359,8 @@ class TextExtractor(BaseExtractor):
                         text: text,
                         language: code.className?.match(/language-(\\w+)/)?.[1] || null,
                         selector: getSelector(code),
+                        images: [],
+                        links: [],
                         order: order++
                     }});
                 }});
@@ -305,6 +386,8 @@ class TextExtractor(BaseExtractor):
                         items: items,
                         text: items.join('\\n'),
                         selector: getSelector(dl),
+                        images: findNearbyImages(dl),
+                        links: extractLinks(dl),
                         order: order++
                     }});
                 }});
@@ -337,6 +420,10 @@ class TextExtractor(BaseExtractor):
         for item in raw_content:
             item_type = item.get("type", "")
 
+            # Extract media assets and links from the item
+            media_assets = self._process_images(item.get("images", []))
+            links = item.get("links", [])
+
             if item_type == "heading":
                 current_heading = item.get("text", "")
                 block = ContentBlock(
@@ -346,6 +433,8 @@ class TextExtractor(BaseExtractor):
                     heading_level=item.get("level", 1),
                     source_selector=item.get("selector"),
                     order=item.get("order", 0),
+                    media_assets=media_assets,
+                    links=links,
                 )
                 blocks.append(block)
 
@@ -357,6 +446,8 @@ class TextExtractor(BaseExtractor):
                     source_selector=item.get("selector"),
                     parent_section=item.get("parentHeading") or current_heading,
                     order=item.get("order", 0),
+                    media_assets=media_assets,
+                    links=links,
                 )
                 blocks.append(block)
 
@@ -368,6 +459,8 @@ class TextExtractor(BaseExtractor):
                     source_selector=item.get("selector"),
                     parent_section=item.get("parentHeading") or current_heading,
                     order=item.get("order", 0),
+                    media_assets=media_assets,
+                    links=links,
                 )
                 blocks.append(block)
 
@@ -378,6 +471,8 @@ class TextExtractor(BaseExtractor):
                     html=item.get("html"),
                     source_selector=item.get("selector"),
                     order=item.get("order", 0),
+                    media_assets=media_assets,
+                    links=links,
                 )
                 blocks.append(block)
 
@@ -387,10 +482,42 @@ class TextExtractor(BaseExtractor):
                     text=item.get("text", ""),
                     source_selector=item.get("selector"),
                     order=item.get("order", 0),
+                    media_assets=[],
+                    links=[],
                 )
                 blocks.append(block)
 
         return blocks
+
+    def _process_images(self, raw_images: list[dict]) -> list[MediaAsset]:
+        """Convert raw image data to MediaAsset objects.
+
+        Args:
+            raw_images: List of raw image dictionaries from JavaScript extraction.
+
+        Returns:
+            List of MediaAsset objects.
+        """
+        assets = []
+        seen_urls = set()  # Avoid duplicates
+
+        for img in raw_images:
+            url = img.get("url", "")
+            if not url or url in seen_urls:
+                continue
+            seen_urls.add(url)
+
+            asset = MediaAsset(
+                url=url,
+                alt_text=img.get("alt") or None,
+                title=img.get("title") or None,
+                width=img.get("width"),
+                height=img.get("height"),
+                source_selector=img.get("selector"),
+            )
+            assets.append(asset)
+
+        return assets
 
     def _classify_content_blocks(
         self, blocks: list[ContentBlock]

@@ -52,6 +52,7 @@ htmlcov/
 # Data & Output
 data/extractions/*
 !data/extractions/.gitkeep
+data/projects/*
 output/
 downloads/
 *.log

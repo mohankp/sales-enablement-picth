@@ -101,6 +101,18 @@ Options:
 - `--model, -m`: Model to use (haiku, sonnet, opus)
 - `--verbose, -v`: Enable debug logging
 
+### Batch process multiple extractions
+```bash
+python -m src.main batch-process ./extractions --output ./processed --concurrency 5
+```
+
+Options:
+- `--output, -o`: Output directory for processed files
+- `--pattern, -p`: Glob pattern for input files (default: *.json)
+- `--concurrency, -c`: Maximum concurrent processing (1-10)
+- `--model, -m`: Model to use (haiku, sonnet, opus)
+- `--verbose, -v`: Enable debug logging
+
 ## Development
 
 ### Running Tests
@@ -184,14 +196,15 @@ async with ContentProcessor(config) as processor:
   - Technical specifications extraction
   - Multi-level summarization
   - CLI `process` command
+  - LLM result caching (memory + disk with TTL)
+  - Batch processing with concurrency control
+  - CLI `batch-process` command
 
 ### TODO
 - [ ] Pitch Generation Engine
 - [ ] Incremental Update System
 - [ ] Refinement Engine (conversational)
 - [ ] Output composers (PPTX, PDF)
-- [ ] LLM result caching
-- [ ] Batch processing optimization
 
 ## Key Design Decisions
 

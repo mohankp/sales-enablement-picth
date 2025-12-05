@@ -1,23 +1,22 @@
 {
   "product_name": "ADP SecurTime",
   "product_url": "https://in.adp.com/what-we-offer/products/adp-securtime.aspx",
-  "processing_id": "dc3bbc6ebae5",
+  "processing_id": "b5fb484dc6f5",
   "summary": {
-    "executive_summary": "ADP SecurTime is a comprehensive workforce management solution that provides real-time attendance tracking, biometric authentication, and integrated time and payroll management across diverse work environments.",
-    "detailed_summary": "ADP SecurTime is a cloud-based time and attendance platform designed to help organizations efficiently manage employee scheduling, attendance, and productivity. The solution offers advanced features like biometric authentication, geo-tracking, mobile app access, and integration with payroll systems, enabling businesses to reduce time fraud, optimize workforce management, and ensure compliance across various industries and work arrangements.",
-    "comprehensive_summary": "ADP SecurTime is a robust workforce management platform addressing time tracking, attendance, and payroll challenges. Key features include real-time attendance tracking, biometric authentication (facial recognition, fingerprint), mobile and tablet apps, geo-fencing, and industry-specific solutions. The platform supports diverse workforce types including full-time, part-time, contract, and gig workers across industries like manufacturing, healthcare, banking, and construction. It offers advanced capabilities such as automated shift scheduling, leave management, overtime tracking, and seamless payroll integration, with a strong emphasis on data privacy and security.",
+    "executive_summary": "ADP SecurTime is a comprehensive workforce management solution that provides real-time attendance tracking, biometric authentication, and seamless integration with payroll systems across diverse work environments.",
+    "detailed_summary": "ADP SecurTime offers an advanced cloud-based platform for managing employee time, attendance, and productivity across multiple industries and work arrangements. The solution leverages biometric technologies, mobile applications, and intelligent tracking to help organizations optimize workforce management, reduce time fraud, and ensure accurate payroll processing.",
+    "comprehensive_summary": "ADP SecurTime is a robust workforce management platform designed to streamline time tracking, attendance monitoring, and payroll processes. Key features include real-time attendance tracking, biometric authentication (facial recognition, fingerprint), mobile and tablet apps, geo-fencing, shift scheduling, leave management, and seamless payroll integration. The solution supports diverse workforce types including full-time, part-time, contract, and gig workers across industries like manufacturing, healthcare, banking, and construction. It addresses critical challenges such as time fraud, productivity tracking, and compliance with labor regulations.",
     "key_points": [
       "Real-time attendance tracking with biometric authentication",
-      "Mobile and tablet apps with geo-tracking capabilities",
-      "Supports diverse workforce types and multiple industries",
-      "Automated shift scheduling and leave management",
-      "Seamless payroll integration and compliance support",
-      "Advanced security with AWS cloud infrastructure",
-      "Reduces time fraud and improves workforce productivity"
+      "Mobile and cloud-based solution supporting diverse workforce types",
+      "Reduces time fraud and increases workforce productivity",
+      "Supports multiple industries with flexible scheduling options",
+      "Seamless integration with payroll and HR systems",
+      "Advanced security with multi-factor authentication and role-based access"
     ],
     "product_category": "Workforce Management Software",
     "tagline": "Get the right people in the right place, at the right time for the right cost",
-    "value_proposition": "ADP SecurTime simplifies workforce management by providing accurate, real-time attendance tracking, reducing time fraud, and enabling organizations to optimize productivity across diverse work environments."
+    "value_proposition": "ADP SecurTime simplifies workforce management by providing accurate, real-time attendance tracking and productivity insights across distributed and diverse work environments."
   },
   "features": {
     "features": [
@@ -36,7 +35,7 @@
           "Tracking on-premise and remote employees",
           "Monitoring productivity across multiple locations"
         ],
-        "technical_details": "Real-time data processing and visualization",
+        "technical_details": "Real-time data processing and synchronization",
         "limitations": [],
         "related_features": [],
         "is_unique": false,
@@ -55,9 +54,9 @@
           "Improves security"
         ],
         "use_cases": [
-          "Preventing ghost employee fraud",
-          "Securing attendance data",
-          "Contactless authentication"
+          "Secure employee identification",
+          "Preventing unauthorized entries",
+          "Contactless attendance marking"
         ],
         "technical_details": "Supports RFID, fingerprint, and facial recognition technologies",
         "limitations": [],
@@ -68,19 +67,19 @@
         "source_urls": []
       },
       {
-        "name": "Advanced Facial Recognition",
-        "description": "Contactless facial recognition with mask detection, temperature detection and thermal scanning capabilities",
+        "name": "Facial Recognition with Advanced Features",
+        "description": "Advanced facial recognition with mask detection, temperature detection, and thermal scanning capabilities",
         "category": "security",
         "benefits": [
-          "Contactless operation",
-          "Enhanced workplace safety",
-          "Improved hygiene protocols",
-          "COVID-19 compliance"
+          "Contactless attendance",
+          "Health safety compliance",
+          "Enhanced workplace hygiene",
+          "COVID-19 protocol support"
         ],
         "use_cases": [
           "Post-pandemic workplace safety",
-          "Healthcare environments",
-          "High-security facilities"
+          "Health screening",
+          "Contactless operations"
         ],
         "technical_details": "Includes mask detection, temperature detection, and thermal scanning",
         "limitations": [],
@@ -91,19 +90,19 @@
         "source_urls": []
       },
       {
-        "name": "Mobile App with GPS Tracking",
-        "description": "Cloud-based mobile application with geo-tagging, geo-fencing, and live tracking capabilities",
+        "name": "Mobile App with Geo-features",
+        "description": "Cloud-based mobile app with geo-tagging, geo-fencing, and live tracking capabilities",
         "category": "core",
         "benefits": [
           "Track mobile workforce",
           "Prevent location fraud",
           "Real-time location monitoring",
-          "Convenience for employees"
+          "Flexible attendance marking"
         ],
         "use_cases": [
           "Field employees",
+          "Remote workers",
           "Sales teams",
-          "Construction workers",
           "Delivery personnel"
         ],
         "technical_details": "Available on Android and iOS, includes IMEI tagging to prevent proxy attendance",
@@ -115,46 +114,22 @@
         "source_urls": []
       },
       {
-        "name": "Geo-fencing and Geo-tagging",
-        "description": "Location-based attendance capture with geographic restrictions and location tracking",
-        "category": "core",
-        "benefits": [
-          "Ensures employees are at correct locations",
-          "Prevents attendance fraud",
-          "Optimizes route planning",
-          "Accurate location reporting"
-        ],
-        "use_cases": [
-          "Multi-location businesses",
-          "Field service teams",
-          "Retail chains",
-          "Construction sites"
-        ],
-        "technical_details": "GPS-based location verification with customizable geographic boundaries",
-        "limitations": [],
-        "related_features": [],
-        "is_unique": false,
-        "is_flagship": false,
-        "confidence_score": 1.0,
-        "source_urls": []
-      },
-      {
-        "name": "Automated Shift Scheduling",
-        "description": "Auto shift scheduling based on employee availability, skill set, and business criteria",
+        "name": "Automatic Shift Scheduling",
+        "description": "Automated shift scheduling based on employee availability, skill set, and business requirements",
         "category": "automation",
         "benefits": [
-          "Reduces manual scheduling effort",
-          "Optimizes resource allocation",
-          "Improves productivity",
-          "Ensures proper staffing"
+          "Reduced manual scheduling effort",
+          "Optimized resource allocation",
+          "Fair shift distribution",
+          "Improved productivity"
         ],
         "use_cases": [
           "24/7 operations",
-          "Manufacturing",
-          "Healthcare",
-          "Retail"
+          "Manufacturing shifts",
+          "Healthcare rostering",
+          "Retail scheduling"
         ],
-        "technical_details": "Automated scheduling algorithms with shift cut-off, shift rotation, and on-call tracking",
+        "technical_details": "Auto shift scheduling with shift cut-off, shift rotation, and on-call tracking",
         "limitations": [],
         "related_features": [],
         "is_unique": false,
@@ -168,16 +143,17 @@
         "category": "core",
         "benefits": [
           "Streamlined leave processes",
-          "Automated policy enforcement",
+          "Policy compliance",
           "Reduced administrative burden",
-          "Better compliance"
+          "Better workforce planning"
         ],
         "use_cases": [
-          "Managing different employee groups",
-          "Policy compliance",
-          "Leave approval workflows"
+          "Annual leave planning",
+          "Sick leave tracking",
+          "Policy enforcement",
+          "Approval workflows"
         ],
-        "technical_details": "Configurable leave policies for different employee groups with mobile approval capabilities",
+        "technical_details": "Define leave and workflow policies for different employee groups",
         "limitations": [],
         "related_features": [],
         "is_unique": false,
@@ -187,20 +163,21 @@
       },
       {
         "name": "Overtime Management",
-        "description": "Automatic overtime calculation and policy enforcement with real-time monitoring",
+        "description": "Automated overtime calculation and policy enforcement with real-time monitoring",
         "category": "core",
         "benefits": [
-          "Accurate overtime calculation",
           "Cost control",
           "Compliance with labor laws",
-          "Proactive overtime alerts"
+          "Accurate compensation",
+          "Budget management"
         ],
         "use_cases": [
-          "Manufacturing",
-          "Healthcare",
-          "Any business with hourly workers"
+          "Labor law compliance",
+          "Cost management",
+          "Fair compensation",
+          "Workload monitoring"
         ],
-        "technical_details": "Customizable overtime policies for specific employee groups with automatic calculation",
+        "technical_details": "Overtime rules specific to individual businesses and locations",
         "limitations": [],
         "related_features": [],
         "is_unique": false,
@@ -215,16 +192,16 @@
         "benefits": [
           "Accurate client billing",
           "Project cost tracking",
-          "Resource allocation insights",
+          "Resource utilization insights",
           "Improved profitability"
         ],
         "use_cases": [
           "Professional services",
           "IT services",
-          "Consulting firms",
+          "Consulting",
           "Project-based work"
         ],
-        "technical_details": "Time allocation tracking with client and project categorization",
+        "technical_details": "Time tracking against clients, projects, and activities",
         "limitations": [],
         "related_features": [],
         "is_unique": false,
@@ -234,20 +211,21 @@
       },
       {
         "name": "Role-based Dashboards",
-        "description": "Different dashboard views and access levels based on user roles in the organization",
+        "description": "Customized dashboards and views based on different organizational roles",
         "category": "usability",
         "benefits": [
           "Personalized user experience",
-          "Appropriate access control",
-          "Relevant information display",
-          "Improved efficiency"
+          "Relevant information access",
+          "Improved efficiency",
+          "Better decision making"
         ],
         "use_cases": [
-          "Multi-level organizations",
-          "Different user types",
-          "Hierarchical access control"
+          "Management reporting",
+          "HR administration",
+          "Employee self-service",
+          "Supervisor monitoring"
         ],
-        "technical_details": "Customizable dashboards with role-based access control",
+        "technical_details": "Different dashboard views based on organizational roles",
         "limitations": [],
         "related_features": [],
         "is_unique": false,
@@ -257,7 +235,7 @@
       },
       {
         "name": "Approval Workflows",
-        "description": "Configurable workflows for different tasks requiring supervisor approval",
+        "description": "Configurable workflows for various tasks requiring supervisor approval",
         "category": "automation",
         "benefits": [
           "Streamlined approval processes",
@@ -271,7 +249,7 @@
           "Schedule changes",
           "Exception handling"
         ],
-        "technical_details": "Workflow engine with configurable approval chains",
+        "technical_details": "Creation of workflows based on different tasks for easy approval from supervisors",
         "limitations": [],
         "related_features": [],
         "is_unique": false,
@@ -280,21 +258,22 @@
         "source_urls": []
       },
       {
-        "name": "Employee Self-Service",
-        "description": "Employees can view attendance data, apply for leaves, and access personal information",
+        "name": "Employee Self-Service Portal",
+        "description": "Employee portal for viewing attendance, applying for leave, and accessing personal data",
         "category": "usability",
         "benefits": [
           "Reduced HR workload",
           "Employee empowerment",
-          "Real-time access to information",
-          "Improved satisfaction"
+          "Improved transparency",
+          "Better user experience"
         ],
         "use_cases": [
-          "Employee data access",
           "Leave applications",
-          "Attendance queries"
+          "Attendance viewing",
+          "Personal data updates",
+          "Schedule viewing"
         ],
-        "technical_details": "Self-service portal with mobile access",
+        "technical_details": "Web-based and mobile access for employee self-service",
         "limitations": [],
         "related_features": [],
         "is_unique": false,
@@ -307,17 +286,18 @@
         "description": "Seamless integration with ADP Vista Payroll and other payroll systems",
         "category": "integration",
         "benefits": [
-          "Eliminates double data entry",
-          "Reduces errors",
-          "Faster payroll processing",
-          "Improved accuracy"
+          "Reduced data entry errors",
+          "Streamlined payroll processing",
+          "Accurate pay calculations",
+          "Time savings"
         ],
         "use_cases": [
-          "Payroll processing",
-          "Data synchronization",
-          "Compliance reporting"
+          "Automated payroll processing",
+          "Accurate wage calculations",
+          "Compliance reporting",
+          "Error reduction"
         ],
-        "technical_details": "Direct integration with ADP Vista Payroll and other leading payroll systems",
+        "technical_details": "Integration with ADP Vista Payroll and other leading payroll systems",
         "limitations": [],
         "related_features": [],
         "is_unique": false,
@@ -326,21 +306,22 @@
         "source_urls": []
       },
       {
-        "name": "Multi-location Support",
-        "description": "Manage workforce across 1,000+ distributed locations",
+        "name": "Multi-location Management",
+        "description": "Manage workforce across 1,000+ distributed locations from a single platform",
         "category": "core",
         "benefits": [
           "Centralized management",
-          "Scalable solution",
+          "Scalability",
           "Consistent policies",
-          "Real-time visibility"
+          "Operational efficiency"
         ],
         "use_cases": [
-          "Multi-location businesses",
-          "Franchise operations",
+          "Multi-site organizations",
+          "Retail chains",
+          "Distributed workforce",
           "Large enterprises"
         ],
-        "technical_details": "Cloud-based architecture supporting 1,000+ locations",
+        "technical_details": "Supports management across 1,000+ locations",
         "limitations": [],
         "related_features": [],
         "is_unique": false,
@@ -350,20 +331,21 @@
       },
       {
         "name": "Irregularity Detection",
-        "description": "Automatically detects attendance irregularities and prevents unauthorized entries",
-        "category": "security",
+        "description": "Automatic detection of attendance irregularities and data cross-referencing",
+        "category": "analytics",
         "benefits": [
           "Fraud prevention",
-          "Data integrity",
-          "Compliance assurance",
-          "Cost savings"
+          "Data accuracy",
+          "Compliance monitoring",
+          "Risk mitigation"
         ],
         "use_cases": [
-          "Fraud detection",
+          "Time fraud detection",
+          "Ghost employee identification",
           "Compliance monitoring",
-          "Data validation"
+          "Audit support"
         ],
-        "technical_details": "Automated data cross-referencing and anomaly detection",
+        "technical_details": "Automatically detects irregularities and cross-references data",
         "limitations": [],
         "related_features": [],
         "is_unique": false,
@@ -372,26 +354,50 @@
         "source_urls": []
       },
       {
-        "name": "Customizable Reports",
-        "description": "Meticulous audits and customizable reports for labor costs and attendance analytics",
+        "name": "Customizable Reporting",
+        "description": "Comprehensive reporting with customizable options for various business needs",
         "category": "analytics",
         "benefits": [
           "Business insights",
-          "Cost analysis",
           "Compliance reporting",
-          "Data-driven decisions"
+          "Cost analysis",
+          "Performance monitoring"
         ],
         "use_cases": [
           "Management reporting",
           "Compliance audits",
           "Cost analysis",
-          "Performance monitoring"
+          "Performance reviews"
         ],
-        "technical_details": "Customizable report builder with various output formats",
+        "technical_details": "Meticulous audits and customizable reports",
         "limitations": [],
         "related_features": [],
         "is_unique": false,
         "is_flagship": false,
+        "confidence_score": 1.0,
+        "source_urls": []
+      },
+      {
+        "name": "Cloud-based Architecture",
+        "description": "Fully cloud-based solution with pay-as-you-go scaling options",
+        "category": "performance",
+        "benefits": [
+          "No infrastructure investment",
+          "Scalability",
+          "Reduced maintenance",
+          "Global accessibility"
+        ],
+        "use_cases": [
+          "Growing businesses",
+          "Remote operations",
+          "Cost-conscious organizations",
+          "Global operations"
+        ],
+        "technical_details": "Cloud-based with pay-as-you-go pricing model",
+        "limitations": [],
+        "related_features": [],
+        "is_unique": false,
+        "is_flagship": true,
         "confidence_score": 1.0,
         "source_urls": []
       },
@@ -402,16 +408,16 @@
         "benefits": [
           "Cost-effective deployment",
           "Shared workspace support",
-          "Easy authentication",
-          "Location-based access"
+          "Flexible authentication",
+          "Easy management"
         ],
         "use_cases": [
           "Kiosks",
-          "Shared workspaces",
+          "Shared workstations",
           "Manufacturing floors",
-          "Retail locations"
+          "Common areas"
         ],
-        "technical_details": "Multi-user authentication on single device with geofencing",
+        "technical_details": "Multiple employee authentication on single device with geofencing",
         "limitations": [],
         "related_features": [],
         "is_unique": false,
@@ -421,20 +427,21 @@
       },
       {
         "name": "Web Punch",
-        "description": "Web-based attendance marking for on-premise and work-from-home employees",
-        "category": "core",
+        "description": "Web-based attendance marking for office and remote workers",
+        "category": "usability",
         "benefits": [
           "Flexible access",
           "Remote work support",
-          "Quick clock in/out",
-          "Centralized data storage"
+          "Easy deployment",
+          "Universal compatibility"
         ],
         "use_cases": [
-          "Remote workers",
-          "Office employees",
-          "Hybrid work arrangements"
+          "Office workers",
+          "Remote employees",
+          "Work-from-home",
+          "Hybrid work models"
         ],
-        "technical_details": "Web-based application with cloud storage",
+        "technical_details": "Web-based punch application with centralized cloud storage",
         "limitations": [],
         "related_features": [],
         "is_unique": false,
@@ -443,45 +450,22 @@
         "source_urls": []
       },
       {
-        "name": "BYOD Integration",
-        "description": "Integration with existing biometric devices and systems",
-        "category": "integration",
-        "benefits": [
-          "Cost savings",
-          "Leverage existing investments",
-          "Flexible deployment",
-          "Reduced implementation time"
-        ],
-        "use_cases": [
-          "Upgrading existing systems",
-          "Phased implementations",
-          "Budget-conscious deployments"
-        ],
-        "technical_details": "Plug-and-play integration with existing biometric systems",
-        "limitations": [],
-        "related_features": [],
-        "is_unique": false,
-        "is_flagship": false,
-        "confidence_score": 1.0,
-        "source_urls": []
-      },
-      {
-        "name": "Employee Communication Hub",
-        "description": "Communication features including HR questions, expense management, and surveys",
+        "name": "Employee Communication Features",
+        "description": "Built-in communication tools including HR Q&A, expense management, and surveys",
         "category": "collaboration",
         "benefits": [
           "Improved communication",
-          "Centralized employee services",
-          "Better engagement",
-          "Streamlined processes"
-        ],
-        "use_cases": [
           "Employee engagement",
-          "HR communications",
+          "Streamlined processes",
+          "Better feedback"
+        ],
+        "use_cases": [
+          "Employee queries",
           "Expense reporting",
-          "Feedback collection"
+          "Feedback collection",
+          "Internal communication"
         ],
-        "technical_details": "Integrated communication platform with multiple service modules",
+        "technical_details": "Feature to ask HR questions, expense management and surveys",
         "limitations": [],
         "related_features": [],
         "is_unique": false,
@@ -490,183 +474,22 @@
         "source_urls": []
       },
       {
-        "name": "Front Camera Self-Validation",
-        "description": "Mobile app feature using front camera for employee identity validation",
-        "category": "security",
-        "benefits": [
-          "Prevents proxy attendance",
-          "Identity verification",
-          "Fraud prevention",
-          "Easy authentication"
-        ],
-        "use_cases": [
-          "Mobile workforce",
-          "Remote employees",
-          "Field workers"
-        ],
-        "technical_details": "Front-facing camera facial recognition with IMEI tagging",
-        "limitations": [],
-        "related_features": [],
-        "is_unique": false,
-        "is_flagship": false,
-        "confidence_score": 1.0,
-        "source_urls": []
-      },
-      {
-        "name": "Live Attendance Alerts",
-        "description": "Real-time alerts and notifications for attendance events",
-        "category": "automation",
-        "benefits": [
-          "Proactive management",
-          "Immediate issue resolution",
-          "Better compliance",
-          "Reduced absenteeism"
-        ],
-        "use_cases": [
-          "Shift management",
-          "Attendance monitoring",
-          "Compliance tracking"
-        ],
-        "technical_details": "Real-time notification system with configurable alert rules",
-        "limitations": [],
-        "related_features": [],
-        "is_unique": false,
-        "is_flagship": false,
-        "confidence_score": 1.0,
-        "source_urls": []
-      },
-      {
-        "name": "Shift Bidding and Acceptance",
-        "description": "Transparent shift bidding system allowing employees to bid for preferred shifts",
-        "category": "usability",
-        "benefits": [
-          "Fair shift allocation",
-          "Employee satisfaction",
-          "Reduced conflicts",
-          "Transparent process"
-        ],
-        "use_cases": [
-          "24/7 operations",
-          "Flexible scheduling",
-          "Employee preference management"
-        ],
-        "technical_details": "Automated bidding system with transparent allocation rules",
-        "limitations": [],
-        "related_features": [],
-        "is_unique": true,
-        "is_flagship": false,
-        "confidence_score": 1.0,
-        "source_urls": []
-      },
-      {
-        "name": "On-call Tracking",
-        "description": "Track and manage on-call schedules and activities",
+        "name": "Diverse Workforce Management",
+        "description": "Support for full-time, part-time, contract, gig, and contingent employees",
         "category": "core",
         "benefits": [
-          "Accurate on-call compensation",
-          "Better resource planning",
-          "Compliance tracking",
-          "Cost control"
-        ],
-        "use_cases": [
-          "Healthcare",
-          "IT services",
-          "Emergency services",
-          "Technical support"
-        ],
-        "technical_details": "On-call schedule management with automatic tracking",
-        "limitations": [],
-        "related_features": [],
-        "is_unique": false,
-        "is_flagship": false,
-        "confidence_score": 1.0,
-        "source_urls": []
-      },
-      {
-        "name": "Payroll Freeze and LOP Reversal",
-        "description": "Policies to implement payroll freeze and Loss of Pay reversal for discipline management",
-        "category": "automation",
-        "benefits": [
-          "Improved discipline",
-          "Reduced payroll gaps",
-          "Better compliance",
-          "Automated policy enforcement"
-        ],
-        "use_cases": [
-          "Disciplinary actions",
-          "Attendance improvement",
-          "Policy enforcement"
-        ],
-        "technical_details": "Automated policy enforcement with configurable rules",
-        "limitations": [],
-        "related_features": [],
-        "is_unique": true,
-        "is_flagship": false,
-        "confidence_score": 1.0,
-        "source_urls": []
-      },
-      {
-        "name": "Multi-Manager Support",
-        "description": "Support for different managers for day and night shifts",
-        "category": "usability",
-        "benefits": [
-          "Flexible management structure",
-          "Appropriate oversight",
-          "Better shift management",
-          "Clear accountability"
-        ],
-        "use_cases": [
-          "24/7 operations",
-          "Multiple shift patterns",
-          "Complex organizational structures"
-        ],
-        "technical_details": "Configurable manager assignments based on shift patterns",
-        "limitations": [],
-        "related_features": [],
-        "is_unique": false,
-        "is_flagship": false,
-        "confidence_score": 1.0,
-        "source_urls": []
-      },
-      {
-        "name": "Employee Group-based Policies",
-        "description": "Different policies for different employee groups including contract workers",
-        "category": "customization",
-        "benefits": [
-          "Flexible policy management",
-          "Compliance with different regulations",
-          "Tailored approach",
-          "Better control"
+          "Workforce flexibility",
+          "Comprehensive coverage",
+          "Tailored policies",
+          "Unified management"
         ],
         "use_cases": [
           "Mixed workforce",
-          "Contract employees",
-          "Different employment types"
+          "Gig economy",
+          "Seasonal workers",
+          "Contract employees"
         ],
-        "technical_details": "Policy engine supporting multiple employee classifications",
-        "limitations": [],
-        "related_features": [],
-        "is_unique": false,
-        "is_flagship": false,
-        "confidence_score": 1.0,
-        "source_urls": []
-      },
-      {
-        "name": "Cloud-based Architecture",
-        "description": "Fully cloud-based solution with pay-as-you-go scaling",
-        "category": "performance",
-        "benefits": [
-          "No infrastructure investment",
-          "Scalable solution",
-          "Reduced IT overhead",
-          "Flexible pricing"
-        ],
-        "use_cases": [
-          "Growing businesses",
-          "Multi-location operations",
-          "Cost-conscious implementations"
-        ],
-        "technical_details": "AWS cloud infrastructure with pay-as-you-go pricing model",
+        "technical_details": "Tailored tracking for different employee types",
         "limitations": [],
         "related_features": [],
         "is_unique": false,
@@ -675,21 +498,46 @@
         "source_urls": []
       },
       {
-        "name": "Data Security and Privacy",
-        "description": "Comprehensive security with AWS cloud, multi-factor authentication, and role-based access",
+        "name": "Biometric Device Integration",
+        "description": "Integration with existing biometric devices and support for new device procurement",
+        "category": "integration",
+        "benefits": [
+          "Protect existing investments",
+          "Flexible deployment",
+          "Vendor choice",
+          "Easy migration"
+        ],
+        "use_cases": [
+          "Existing device utilization",
+          "Phased rollouts",
+          "Mixed device environments",
+          "Upgrade paths"
+        ],
+        "technical_details": "Plug-n-play integration with existing biometric systems",
+        "limitations": [],
+        "related_features": [],
+        "is_unique": false,
+        "is_flagship": false,
+        "confidence_score": 1.0,
+        "source_urls": []
+      },
+      {
+        "name": "Advanced Security Features",
+        "description": "Multi-layered security including AWS cloud centers, multi-factor authentication, and role-based access",
         "category": "security",
         "benefits": [
           "Data protection",
           "Compliance assurance",
-          "Secure access",
+          "Access control",
           "Audit trail"
         ],
         "use_cases": [
           "Sensitive data protection",
           "Compliance requirements",
-          "Secure operations"
+          "Access management",
+          "Security audits"
         ],
-        "technical_details": "AWS cloud data centers, multi-factor authentication, role-based access control, secure API integration",
+        "technical_details": "AWS Cloud data centers, multifactor authentication, role-based access control, secure API integration",
         "limitations": [],
         "related_features": [],
         "is_unique": false,
@@ -699,23 +547,70 @@
       },
       {
         "name": "Industry-specific Solutions",
-        "description": "Tailored solutions for specific industries including manufacturing, healthcare, construction, etc.",
+        "description": "Tailored solutions for manufacturing, healthcare, construction, banking, retail, and other industries",
         "category": "customization",
         "benefits": [
           "Industry-specific features",
-          "Better compliance",
+          "Compliance support",
           "Optimized workflows",
-          "Relevant functionality"
+          "Best practices"
         ],
         "use_cases": [
-          "Manufacturing",
-          "Healthcare",
-          "Construction",
-          "Banking",
-          "Retail",
-          "Transport & Logistics"
+          "Manufacturing shifts",
+          "Healthcare rostering",
+          "Construction sites",
+          "Retail operations",
+          "Banking services"
         ],
-        "technical_details": "Pre-configured industry templates with specific features",
+        "technical_details": "Customized for Manufacturing, Transport & Logistics, Banking, Healthcare, Professional Services, Construction",
+        "limitations": [],
+        "related_features": [],
+        "is_unique": false,
+        "is_flagship": true,
+        "confidence_score": 1.0,
+        "source_urls": []
+      },
+      {
+        "name": "Shift Bidding and Acceptance",
+        "description": "Transparent shift bidding system allowing employees to bid for preferred shifts",
+        "category": "usability",
+        "benefits": [
+          "Employee satisfaction",
+          "Fair shift distribution",
+          "Reduced conflicts",
+          "Improved morale"
+        ],
+        "use_cases": [
+          "Shift-based operations",
+          "Employee preference management",
+          "Fair scheduling",
+          "Conflict resolution"
+        ],
+        "technical_details": "Transparent shift bidding and acceptance system",
+        "limitations": [],
+        "related_features": [],
+        "is_unique": true,
+        "is_flagship": false,
+        "confidence_score": 1.0,
+        "source_urls": []
+      },
+      {
+        "name": "Punch Alerts and Notifications",
+        "description": "Automated alerts and notifications for punch reminders and attendance issues",
+        "category": "automation",
+        "benefits": [
+          "Reduced missed punches",
+          "Improved accuracy",
+          "Proactive management",
+          "Better compliance"
+        ],
+        "use_cases": [
+          "Shift reminders",
+          "Attendance monitoring",
+          "Exception handling",
+          "Manager notifications"
+        ],
+        "technical_details": "Punch alerts based on shift timing with mobile notifications",
         "limitations": [],
         "related_features": [],
         "is_unique": false,
@@ -724,22 +619,238 @@
         "source_urls": []
       },
       {
-        "name": "24/7 Support Services",
-        "description": "Comprehensive support including L1 helpdesk, L2/L3 technical support, and remote management",
-        "category": "support",
+        "name": "Front Camera Self-validation",
+        "description": "Mobile app feature using front camera for employee identity validation",
+        "category": "security",
         "benefits": [
-          "Continuous operation",
-          "Expert support",
-          "Remote troubleshooting",
-          "Minimal downtime"
+          "Prevents proxy attendance",
+          "Identity verification",
+          "Fraud prevention",
+          "Accurate tracking"
         ],
         "use_cases": [
-          "Critical operations",
-          "Technical issues",
-          "System maintenance",
-          "User support"
+          "Mobile workforce",
+          "Remote employees",
+          "Field workers",
+          "Anti-fraud measures"
         ],
-        "technical_details": "SLA-based support model with multiple support levels and remote management capabilities",
+        "technical_details": "Front camera validation with IMEI tagging to prevent proxy attendance",
+        "limitations": [],
+        "related_features": [],
+        "is_unique": false,
+        "is_flagship": false,
+        "confidence_score": 1.0,
+        "source_urls": []
+      },
+      {
+        "name": "Employee Group-based Policies",
+        "description": "Different policies and rules for different employee groups and categories",
+        "category": "customization",
+        "benefits": [
+          "Policy flexibility",
+          "Compliance management",
+          "Tailored rules",
+          "Administrative efficiency"
+        ],
+        "use_cases": [
+          "Contract vs permanent employees",
+          "Different departments",
+          "Various locations",
+          "Role-based policies"
+        ],
+        "technical_details": "Employee group-based policies for tracking different employee types",
+        "limitations": [],
+        "related_features": [],
+        "is_unique": false,
+        "is_flagship": false,
+        "confidence_score": 1.0,
+        "source_urls": []
+      },
+      {
+        "name": "Payroll Freeze and LOP Reversal",
+        "description": "Policies for payroll freeze and Loss of Pay (LOP) reversal to improve discipline",
+        "category": "automation",
+        "benefits": [
+          "Improved discipline",
+          "Policy enforcement",
+          "Reduced payroll gaps",
+          "Better compliance"
+        ],
+        "use_cases": [
+          "Disciplinary actions",
+          "Policy enforcement",
+          "Payroll management",
+          "Attendance improvement"
+        ],
+        "technical_details": "Payroll Freeze and LOP Reversal policies",
+        "limitations": [],
+        "related_features": [],
+        "is_unique": true,
+        "is_flagship": false,
+        "confidence_score": 1.0,
+        "source_urls": []
+      },
+      {
+        "name": "Multiple Manager Support",
+        "description": "Support for different managers for day and night shifts",
+        "category": "usability",
+        "benefits": [
+          "Flexible management structure",
+          "24/7 operations support",
+          "Clear accountability",
+          "Efficient supervision"
+        ],
+        "use_cases": [
+          "24/7 operations",
+          "Shift-based management",
+          "Multiple supervisors",
+          "Round-the-clock monitoring"
+        ],
+        "technical_details": "Multiple manager support for different shifts",
+        "limitations": [],
+        "related_features": [],
+        "is_unique": false,
+        "is_flagship": false,
+        "confidence_score": 1.0,
+        "source_urls": []
+      },
+      {
+        "name": "Continuous Presence Limits",
+        "description": "Limit maximum days of continuous presence for compliance and productivity",
+        "category": "automation",
+        "benefits": [
+          "Compliance assurance",
+          "Employee wellbeing",
+          "Productivity optimization",
+          "Risk management"
+        ],
+        "use_cases": [
+          "Labor law compliance",
+          "Employee health",
+          "Productivity management",
+          "Risk mitigation"
+        ],
+        "technical_details": "Maximum continuous presence day limits",
+        "limitations": [],
+        "related_features": [],
+        "is_unique": true,
+        "is_flagship": false,
+        "confidence_score": 1.0,
+        "source_urls": []
+      },
+      {
+        "name": "Employee-to-Store Mapping",
+        "description": "Geofencing-based mapping ensuring employees can only mark attendance at assigned locations",
+        "category": "security",
+        "benefits": [
+          "Location accuracy",
+          "Prevents cross-location attendance",
+          "Improved security",
+          "Better tracking"
+        ],
+        "use_cases": [
+          "Retail chains",
+          "Multiple locations",
+          "Store-specific employees",
+          "Location-based operations"
+        ],
+        "technical_details": "Employee to store mapping using devices and geo-fencing",
+        "limitations": [],
+        "related_features": [],
+        "is_unique": false,
+        "is_flagship": false,
+        "confidence_score": 1.0,
+        "source_urls": []
+      },
+      {
+        "name": "On-call Tracking",
+        "description": "Special tracking for on-call employees and after-hours work",
+        "category": "core",
+        "benefits": [
+          "Accurate compensation",
+          "Compliance tracking",
+          "Better scheduling",
+          "Cost management"
+        ],
+        "use_cases": [
+          "Healthcare on-call",
+          "Emergency services",
+          "IT support",
+          "Maintenance teams"
+        ],
+        "technical_details": "On-call tracking for work beyond regular shift times",
+        "limitations": [],
+        "related_features": [],
+        "is_unique": false,
+        "is_flagship": false,
+        "confidence_score": 1.0,
+        "source_urls": []
+      },
+      {
+        "name": "Shift Cut-off Management",
+        "description": "Automatic identification and separation of prior day night shift and current day shift",
+        "category": "automation",
+        "benefits": [
+          "Accurate shift tracking",
+          "Proper time allocation",
+          "Payroll accuracy",
+          "Compliance support"
+        ],
+        "use_cases": [
+          "Night shift operations",
+          "24/7 businesses",
+          "Shift transitions",
+          "Accurate payroll"
+        ],
+        "technical_details": "Shift cut-off to identify prior day night shift and current day shift",
+        "limitations": [],
+        "related_features": [],
+        "is_unique": false,
+        "is_flagship": false,
+        "confidence_score": 1.0,
+        "source_urls": []
+      },
+      {
+        "name": "Remote Support and Maintenance",
+        "description": "SLA-based remote support with L1, L2, and L3 support levels",
+        "category": "support",
+        "benefits": [
+          "Reduced downtime",
+          "Cost-effective support",
+          "Expert assistance",
+          "Proactive maintenance"
+        ],
+        "use_cases": [
+          "System maintenance",
+          "Technical support",
+          "Software updates",
+          "Issue resolution"
+        ],
+        "technical_details": "SLA-based low-cost remote support model with L1 HelpDesk, L2/L3 business hours support",
+        "limitations": [],
+        "related_features": [],
+        "is_unique": false,
+        "is_flagship": false,
+        "confidence_score": 1.0,
+        "source_urls": []
+      },
+      {
+        "name": "API Integration with Alerts",
+        "description": "Secure API integration with deep visibility and alert notifications",
+        "category": "integration",
+        "benefits": [
+          "System integration",
+          "Real-time monitoring",
+          "Proactive alerts",
+          "Seamless connectivity"
+        ],
+        "use_cases": [
+          "Third-party integrations",
+          "System monitoring",
+          "Alert management",
+          "Data synchronization"
+        ],
+        "technical_details": "Secure integration with deep visibility into API calls and alert notifications",
         "limitations": [],
         "related_features": [],
         "is_unique": false,
@@ -751,32 +862,34 @@
     "flagship_features": [
       "Real-time Attendance Tracking",
       "Biometric Authentication",
-      "Advanced Facial Recognition",
-      "Mobile App with GPS Tracking",
-      "Automated Shift Scheduling",
+      "Facial Recognition with Advanced Features",
+      "Mobile App with Geo-features",
+      "Automatic Shift Scheduling",
       "Payroll Integration",
-      "Multi-location Support",
+      "Multi-location Management",
       "Cloud-based Architecture",
-      "Data Security and Privacy"
+      "Diverse Workforce Management",
+      "Advanced Security Features",
+      "Industry-specific Solutions"
     ],
     "feature_count_by_category": {
-      "core": 9,
+      "core": 8,
       "security": 5,
-      "automation": 4,
-      "usability": 5,
-      "integration": 2,
-      "analytics": 1,
+      "automation": 6,
+      "usability": 6,
+      "integration": 3,
+      "analytics": 2,
+      "performance": 1,
       "collaboration": 1,
       "customization": 2,
-      "performance": 1,
       "support": 1
     }
   },
   "benefits": {
     "benefits": [
       {
-        "headline": "Stop revenue loss from time fraud and ghost employees",
-        "description": "Eliminate time fraud that costs up to 5% of gross payroll through biometric authentication and real-time tracking. Prevent ghost employee fraud that affects 29% of businesses with secure, verified attendance recording.",
+        "headline": "Eliminate time fraud and reduce payroll costs by up to 5%",
+        "description": "Biometric authentication and real-time tracking prevent buddy punching, ghost employees, and time theft. Automated detection of irregularities and unauthorized entries ensures you only pay for actual hours worked.",
         "target_audience": [
           "business",
           "executive"
@@ -784,481 +897,547 @@
         "supporting_features": [
           "Biometric authentication",
           "Real-time tracking",
+          "Automatic irregularity detection",
           "Facial recognition",
-          "Fingerprint scanning",
-          "Automated irregularity detection"
+          "IMEI tagging"
         ],
         "proof_points": [
           "Time fraud can cost businesses up to 5% of gross payroll",
           "29% of all businesses are affected by ghost employee fraud",
-          "A worker 10 minutes late daily costs 40 hours of mistaken pay per year"
+          "Reduce time tracking errors by 30% on average"
         ],
         "emotional_appeal": null,
-        "business_impact": "Direct payroll cost savings, improved profit margins, reduced financial risk"
+        "business_impact": "Direct payroll cost savings, improved financial accuracy"
       },
       {
-        "headline": "Reduce time tracking errors by 30% with automated systems",
-        "description": "Replace error-prone manual processes with automated time collection and tracking. Eliminate calculation mistakes and ensure accurate payroll processing with seamless integration to payroll systems.",
+        "headline": "Boost productivity by 35% through better attendance management",
+        "description": "Real-time visibility into workforce attendance, automated scheduling, and proactive absence management help minimize disruptions and optimize resource allocation across distributed teams.",
+        "target_audience": [
+          "business",
+          "executive"
+        ],
+        "supporting_features": [
+          "Real-time attendance tracking",
+          "Automated shift scheduling",
+          "Absence management",
+          "Mobile app with GPS"
+        ],
+        "proof_points": [
+          "Businesses suffer 35.5% loss in productivity from unplanned absenteeism"
+        ],
+        "emotional_appeal": null,
+        "business_impact": "Increased operational efficiency, better resource utilization"
+      },
+      {
+        "headline": "Streamline payroll processing and ensure compliance",
+        "description": "Seamlessly integrate accurate time data directly into payroll systems with automated overtime calculations and labor law compliance. Eliminate manual data entry and reduce payroll errors.",
         "target_audience": [
           "business",
           "technical"
         ],
         "supporting_features": [
-          "Automated time tracking",
           "Payroll integration",
-          "Real-time data collection",
-          "Error detection algorithms"
-        ],
-        "proof_points": [
-          "Reduce time tracking errors by 30% on average with Time & Attendance tracking system"
-        ],
-        "emotional_appeal": null,
-        "business_impact": "Reduced payroll errors, lower administrative costs, improved compliance"
-      },
-      {
-        "headline": "Manage distributed workforce across 1,000+ locations in real-time",
-        "description": "Get instant visibility into attendance, productivity, and compliance across vast distributed teams. Track on-premise, remote, and mobile employees from a single platform with geo-fencing and location-based reporting.",
-        "target_audience": [
-          "business",
-          "executive"
-        ],
-        "supporting_features": [
-          "Multi-location management",
-          "Geo-fencing",
-          "GPS tracking",
-          "Mobile app",
-          "Real-time dashboards",
-          "Location-based reporting"
-        ],
-        "proof_points": [
-          "Manage employees across 1,000+ locations",
-          "Client rating of 4 out of 5 stars"
-        ],
-        "emotional_appeal": null,
-        "business_impact": "Improved operational efficiency, better resource allocation, enhanced productivity oversight"
-      },
-      {
-        "headline": "Recover 35.5% productivity loss from unplanned absences",
-        "description": "Gain real-time visibility into attendance patterns and receive instant alerts for absences. Optimize shift scheduling and resource allocation to minimize disruption from unplanned absences.",
-        "target_audience": [
-          "business",
-          "executive"
-        ],
-        "supporting_features": [
-          "Real-time attendance monitoring",
-          "Automated alerts",
-          "Shift scheduling",
-          "Absence management",
-          "Predictive analytics"
-        ],
-        "proof_points": [
-          "Businesses suffer 35.5% loss in productivity from unplanned absenteeism on average"
-        ],
-        "emotional_appeal": null,
-        "business_impact": "Increased productivity, better customer service continuity, optimized staffing costs"
-      },
-      {
-        "headline": "Ensure labor law compliance and control overtime costs automatically",
-        "description": "Automatically calculate hours worked and apply overtime rules specific to your business and locations. Get timely visibility into approaching overtime to adjust schedules proactively and maintain compliance.",
-        "target_audience": [
-          "business",
-          "executive"
-        ],
-        "supporting_features": [
           "Automated overtime calculation",
           "Compliance tracking",
-          "Labor law adherence",
-          "Overtime alerts",
-          "Policy management"
+          "Role-based workflows"
         ],
         "proof_points": [
           "Complying with labour laws and controlling overtime costs are two of the biggest benefits"
         ],
         "emotional_appeal": null,
-        "business_impact": "Reduced compliance risk, controlled labor costs, avoided penalties and legal issues"
+        "business_impact": "Reduced administrative overhead, compliance risk mitigation"
       },
       {
-        "headline": "Deploy without infrastructure investment using cloud-based solution",
-        "description": "Get started immediately with cloud-based deployment that requires no additional infrastructure investment. Scale as needed with pay-as-you-go pricing and integrate existing biometric devices.",
+        "headline": "Manage distributed workforce across 1,000+ locations effortlessly",
+        "description": "Cloud-based platform with mobile apps, geo-fencing, and location tracking enables seamless management of remote, on-site, and mobile employees from a single dashboard.",
         "target_audience": [
           "business",
-          "technical",
+          "enterprise"
+        ],
+        "supporting_features": [
+          "Cloud-based platform",
+          "Mobile app",
+          "Geo-fencing",
+          "GPS tracking",
+          "Multi-location support"
+        ],
+        "proof_points": [
+          "Manage productivity across 1,000+ locations",
+          "Available on Android and iOS"
+        ],
+        "emotional_appeal": null,
+        "business_impact": "Scalable workforce management, reduced operational complexity"
+      },
+      {
+        "headline": "Reduce administrative burden with automated workforce management",
+        "description": "Eliminate manual timesheets, automate leave approvals, and streamline scheduling processes. Self-service capabilities let employees manage their own data while providing managers real-time insights.",
+        "target_audience": [
+          "business",
+          "end_user"
+        ],
+        "supporting_features": [
+          "Automated leave management",
+          "Self-service portal",
+          "Workflow automation",
+          "Real-time dashboards"
+        ],
+        "proof_points": [
+          "Easy to extract reports",
+          "Rated 4 out of 5 stars by clients"
+        ],
+        "emotional_appeal": null,
+        "business_impact": "Lower HR administrative costs, improved employee satisfaction"
+      },
+      {
+        "headline": "Scale flexibly with pay-as-you-go cloud solution",
+        "description": "Cloud-based deployment requires no infrastructure investment. Flexible pricing allows you to scale up or down based on workforce size and seasonal demands without capital expenditure.",
+        "target_audience": [
+          "business",
+          "executive",
           "smb"
         ],
         "supporting_features": [
           "Cloud-based platform",
           "Pay-as-you-go pricing",
-          "Device integration",
-          "Mobile app",
+          "No infrastructure investment",
           "Scalable architecture"
         ],
         "proof_points": [
           "Get on-cloud without additional investments to your infrastructure"
         ],
         "emotional_appeal": null,
-        "business_impact": "Lower upfront costs, faster deployment, reduced IT overhead, flexible scaling"
+        "business_impact": "Reduced total cost of ownership, improved cash flow"
       },
       {
-        "headline": "Streamline payroll processing with seamless integration",
-        "description": "Eliminate manual data entry and reduce payroll processing time with direct integration between time tracking and payroll systems. Ensure accurate, timely paychecks while reducing administrative burden.",
-        "target_audience": [
-          "business",
-          "technical"
-        ],
-        "supporting_features": [
-          "Payroll integration",
-          "Automated data transfer",
-          "ADP Vista Payroll integration",
-          "Real-time sync"
-        ],
-        "proof_points": [
-          "Save admin time and simplify your payroll",
-          "Meet employee expectations for timely, error-free paychecks"
-        ],
-        "emotional_appeal": null,
-        "business_impact": "Reduced payroll processing costs, improved employee satisfaction, faster payroll cycles"
-      },
-      {
-        "headline": "Enable contactless attendance with advanced health safety features",
-        "description": "Protect employee health with contactless facial recognition, temperature detection, thermal scanning, and mask detection. Maintain workplace safety while ensuring accurate attendance tracking.",
+        "headline": "Ensure workplace safety with contactless biometric technology",
+        "description": "Advanced facial recognition with mask detection, temperature screening, and thermal scanning capabilities maintain hygiene protocols while ensuring accurate attendance tracking.",
         "target_audience": [
           "business",
           "end_user"
         ],
         "supporting_features": [
           "Contactless facial recognition",
-          "Temperature detection",
-          "Thermal scanning",
           "Mask detection",
-          "Health monitoring"
+          "Temperature detection",
+          "Thermal scanning"
         ],
         "proof_points": [
-          "Advanced biometric capabilities such as mask detection, temperature detection and thermal scanning"
+          "Advanced biometric capabilities including mask detection and temperature detection"
         ],
         "emotional_appeal": null,
-        "business_impact": "Enhanced workplace safety, reduced health risks, maintained productivity during health concerns"
+        "business_impact": "Enhanced workplace safety, reduced health risks"
+      },
+      {
+        "headline": "Get real-time workforce insights with comprehensive analytics",
+        "description": "Customizable dashboards and reports provide instant visibility into labor costs, attendance patterns, and productivity metrics. Make data-driven decisions to optimize workforce performance.",
+        "target_audience": [
+          "business",
+          "executive"
+        ],
+        "supporting_features": [
+          "Real-time dashboards",
+          "Customizable reports",
+          "Analytics",
+          "Role-based views"
+        ],
+        "proof_points": [
+          "Track attendance on a real time basis and easy to extract reports",
+          "Uncover insights into labor costs and spot irregularities"
+        ],
+        "emotional_appeal": null,
+        "business_impact": "Better decision-making, improved workforce optimization"
       }
     ],
     "top_benefits": [
-      "Stop revenue loss from time fraud and ghost employees",
-      "Reduce time tracking errors by 30% with automated systems",
-      "Manage distributed workforce across 1,000+ locations in real-time",
-      "Recover 35.5% productivity loss from unplanned absences",
-      "Ensure labor law compliance and control overtime costs automatically"
+      "Eliminate time fraud and reduce payroll costs by up to 5%",
+      "Boost productivity by 35% through better attendance management",
+      "Streamline payroll processing and ensure compliance",
+      "Manage distributed workforce across 1,000+ locations effortlessly",
+      "Reduce administrative burden with automated workforce management"
     ],
     "benefits_by_audience": {
       "business": [
-        "Stop revenue loss from time fraud and ghost employees",
-        "Reduce time tracking errors by 30% with automated systems",
-        "Manage distributed workforce across 1,000+ locations in real-time",
-        "Recover 35.5% productivity loss from unplanned absences",
-        "Ensure labor law compliance and control overtime costs automatically",
-        "Deploy without infrastructure investment using cloud-based solution",
-        "Streamline payroll processing with seamless integration",
-        "Enable contactless attendance with advanced health safety features"
+        "Eliminate time fraud and reduce payroll costs by up to 5%",
+        "Boost productivity by 35% through better attendance management",
+        "Streamline payroll processing and ensure compliance",
+        "Manage distributed workforce across 1,000+ locations effortlessly",
+        "Reduce administrative burden with automated workforce management",
+        "Scale flexibly with pay-as-you-go cloud solution",
+        "Ensure workplace safety with contactless biometric technology",
+        "Get real-time workforce insights with comprehensive analytics"
       ],
       "executive": [
-        "Stop revenue loss from time fraud and ghost employees",
-        "Manage distributed workforce across 1,000+ locations in real-time",
-        "Recover 35.5% productivity loss from unplanned absences",
-        "Ensure labor law compliance and control overtime costs automatically"
+        "Eliminate time fraud and reduce payroll costs by up to 5%",
+        "Boost productivity by 35% through better attendance management",
+        "Scale flexibly with pay-as-you-go cloud solution",
+        "Get real-time workforce insights with comprehensive analytics"
       ],
       "technical": [
-        "Reduce time tracking errors by 30% with automated systems",
-        "Deploy without infrastructure investment using cloud-based solution",
-        "Streamline payroll processing with seamless integration"
+        "Streamline payroll processing and ensure compliance"
       ],
-      "smb": [
-        "Deploy without infrastructure investment using cloud-based solution"
+      "enterprise": [
+        "Manage distributed workforce across 1,000+ locations effortlessly"
       ],
       "end_user": [
-        "Enable contactless attendance with advanced health safety features"
+        "Reduce administrative burden with automated workforce management",
+        "Ensure workplace safety with contactless biometric technology"
+      ],
+      "smb": [
+        "Scale flexibly with pay-as-you-go cloud solution"
       ]
     }
   },
   "use_cases": {
     "use_cases": [
       {
-        "title": "Manufacturing Shift Management",
-        "scenario": "Manufacturing companies with mixed workforce (full-time, part-time, rotating shifts, on-call) need to manage complex scheduling and track attendance across multiple production lines",
-        "problem_solved": "Complex scheduling processes, time fraud, manual attendance tracking errors, and difficulty managing dynamic shift schedules",
-        "solution_approach": "Automated shift scheduling based on employee availability and skills, biometric attendance tracking, real-time monitoring, and integration with payroll systems",
+        "title": "Manufacturing Shift Management with Complex Scheduling",
+        "scenario": "Manufacturing companies with mixed workforce (full-time, part-time, rotating shifts, on-call) across multiple production lines requiring precise scheduling and attendance tracking",
+        "problem_solved": "Complex scheduling management, time fraud, inaccurate attendance tracking, and compliance issues with labor laws",
+        "solution_approach": "Automated shift scheduling based on employee availability and skills, biometric authentication, real-time attendance monitoring, and automated overtime calculations",
         "target_audience": [],
         "industry_vertical": "Manufacturing",
         "key_features_used": [
           "Auto shift scheduling",
-          "Biometric authentication",
-          "Real-time tracking",
+          "Biometric devices",
           "Overtime management",
+          "Real-time tracking",
           "Role-based dashboards"
         ],
         "expected_outcomes": [
           "Increased productivity",
           "Reduced scheduling errors",
-          "Proper resource allocation",
-          "Compliance with labor laws"
+          "30% reduction in time tracking errors",
+          "Better resource allocation"
+        ],
+        "complexity": null
+      },
+      {
+        "title": "Mobile Workforce Management for Transport & Logistics",
+        "scenario": "Transport and logistics companies managing drivers, dispatchers, and support staff across 1,000+ distributed locations with varying schedules and routes",
+        "problem_solved": "Difficulty tracking mobile workforce, inaccurate time recording at remote locations, and inefficient resource allocation",
+        "solution_approach": "GPS-enabled mobile app with geo-fencing, geo-tagging for location verification, real-time attendance tracking, and optimized scheduling",
+        "target_audience": [],
+        "industry_vertical": "Transport & Logistics",
+        "key_features_used": [
+          "Mobile app",
+          "GPS tracking",
+          "Geo-fencing",
+          "Geo-tagging",
+          "Real-time monitoring",
+          "Shift scheduling"
+        ],
+        "expected_outcomes": [
+          "Accurate time recording",
+          "Optimized routes",
+          "Reduced operational costs",
+          "Improved customer service"
+        ],
+        "complexity": null
+      },
+      {
+        "title": "Healthcare Staff Management with 24/7 Operations",
+        "scenario": "Healthcare organizations managing doctors, nurses, and support staff across multiple departments with complex shift patterns and on-call requirements",
+        "problem_solved": "Complex rostering, attendance fraud, ensuring adequate staffing levels, and maintaining patient care continuity",
+        "solution_approach": "Automated shift scheduling considering patient needs, contactless biometric authentication for hygiene, shift cut-off management, and on-call tracking",
+        "target_audience": [],
+        "industry_vertical": "Healthcare",
+        "key_features_used": [
+          "Automated shift scheduling",
+          "Contactless biometrics",
+          "Shift cut-off",
+          "On-call tracking",
+          "Real-time alerts",
+          "Shift rotation"
+        ],
+        "expected_outcomes": [
+          "Improved patient care",
+          "Reduced attendance issues",
+          "Better staff allocation",
+          "Enhanced workplace safety"
         ],
         "complexity": null
       },
       {
         "title": "Construction Site Workforce Tracking",
-        "scenario": "Construction companies managing workers across multiple remote job sites with varying schedules, compliance requirements, and safety protocols",
-        "problem_solved": "Manual recording errors, difficulty tracking remote workers, safety compliance, labor law adherence, and budget management challenges",
-        "solution_approach": "Mobile app with GPS tracking, geo-fencing for site boundaries, automated time tracking, project-based billing, and real-time attendance monitoring",
+        "scenario": "Construction companies managing workers across multiple remote job sites with varying project timelines, safety requirements, and compliance needs",
+        "problem_solved": "Manual attendance recording errors, safety compliance issues, difficulty tracking workers at remote sites, and labor law adherence",
+        "solution_approach": "Mobile attendance tracking with geo-fencing for site boundaries, automated data collection, real-time monitoring, and integrated payroll processing",
         "target_audience": [],
         "industry_vertical": "Construction",
         "key_features_used": [
           "Mobile app",
           "Geo-fencing",
-          "GPS tracking",
-          "Project-based time tracking",
-          "Real-time monitoring"
-        ],
-        "expected_outcomes": [
-          "Improved worker safety",
-          "Better budget management",
-          "Regulatory compliance",
-          "Accurate project billing"
-        ],
-        "complexity": null
-      },
-      {
-        "title": "Healthcare Staff Rostering",
-        "scenario": "Healthcare organizations managing doctors, nurses, and support staff across multiple departments with complex shift patterns and patient care requirements",
-        "problem_solved": "Complex rostering, attendance fraud, ensuring adequate staffing levels, managing on-call schedules, and maintaining patient care standards",
-        "solution_approach": "Automated shift scheduling considering patient needs, biometric attendance with contactless options, shift cut-off management, and real-time alerts for absences",
-        "target_audience": [],
-        "industry_vertical": "Healthcare",
-        "key_features_used": [
-          "Automated shift scheduling",
-          "Contactless biometric",
-          "Shift cut-off",
-          "On-call tracking",
-          "Real-time alerts"
-        ],
-        "expected_outcomes": [
-          "Uninterrupted patient care",
-          "Improved workplace hygiene",
-          "Balanced shift distribution",
-          "Reduced attendance issues"
-        ],
-        "complexity": null
-      },
-      {
-        "title": "Transport & Logistics Fleet Management",
-        "scenario": "Transport companies managing drivers, dispatchers, and support staff across 1000+ distributed locations with varying schedules and route requirements",
-        "problem_solved": "Difficulty tracking mobile workforce, optimizing routes, managing distributed operations, and ensuring accurate time recording at checkpoints",
-        "solution_approach": "GPS-enabled mobile tracking, geo-tagging at checkpoints, optimized scheduling for drivers and dispatchers, and real-time location monitoring",
-        "target_audience": [],
-        "industry_vertical": "Transport & Logistics",
-        "key_features_used": [
-          "GPS tracking",
-          "Mobile app",
-          "Geo-tagging",
           "Real-time monitoring",
-          "Optimized scheduling"
+          "Automated tracking",
+          "Payroll integration",
+          "Compliance reporting"
         ],
         "expected_outcomes": [
-          "Improved route efficiency",
-          "Accurate working hours recording",
-          "Better resource allocation",
-          "Enhanced operational visibility"
+          "Eliminated manual errors",
+          "Improved worker safety",
+          "Better compliance adherence",
+          "Enhanced resource allocation"
         ],
         "complexity": null
       },
       {
         "title": "Banking Field Staff Management",
         "scenario": "Banking and financial services organizations managing collection and sales employees who visit customers across geographically dispersed locations",
-        "problem_solved": "Tracking field employees, ensuring presence at client locations, optimizing routes, and maintaining productivity standards",
-        "solution_approach": "GPS-based geo-tagging to verify location presence, route optimization, role-based access control, and real-time activity monitoring",
+        "problem_solved": "Inability to verify employee presence at client locations, inefficient route planning, and difficulty maximizing customer service productivity",
+        "solution_approach": "GPS-based geo-tagging to verify location presence, route optimization, role-based access controls, and real-time activity monitoring",
         "target_audience": [],
         "industry_vertical": "Banking and Financial Services",
         "key_features_used": [
           "GPS geo-tagging",
-          "Route optimization",
+          "Location verification",
           "Role-based access",
           "Real-time monitoring",
-          "Mobile app"
+          "Route optimization"
         ],
         "expected_outcomes": [
-          "Maximized customer service",
+          "Verified customer visits",
           "Optimized employee routes",
-          "Improved productivity",
-          "Better field staff accountability"
+          "Maximized productivity",
+          "Improved customer service"
         ],
         "complexity": null
       },
       {
-        "title": "Retail Multi-Store Operations",
-        "scenario": "Retail chains managing employees across multiple store locations with different departments, tight schedules, and high customer service demands",
-        "problem_solved": "Employee attendance disruptions affecting customer service, managing multiple locations, preventing time fraud, and reducing HR administrative load",
-        "solution_approach": "Employee-to-store mapping using geo-fencing, punch alerts based on shifts, biometric authentication, and automated attendance tracking",
-        "target_audience": [],
-        "industry_vertical": "Retail",
-        "key_features_used": [
-          "Geo-fencing",
-          "Punch alerts",
-          "Employee mapping",
-          "Biometric authentication",
-          "Automated tracking"
-        ],
-        "expected_outcomes": [
-          "Uninterrupted customer service",
-          "Reduced HR admin load",
-          "Accurate attendance recording",
-          "Improved workforce efficiency"
-        ],
-        "complexity": null
-      },
-      {
-        "title": "Professional Services Project Billing",
-        "scenario": "IT services and consulting companies need to track time spent by employees on different client projects and ensure accurate billing",
-        "problem_solved": "Inaccurate client billing, difficulty tracking project hours, managing shift-based projects, and monitoring overtime compliance",
-        "solution_approach": "Project-based time tracking against clients and activities, shift scheduling for projects, overtime monitoring, and automated billing integration",
+        "title": "Professional Services Project-Based Time Tracking",
+        "scenario": "IT services and consulting companies tracking employee time across multiple client projects with varying shift requirements and billing needs",
+        "problem_solved": "Inaccurate client billing, difficulty tracking project hours, overtime management, and ensuring proper employee compensation",
+        "solution_approach": "Project-based time tracking against clients and activities, automated overtime calculations, shift scheduling, and integrated billing reports",
         "target_audience": [],
         "industry_vertical": "Professional & Technical Services",
         "key_features_used": [
-          "Project-based time tracking",
-          "Shift scheduling",
-          "Overtime tracking",
+          "Project-based tracking",
           "Client billing integration",
-          "Activity tracking"
+          "Overtime management",
+          "Shift scheduling",
+          "Customizable reports"
         ],
         "expected_outcomes": [
           "Accurate client billing",
-          "On-time project completion",
           "Proper employee compensation",
+          "On-time project completion",
           "Budget adherence"
         ],
         "complexity": null
       },
       {
-        "title": "Remote Workforce Management",
-        "scenario": "Companies with distributed teams including on-premise, remote, and field employees across multiple geographic locations",
-        "problem_solved": "Managing diverse work arrangements, preventing time fraud, tracking productivity across locations, and maintaining compliance",
-        "solution_approach": "Multi-platform attendance options (mobile, web, biometric), geo-fencing and geo-tagging, real-time monitoring, and centralized cloud-based management",
+        "title": "Retail Chain Multi-Location Management",
+        "scenario": "Retail companies with multiple stores across cities managing large workforce across various departments with tight operational schedules",
+        "problem_solved": "Attendance disruptions affecting customer service, high employee turnover, payroll issues from missing timesheets, and cross-store attendance fraud",
+        "solution_approach": "Employee-to-store mapping with geo-fencing, punch alerts based on shifts, biometric authentication, and automated attendance regularization",
+        "target_audience": [],
+        "industry_vertical": "Retail",
+        "key_features_used": [
+          "Employee-store mapping",
+          "Geo-fencing",
+          "Punch alerts",
+          "Biometric authentication",
+          "Automated regularization"
+        ],
+        "expected_outcomes": [
+          "Reduced operational disruption",
+          "Improved customer service",
+          "Accurate payroll processing",
+          "Eliminated attendance fraud"
+        ],
+        "complexity": null
+      },
+      {
+        "title": "Ghost Employee Fraud Prevention",
+        "scenario": "Organizations of all sizes experiencing ghost employee fraud where non-existent employees are added to payroll systems",
+        "problem_solved": "Ghost employee fraud affecting 29% of businesses, leading to significant financial losses and payroll inaccuracies",
+        "solution_approach": "Biometric authentication ensuring only real employees can clock in, real-time verification, automated irregularity detection, and comprehensive audit trails",
         "target_audience": [],
         "industry_vertical": "Cross-industry",
         "key_features_used": [
-          "Multi-platform access",
-          "Geo-fencing",
-          "Cloud-based platform",
-          "Real-time monitoring",
-          "Centralized management"
+          "Biometric authentication",
+          "Real-time verification",
+          "Automated irregularity detection",
+          "Audit trails",
+          "Anti-fraud controls"
         ],
         "expected_outcomes": [
-          "Better workforce visibility",
-          "Reduced time fraud",
-          "Improved productivity",
-          "Simplified operations management"
+          "Eliminated ghost employees",
+          "Reduced payroll fraud",
+          "Improved financial accuracy",
+          "Enhanced compliance"
+        ],
+        "complexity": null
+      },
+      {
+        "title": "Remote and Hybrid Workforce Management",
+        "scenario": "Companies managing mixed workforce including on-premise, remote, and field employees across multiple locations and time zones",
+        "problem_solved": "Difficulty tracking diverse workforce types, ensuring productivity accountability, and maintaining consistent attendance policies",
+        "solution_approach": "Cloud-based platform with mobile app, web punch for remote workers, geo-tagging for field staff, and unified dashboard for all employee types",
+        "target_audience": [],
+        "industry_vertical": "Cross-industry",
+        "key_features_used": [
+          "Cloud platform",
+          "Mobile app",
+          "Web punch",
+          "Geo-tagging",
+          "Unified dashboard",
+          "Multi-location support"
+        ],
+        "expected_outcomes": [
+          "Unified workforce visibility",
+          "Consistent policy application",
+          "Improved productivity tracking",
+          "Reduced administrative overhead"
+        ],
+        "complexity": null
+      },
+      {
+        "title": "Seasonal Workforce Management for E-commerce",
+        "scenario": "E-commerce companies experiencing fluctuating staff levels and relying on augmented workforce during peak seasons and uncertain periods",
+        "problem_solved": "Managing different worker types, fluctuating schedules, seasonal shift complexity, and high employee turnover rates",
+        "solution_approach": "Flexible employee classification system, demand-based scheduling, quick onboarding processes, and scalable pay-as-you-go model",
+        "target_audience": [],
+        "industry_vertical": "E-commerce/Retail",
+        "key_features_used": [
+          "Flexible employee classification",
+          "Demand-based scheduling",
+          "Quick onboarding",
+          "Scalable platform",
+          "Multi-worker type support"
+        ],
+        "expected_outcomes": [
+          "Efficient seasonal scaling",
+          "Reduced hiring complexity",
+          "Better resource planning",
+          "Cost-effective workforce management"
         ],
         "complexity": null
       }
     ],
     "primary_use_cases": [
-      "Manufacturing Shift Management",
+      "Manufacturing Shift Management with Complex Scheduling",
+      "Mobile Workforce Management for Transport & Logistics",
+      "Healthcare Staff Management with 24/7 Operations",
       "Construction Site Workforce Tracking",
-      "Healthcare Staff Rostering",
-      "Transport & Logistics Fleet Management",
       "Banking Field Staff Management"
     ],
     "industries_served": [
-      "Banking and Financial Services",
-      "Healthcare",
-      "Manufacturing",
-      "Cross-industry",
-      "Professional & Technical Services",
       "Construction",
+      "Healthcare",
+      "Transport & Logistics",
+      "Banking and Financial Services",
+      "Manufacturing",
+      "E-commerce/Retail",
       "Retail",
-      "Transport & Logistics"
+      "Cross-industry",
+      "Professional & Technical Services"
     ]
   },
   "competitive_analysis": {
     "differentiators": [
       {
         "claim": "Comprehensive biometric ecosystem with advanced health screening",
-        "explanation": "Combines traditional attendance tracking with health safety features like mask detection, temperature detection, and thermal scanning - critical for post-pandemic workplace safety",
+        "explanation": "Provides contactless attendance tracking with integrated health safety features including mask detection, temperature detection, and thermal scanning - critical for post-pandemic workplace safety",
         "evidence": [
           "Advanced biometric capabilities such as mask detection, temperature detection and thermal scanning",
           "Contactless capability is also critically important to workplace hygiene and safety including sanitation, social distancing and psychological safety"
         ],
         "compared_to": [
-          "Traditional time and attendance systems",
-          "Basic biometric solutions"
+          "Standard biometric systems",
+          "Basic time tracking solutions"
         ],
         "strength": "strong"
       },
       {
-        "claim": "Unified platform for all workforce types across unlimited locations",
-        "explanation": "Single platform manages full-time, part-time, contract, gig and contingent employees across 1,000+ locations with real-time visibility",
+        "claim": "Massive scale distributed workforce management across 1,000+ locations",
+        "explanation": "Specifically designed to handle enterprise-scale operations with thousands of distributed locations, addressing complex multi-location workforce challenges",
         "evidence": [
-          "Whether they're on-premise, remote, or feet-on-street employees, ADP SecurTime helps you manage productivity of your employees across 1,000+ locations",
-          "Tailored for your organisation, SecurTime helps you track and manage your full-time, part-time, contract, gig and contingent employees real-time"
+          "ADP SecurTime helps you manage productivity of your employees across 1,000+ locations",
+          "Manage 24\u00d77 schedules, absences, productivity, overtime and analytics across vast, distributed locations"
         ],
         "compared_to": [
-          "Fragmented workforce management solutions",
-          "Location-limited systems"
+          "Smaller scale workforce management solutions"
         ],
         "strength": "strong"
+      },
+      {
+        "claim": "Comprehensive workforce type coverage including gig and contingent workers",
+        "explanation": "Handles all employment types in a single platform, addressing the modern diverse workforce reality that many solutions struggle with",
+        "evidence": [
+          "SecurTime helps you track and manage your full-time, part-time, contract, gig and contingent employees real-time",
+          "Tailored for your organisation"
+        ],
+        "compared_to": [
+          "Traditional time tracking focused on full-time employees only"
+        ],
+        "strength": "moderate"
       },
       {
         "claim": "Plug-and-play integration with existing biometric infrastructure",
-        "explanation": "Can integrate with clients' existing biometric devices without requiring complete system replacement, reducing implementation costs and complexity",
+        "explanation": "Allows organizations to leverage their current biometric investments while upgrading to cloud-based capabilities, reducing replacement costs",
         "evidence": [
           "We can integrate the devices you're already using",
-          "Our ADP SecurTime system integration partners help our clients adopt cloud-based time attendance systems without replacing current biometric systems using ADP SecurTime's plug-n-play, cloud-based time attendance platform"
+          "ADP SecurTime's plug-n-play, cloud-based time attendance platform",
+          "adopt cloud-based time attendance systems without replacing current biometric systems"
         ],
         "compared_to": [
-          "Solutions requiring complete infrastructure overhaul"
+          "Solutions requiring complete infrastructure replacement"
         ],
         "strength": "moderate"
       },
       {
         "claim": "Industry-specific workforce management solutions",
-        "explanation": "Tailored solutions for specific industries like construction, healthcare, manufacturing with specialized features for each sector's unique challenges",
+        "explanation": "Provides tailored solutions for specific industry challenges rather than generic one-size-fits-all approach",
         "evidence": [
-          "Whether it's managing your staff efficiently, dealing with a distributed, mobile workforce, managing a diverse group of workers or simplifying your payroll, your challenges depend on your industry",
-          "Shift cut off to identify the prior day night shift and current day shift, on-call tracking for doctor visits beyond shift times"
+          "Manufacturing",
+          "Transport & Logistics",
+          "Banking and financial services",
+          "Healthcare",
+          "Professional & Technical Services",
+          "Construction",
+          "Industry solutions based on industry challenges"
         ],
         "compared_to": [
-          "Generic time and attendance solutions"
+          "Generic workforce management solutions"
         ],
         "strength": "moderate"
       },
       {
-        "claim": "Advanced fraud prevention with multiple authentication layers",
-        "explanation": "Prevents time fraud, ghost employees, and proxy attendance through biometric authentication, geo-fencing, IMEI tagging, and real-time cross-referencing",
+        "claim": "Zero infrastructure investment cloud deployment",
+        "explanation": "Pay-as-you-go model eliminates upfront infrastructure costs and allows flexible scaling",
         "evidence": [
-          "Stop time leakage, time fraud and ghost employees",
-          "Our mobile app allows only one person to authenticate themselves using a single device. This is made possible by leveraging IMEI number tagging and which prevents proxy",
-          "ADP SecurTime automatically detects irregularities, cross-references data, and prevents unauthorized entries"
+          "Get on-cloud without additional investments to your infrastructure",
+          "Pay-as-you-go allows you to scale as needed",
+          "Mobile app to eliminate time fraud without investing in a biometric device"
         ],
         "compared_to": [
-          "Basic time tracking systems vulnerable to fraud"
+          "Solutions requiring significant upfront infrastructure investment"
         ],
-        "strength": "strong"
+        "strength": "moderate"
       }
     ],
     "unique_capabilities": [
-      "Mask detection and temperature screening in biometric devices",
-      "IMEI number tagging to prevent proxy attendance",
-      "Plug-and-play integration with existing biometric infrastructure",
-      "Management across 1,000+ distributed locations",
-      "Unified platform for all employee types (full-time, part-time, contract, gig, contingent)",
-      "Industry-specific workflow configurations",
-      "Shift cut-off and on-call tracking for healthcare",
-      "Pay-as-you-go cloud scaling model"
+      "Mask detection and temperature screening integration",
+      "Thermal scanning capabilities",
+      "1,000+ location distributed workforce management",
+      "Gig and contingent worker management",
+      "IMEI number tagging for proxy prevention",
+      "Shift cut-off and shift rotation automation",
+      "On-call tracking for healthcare",
+      "Geo-fencing with store-to-employee mapping",
+      "Project-based time tracking with client billing integration"
     ],
-    "market_position": "Comprehensive workforce management platform for diverse, distributed workforces with advanced biometric capabilities and industry-specific solutions",
+    "market_position": "Enterprise-scale workforce management leader for distributed, diverse workforces with advanced biometric and health screening capabilities",
     "mentioned_competitors": [],
     "competitive_advantages": [
-      "Advanced health screening biometric capabilities",
-      "Support for unlimited geographic locations and workforce types",
-      "Existing infrastructure integration without replacement",
-      "Industry-specific feature sets and workflows",
-      "Multi-layered fraud prevention system",
-      "Flexible pay-as-you-go scaling model",
-      "Comprehensive partner ecosystem for implementation"
+      "Advanced health screening biometrics (mask, temperature, thermal)",
+      "Massive scale handling (1,000+ locations)",
+      "Comprehensive workforce type support (gig, contingent, contract)",
+      "Existing infrastructure integration capabilities",
+      "Industry-specific tailored solutions",
+      "Zero upfront infrastructure investment model",
+      "Real-time fraud prevention and detection",
+      "Comprehensive partner ecosystem for biometric devices"
     ],
     "potential_weaknesses": []
   },
@@ -1269,207 +1448,256 @@
         "name": "HR Managers",
         "description": "Human Resources professionals responsible for workforce management, compliance, and employee administration across various organization sizes",
         "pain_points": [
-          "Manual attendance tracking errors and time fraud",
+          "Manual time tracking processes prone to errors",
+          "Time fraud and ghost employee issues",
           "Complex compliance with labor laws and overtime regulations",
-          "Managing diverse workforce types (full-time, part-time, contract, gig workers)",
-          "High administrative burden for leave management and approvals",
-          "Lack of real-time visibility into workforce productivity"
+          "Managing diverse workforce types (full-time, part-time, contract, gig)",
+          "Difficulty tracking distributed and remote employees",
+          "Administrative burden of leave management and approvals"
         ],
         "goals": [
-          "Automate time and attendance processes",
+          "Automate time and attendance tracking",
           "Ensure compliance with labor regulations",
-          "Reduce administrative overhead",
-          "Improve workforce visibility and control",
-          "Integrate seamlessly with payroll systems"
+          "Reduce administrative workload",
+          "Eliminate time fraud and improve accuracy",
+          "Streamline payroll processing",
+          "Better visibility into workforce productivity"
         ],
         "relevant_features": [
-          "Automated attendance tracking",
+          "Biometric authentication",
+          "Real-time attendance tracking",
           "Leave management and approval workflows",
-          "Compliance reporting and audit trails",
-          "Role-based dashboards",
+          "Compliance reporting",
           "Integration with payroll systems",
-          "Employee self-service capabilities"
+          "Role-based dashboards"
         ],
         "relevant_benefits": [
           "Reduce time tracking errors by 30%",
-          "Eliminate time fraud and ghost employees",
-          "Streamline payroll processing",
-          "Ensure labor law compliance",
-          "Reduce HR administrative burden"
+          "Eliminate up to 5% payroll loss from time fraud",
+          "Automated compliance with labor laws",
+          "Streamlined payroll processing",
+          "Reduced administrative overhead"
         ],
-        "messaging_tone": "professional",
+        "messaging_tone": "professional, solution-focused",
         "key_messages": [
           "Simplify workforce management with end-to-end automation",
-          "Ensure compliance while reducing administrative costs",
+          "Ensure compliance while reducing administrative burden",
           "Get real-time visibility into your entire workforce"
         ]
       },
       {
         "segment_type": "executive",
-        "name": "Operations Directors",
-        "description": "Senior executives overseeing operational efficiency, cost management, and productivity across multiple locations or departments",
+        "name": "Operations Directors/VPs",
+        "description": "Senior executives responsible for operational efficiency, cost management, and productivity across multiple locations or business units",
         "pain_points": [
-          "Time fraud costing up to 5% of gross payroll",
-          "35.5% productivity loss from unplanned absenteeism",
-          "Managing distributed workforce across 1,000+ locations",
-          "Lack of real-time operational visibility",
-          "High operational costs from manual processes"
+          "Lack of real-time visibility into distributed workforce",
+          "High operational costs from inefficient scheduling",
+          "Productivity losses from unplanned absenteeism (35.5% average)",
+          "Managing complex shift schedules across multiple locations",
+          "Budget control and resource allocation challenges",
+          "Scaling workforce management across 1000+ locations"
         ],
         "goals": [
           "Optimize operational efficiency and reduce costs",
-          "Improve workforce productivity and accountability",
-          "Gain real-time operational insights",
-          "Scale operations effectively",
-          "Ensure proper resource allocation"
+          "Improve workforce productivity and utilization",
+          "Gain real-time visibility across all locations",
+          "Better resource allocation and budget control",
+          "Scale operations efficiently",
+          "Reduce operational risks"
         ],
         "relevant_features": [
-          "Real-time workforce analytics",
-          "Multi-location management capabilities",
+          "Real-time analytics and reporting",
+          "Multi-location management",
+          "Automated shift scheduling",
           "Cost tracking and budget management",
-          "Automated scheduling and resource allocation",
-          "Comprehensive reporting and insights"
+          "Scalable cloud-based platform",
+          "Integration with ERP systems"
         ],
         "relevant_benefits": [
-          "Reduce payroll costs by eliminating time fraud",
-          "Improve productivity through better workforce visibility",
-          "Scale operations without proportional cost increases",
-          "Make data-driven operational decisions",
-          "Optimize resource allocation across locations"
-        ],
-        "messaging_tone": "executive",
-        "key_messages": [
           "Get the right people in the right place at the right time for the right cost",
-          "Transform operational efficiency with real-time workforce insights",
-          "Scale your operations while controlling costs"
+          "Manage productivity across 1000+ locations",
+          "Reduce operational costs through automation",
+          "Improve resource allocation and scheduling efficiency"
+        ],
+        "messaging_tone": "strategic, ROI-focused",
+        "key_messages": [
+          "Optimize workforce productivity and control costs",
+          "Scale operations with real-time visibility",
+          "Transform operational efficiency with intelligent automation"
+        ]
+      },
+      {
+        "segment_type": "business",
+        "name": "Payroll Managers",
+        "description": "Payroll professionals responsible for accurate and timely payroll processing, ensuring compliance and managing payroll-related data",
+        "pain_points": [
+          "Manual data collection leading to payroll errors",
+          "Complex overtime calculations and compliance",
+          "Time-consuming payroll processing",
+          "Reconciling attendance data from multiple sources",
+          "Meeting payroll deadlines with accurate data",
+          "Managing different pay rules for various employee types"
+        ],
+        "goals": [
+          "Ensure accurate and timely payroll processing",
+          "Automate data collection and calculations",
+          "Reduce payroll errors and disputes",
+          "Streamline compliance with pay regulations",
+          "Improve payroll efficiency",
+          "Better integration with existing systems"
+        ],
+        "relevant_features": [
+          "Direct integration with ADP Vista Payroll",
+          "Automated time calculation and overtime rules",
+          "Real-time data synchronization",
+          "Compliance reporting",
+          "Exception handling and alerts",
+          "Audit trails and data validation"
+        ],
+        "relevant_benefits": [
+          "Seamlessly convert work time to accurate paychecks",
+          "Stay compliant with internal policy and legal requirements",
+          "Reduce errors and simplify data collection",
+          "Meet employee expectations for timely, error-free paychecks"
+        ],
+        "messaging_tone": "technical, accuracy-focused",
+        "key_messages": [
+          "Eliminate payroll errors with automated data collection",
+          "Ensure compliance with integrated time and payroll solution",
+          "Streamline payroll processing with real-time accuracy"
         ]
       },
       {
         "segment_type": "business",
         "name": "Industry-Specific Managers",
-        "description": "Managers in specific industries (Manufacturing, Construction, Healthcare, Transport & Logistics, Banking, Professional Services) with unique workforce challenges",
+        "description": "Managers in specific industries (Manufacturing, Construction, Healthcare, Transport & Logistics, Banking, Professional Services) with unique workforce management challenges",
         "pain_points": [
-          "Complex shift patterns and scheduling requirements",
-          "Mobile and distributed workforce management",
           "Industry-specific compliance requirements",
-          "Project-based time tracking needs",
+          "Complex shift patterns and scheduling needs",
+          "Managing mobile and distributed workforces",
+          "Project-based time tracking requirements",
+          "Safety and hygiene protocols (especially healthcare)",
           "Seasonal workforce fluctuations"
         ],
         "goals": [
           "Address industry-specific workforce challenges",
-          "Manage complex scheduling and shift patterns",
-          "Track mobile and remote workers effectively",
-          "Ensure industry compliance",
-          "Optimize project-based resource allocation"
+          "Ensure compliance with sector regulations",
+          "Optimize scheduling for industry requirements",
+          "Track project-based work accurately",
+          "Manage mobile and field workers effectively",
+          "Adapt to seasonal or cyclical workforce needs"
         ],
         "relevant_features": [
           "Industry-specific solutions and templates",
-          "Advanced shift scheduling and rotation",
-          "GPS tracking and geo-fencing",
           "Project-based time tracking",
-          "Mobile and tablet applications",
-          "Biometric authentication options"
+          "GPS tracking and geo-fencing",
+          "Contactless biometric options",
+          "Flexible scheduling options",
+          "Mobile app for field workers"
         ],
         "relevant_benefits": [
           "Industry-tailored solutions for specific needs",
-          "Manage complex workforce arrangements",
-          "Ensure accurate tracking of mobile workers",
-          "Meet industry-specific compliance requirements",
-          "Optimize project profitability and resource use"
+          "Manage complex scheduling and compliance requirements",
+          "Track mobile workforce with GPS and geo-fencing",
+          "Ensure safety with contactless attendance options"
         ],
-        "messaging_tone": "industry-focused",
+        "messaging_tone": "industry-specific, solution-oriented",
         "key_messages": [
           "Tailored solutions for your industry's unique challenges",
-          "Manage your mobile workforce with precision",
-          "Industry-specific compliance made simple"
-        ]
-      },
-      {
-        "segment_type": "business",
-        "name": "IT Managers",
-        "description": "IT professionals responsible for system integration, security, and technology infrastructure decisions",
-        "pain_points": [
-          "Integration with existing HR and payroll systems",
-          "Data security and privacy concerns",
-          "Managing multiple biometric devices and technologies",
-          "Scalability and infrastructure requirements",
-          "System maintenance and support needs"
-        ],
-        "goals": [
-          "Ensure seamless system integration",
-          "Maintain data security and compliance",
-          "Minimize infrastructure investment",
-          "Achieve scalable, cloud-based solutions",
-          "Reduce IT maintenance overhead"
-        ],
-        "relevant_features": [
-          "Cloud-based platform with no infrastructure investment",
-          "API integrations with existing systems",
-          "Multiple biometric device compatibility",
-          "AWS cloud security and encryption",
-          "Remote support and maintenance",
-          "Scalable pay-as-you-go model"
-        ],
-        "relevant_benefits": [
-          "No additional infrastructure investment required",
-          "Enterprise-grade security and compliance",
-          "Seamless integration with existing systems",
-          "Reduced IT maintenance burden",
-          "Flexible, scalable deployment options"
-        ],
-        "messaging_tone": "technical",
-        "key_messages": [
-          "Enterprise-grade security with cloud-based flexibility",
-          "Seamless integration with your existing technology stack",
-          "Scale without infrastructure investment"
+          "Manage complex workforce requirements with ease",
+          "Industry-proven solutions with specialized features"
         ]
       },
       {
         "segment_type": "end_user",
         "name": "Employees and Supervisors",
-        "description": "Front-line employees and their direct supervisors who use the system daily for time tracking, scheduling, and workforce management",
+        "description": "Front-line employees and their direct supervisors who use the system daily for time tracking, scheduling, and basic workforce management tasks",
         "pain_points": [
-          "Complex, non-intuitive time tracking systems",
-          "Limited visibility into schedules and time-off balances",
-          "Difficulty accessing systems from mobile devices",
-          "Manual approval processes and delays",
-          "Lack of self-service capabilities"
+          "Complicated time tracking processes",
+          "Difficulty accessing attendance information",
+          "Manual leave application processes",
+          "Lack of visibility into schedules and time-off balances",
+          "Inconvenient attendance marking for mobile workers",
+          "Limited self-service capabilities"
         ],
         "goals": [
-          "Easy, intuitive time tracking experience",
-          "Self-service access to schedules and time-off",
-          "Mobile accessibility for remote work",
-          "Quick approval processes",
-          "Transparent communication with management"
+          "Easy and convenient time tracking",
+          "Quick access to attendance and leave information",
+          "Simple leave application and approval process",
+          "Visibility into schedules and time balances",
+          "Mobile-friendly attendance marking",
+          "Self-service capabilities"
         ],
         "relevant_features": [
-          "User-friendly mobile and web applications",
-          "Self-service employee portal",
-          "Real-time schedule and attendance visibility",
-          "Mobile punch with facial recognition",
-          "Employee engagement and communication tools",
-          "Intuitive approval workflows"
+          "User-friendly mobile app",
+          "Biometric attendance options",
+          "Self-service portal",
+          "Leave application and tracking",
+          "Schedule visibility",
+          "Geo-tagging and geo-fencing for mobile workers"
         ],
         "relevant_benefits": [
-          "Simple, easy-to-use interface",
-          "Access information anytime, anywhere",
-          "Faster approval processes",
-          "Better work-life balance through schedule visibility",
-          "Improved communication with supervisors"
+          "Easy-to-use interface for non-tech-savvy users",
+          "Convenient mobile access from anywhere",
+          "Self-service capabilities for better control",
+          "Real-time access to attendance and leave data"
         ],
-        "messaging_tone": "user-friendly",
+        "messaging_tone": "user-friendly, simple",
         "key_messages": [
-          "Simple workforce management at your fingertips",
-          "Easy access to your schedule and time-off information",
-          "Designed for employees who aren't tech-savvy"
+          "Simple and convenient time tracking at your fingertips",
+          "Access your attendance information anytime, anywhere",
+          "Easy-to-use system designed for everyone"
+        ]
+      },
+      {
+        "segment_type": "technical",
+        "name": "IT Managers",
+        "description": "IT professionals responsible for system integration, security, and technical implementation of workforce management solutions",
+        "pain_points": [
+          "Complex system integrations with existing infrastructure",
+          "Data security and privacy concerns",
+          "Scalability and performance requirements",
+          "Managing multiple biometric devices and systems",
+          "Cloud migration and infrastructure costs",
+          "Ongoing maintenance and support requirements"
+        ],
+        "goals": [
+          "Seamless integration with existing systems",
+          "Ensure data security and compliance",
+          "Scalable and reliable performance",
+          "Minimize infrastructure investments",
+          "Reduce maintenance overhead",
+          "Future-proof technology choices"
+        ],
+        "relevant_features": [
+          "Cloud-based platform",
+          "API integrations with ERP and HCM systems",
+          "Advanced security features (AWS, multi-factor authentication)",
+          "Device integration capabilities",
+          "Scalable pay-as-you-go model",
+          "Remote support and maintenance"
+        ],
+        "relevant_benefits": [
+          "Secure AWS cloud infrastructure with tamper-proof database access",
+          "Seamless integration with existing systems",
+          "Scalable cloud solution without infrastructure investment",
+          "Comprehensive security with role-based access control"
+        ],
+        "messaging_tone": "technical, security-focused",
+        "key_messages": [
+          "Enterprise-grade security with seamless integration",
+          "Scalable cloud solution with minimal infrastructure investment",
+          "Comprehensive API support for existing system integration"
         ]
       }
     ],
     "primary_audience": "HR Managers",
     "secondary_audiences": [
-      "Operations Directors",
+      "Operations Directors/VPs",
+      "Payroll Managers",
       "Industry-Specific Managers"
     ],
-    "buyer_vs_user": "HR Managers and Operations Directors evaluate and purchase, while employees and supervisors are daily users. IT Managers influence technical decisions and integration requirements."
+    "buyer_vs_user": "HR Managers and Operations Directors typically evaluate and purchase, while employees, supervisors, and payroll staff are primary daily users. IT Managers influence technical decisions and implementation."
   },
   "pricing": {
     "pricing_model": "contact_sales",
@@ -1486,12 +1714,16 @@
       "Android",
       "iOS",
       "Web",
-      "Cloud-based"
+      "Cloud-based",
+      "On-premise biometric devices",
+      "Tablet",
+      "Mobile"
     ],
     "deployment_options": [
       "Cloud (SaaS)",
       "On-premise",
-      "Hybrid"
+      "Hybrid",
+      "Pay-as-you-go scaling"
     ],
     "integrations": [
       {
@@ -1501,42 +1733,52 @@
         "documentation_url": null
       },
       {
-        "name": "HR Systems",
+        "name": "Standard fingerprint-based biometric systems",
+        "type": "compatible",
+        "description": "Integrates with all standard fingerprint biometric systems",
+        "documentation_url": null
+      },
+      {
+        "name": "Facial recognition biometric systems",
+        "type": "compatible",
+        "description": "Integrates with facial recognition biometric systems",
+        "documentation_url": null
+      },
+      {
+        "name": "HR systems",
         "type": "integration",
-        "description": "Integration with leading payroll, HR, and Enterprise Resource Planning (ERP) systems",
+        "description": "Integration with leading HR systems",
         "documentation_url": null
       },
       {
-        "name": "Biometric Devices",
-        "type": "hardware",
-        "description": "Integrates with all standard fingerprint-based and facial recognition biometric systems",
+        "name": "Enterprise Resource Planning (ERP) systems",
+        "type": "integration",
+        "description": "Integration with leading ERP systems",
         "documentation_url": null
       },
       {
-        "name": "Existing Devices",
-        "type": "plug-and-play",
-        "description": "Can integrate devices already in use with plug-n-play capability",
+        "name": "Existing biometric devices",
+        "type": "plug-n-play",
+        "description": "Plug-n-play integration with existing biometric systems",
         "documentation_url": null
       }
     ],
     "api_available": true,
     "api_type": "REST",
-    "security_certifications": [
-      "AWS Cloud"
-    ],
+    "security_certifications": [],
     "compliance_standards": [
-      "Labour laws compliance",
-      "Data privacy regulations"
+      "Labour law compliance"
     ],
     "system_requirements": {
       "mobile_platforms": "Android and iOS",
-      "deployment": "Cloud-based with no additional infrastructure investment required",
-      "biometric_support": "RFID, Fingerprint, Facial recognition"
+      "biometric_capabilities": "RFID, Fingerprint, Facial recognition",
+      "advanced_features": "Mask detection, temperature detection, thermal scanning",
+      "device_authentication": "IMEI number tagging for mobile devices"
     },
     "performance_metrics": {
-      "scalability": "1,000+ locations supported",
       "real_time_tracking": "Real-time attendance and location tracking",
-      "error_reduction": "30% reduction in time tracking errors on average"
+      "scalability": "1,000+ locations supported",
+      "error_reduction": "30% average reduction in time tracking errors"
     },
     "data_residency_options": [
       "AWS Cloud data centres"
@@ -1544,10 +1786,10 @@
   },
   "source_extraction_id": "adp-securtime_20251204_160548",
   "source_content_hash": "85ddb0770ac843da2536086fa0ec91a4d093a28d8d369b6c48b4221bf4b7f77e",
-  "processed_at": "2025-12-04 18:02:15.671318+00:00",
-  "processing_duration_ms": 72184,
-  "total_llm_tokens_used": 58175,
-  "total_llm_cost_usd": 0.29173279999999996,
+  "processed_at": "2025-12-05 02:28:57.966885+00:00",
+  "processing_duration_ms": 83182,
+  "total_llm_tokens_used": 59879,
+  "total_llm_cost_usd": 0.3175458,
   "overall_confidence": 0.875,
   "warnings": [],
   "errors": [

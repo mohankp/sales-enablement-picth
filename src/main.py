@@ -627,6 +627,162 @@ def display_processing_results(result) -> None:
             console.print(f"  - {error}")
 
 
+@app.command()
+def batch_process(
+    input_dir: str = typer.Argument(..., help="Directory containing extraction JSON files"),
+    output_dir: Optional[str] = typer.Option(
+        None, "--output", "-o", help="Output directory for processed files"
+    ),
+    pattern: str = typer.Option(
+        "*.json", "--pattern", "-p", help="Glob pattern for input files"
+    ),
+    concurrency: int = typer.Option(
+        3, "--concurrency", "-c", help="Maximum concurrent processing (1-10)"
+    ),
+    model: str = typer.Option(
+        "sonnet", "--model", "-m", help="Model to use (haiku, sonnet, opus)"
+    ),
+    verbose: bool = typer.Option(
+        False, "--verbose", "-v", help="Enable verbose logging"
+    ),
+) -> None:
+    """
+    Process multiple extraction files in batch.
+
+    Efficiently processes multiple extracted content files with
+    concurrent processing, caching, and retry logic.
+
+    Example:
+        pitch-gen batch-process ./extractions --output ./processed --concurrency 5
+    """
+    setup_logging(verbose)
+
+    input_path = Path(input_dir)
+    if not input_path.exists():
+        console.print(f"[red]Input directory not found: {input_dir}[/red]")
+        sys.exit(1)
+
+    # Find input files
+    input_files = list(input_path.glob(pattern))
+    if not input_files:
+        console.print(f"[yellow]No files matching '{pattern}' found in {input_dir}[/yellow]")
+        sys.exit(0)
+
+    console.print(Panel.fit(
+        f"[bold blue]Batch Processing Engine[/bold blue]\n"
+        f"Processing {len(input_files)} files from: {input_dir}",
+        title="Sales Pitch Generator",
+    ))
+
+    # Import processing modules
+    from src.processing import BatchProcessor, BatchConfig, ProcessingConfig
+    from src.llm import ModelName
+
+    # Configure
+    model_map = {
+        "haiku": ModelName.HAIKU,
+        "sonnet": ModelName.SONNET,
+        "opus": ModelName.OPUS,
+    }
+    selected_model = model_map.get(model.lower(), ModelName.SONNET)
+
+    processing_config = ProcessingConfig(
+        default_model=selected_model,
+        analysis_model=selected_model,
+        extraction_model=selected_model,
+    )
+
+    batch_config = BatchConfig(
+        max_concurrent_items=min(max(1, concurrency), 10),
+        processing_config=processing_config,
+    )
+
+    # Setup output directory
+    output_path = Path(output_dir) if output_dir else input_path / "processed"
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    # Progress tracking
+    def progress_callback(completed: int, total: int, current: Optional[str]) -> None:
+        if current:
+            console.print(f"  [{completed}/{total}] Processing: {current}")
+
+    async def run_batch():
+        async with BatchProcessor(batch_config, progress_callback=progress_callback) as processor:
+            with Progress(
+                SpinnerColumn(),
+                TextColumn("[progress.description]{task.description}"),
+                BarColumn(),
+                TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
+                TimeElapsedColumn(),
+                console=console,
+            ) as progress:
+                task = progress.add_task(
+                    f"Processing {len(input_files)} files...",
+                    total=len(input_files),
+                )
+
+                result = await processor.process_from_files(input_files)
+
+                progress.update(task, completed=len(input_files))
+
+            return result
+
+    try:
+        result = asyncio.run(run_batch())
+
+        # Display results summary
+        display_batch_results(result)
+
+        # Save individual results
+        for item_result in result.get_successful_items():
+            if item_result.result:
+                output_file = output_path / f"{item_result.item_id}_processed.json"
+                with open(output_file, "w") as f:
+                    json.dump(item_result.result.model_dump(), f, default=str, indent=2)
+
+        console.print(f"\n[green]Results saved to: {output_path}[/green]")
+
+    except KeyboardInterrupt:
+        console.print("\n[yellow]Batch processing cancelled by user[/yellow]")
+        sys.exit(1)
+    except Exception as e:
+        console.print(f"\n[red]Batch processing failed: {e}[/red]")
+        if verbose:
+            console.print_exception()
+        sys.exit(1)
+
+
+def display_batch_results(result) -> None:
+    """Display batch processing results."""
+    console.print("\n")
+
+    # Summary panel
+    summary = f"""
+[bold]Total Items:[/bold] {result.total_items}
+[bold]Successful:[/bold] {result.successful}
+[bold]Failed:[/bold] {result.failed}
+[bold]Success Rate:[/bold] {result.success_rate * 100:.1f}%
+[bold]Total Time:[/bold] {result.total_time_ms / 1000:.1f}s
+[bold]Total Tokens:[/bold] {result.total_tokens:,}
+[bold]Total Cost:[/bold] ${result.total_cost_usd:.4f}
+"""
+    console.print(Panel(summary, title="Batch Processing Summary", border_style="green"))
+
+    # Show failed items if any
+    failed = result.get_failed_items()
+    if failed:
+        console.print("\n[red]Failed Items:[/red]")
+        for item in failed:
+            console.print(f"  - {item.item_id}: {item.error}")
+
+    # Show successful items
+    successful = result.get_successful_items()
+    if successful and len(successful) <= 20:
+        console.print("\n[green]Successful Items:[/green]")
+        for item in successful:
+            console.print(f"  - {item.item_id} ({item.processing_time_ms:.0f}ms)")
+
+
 @app.callback()
 def main():
     """

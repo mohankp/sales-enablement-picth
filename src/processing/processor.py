@@ -44,6 +44,7 @@ from src.models.processed import (
     UseCaseSet,
 )
 from .chunker import ContentChunker, ChunkingStrategy, ContentChunk
+from .cache import ProcessingCache
 
 logger = logging.getLogger(__name__)
 
@@ -73,7 +74,8 @@ class ProcessingConfig(BaseModel):
 
     # Caching
     enable_cache: bool = True
-    cache_dir: Optional[str] = None
+    cache_dir: Optional[str] = "data/cache/processing"
+    cache_ttl_seconds: int = 86400  # 24 hours
 
     # Concurrency
     max_concurrent_requests: int = 3
@@ -115,8 +117,15 @@ class ContentProcessor:
             strategy=self.config.chunking_strategy,
             max_chars=self.config.max_chunk_chars,
         )
-        self._cache: dict[str, Any] = {}
+        self._cache: Optional[ProcessingCache] = None
         self._semaphore: Optional[asyncio.Semaphore] = None
+
+        # Initialize cache if enabled
+        if self.config.enable_cache:
+            self._cache = ProcessingCache(
+                cache_dir=self.config.cache_dir,
+                default_ttl_seconds=self.config.cache_ttl_seconds,
+            )
 
     async def __aenter__(self) -> "ContentProcessor":
         """Async context manager entry."""
@@ -188,32 +197,61 @@ class ContentProcessor:
                 combined_content
             )
 
+        # Compute content hash for caching
+        content_hash = content.content_hash or hashlib.md5(
+            combined_content.encode()
+        ).hexdigest()[:16]
+
         # Run analyses in parallel where possible
         tasks = []
 
         if self.config.enable_features:
-            tasks.append(("features", self._extract_features(combined_content, product_name)))
+            tasks.append(("features", self._cached_extract(
+                "features", content_hash, combined_content, product_name,
+                self._extract_features, FeatureSet
+            )))
 
         if self.config.enable_benefits:
-            tasks.append(("benefits", self._extract_benefits(combined_content, product_name)))
+            tasks.append(("benefits", self._cached_extract(
+                "benefits", content_hash, combined_content, product_name,
+                self._extract_benefits, BenefitSet
+            )))
 
         if self.config.enable_use_cases:
-            tasks.append(("use_cases", self._extract_use_cases(combined_content, product_name)))
+            tasks.append(("use_cases", self._cached_extract(
+                "use_cases", content_hash, combined_content, product_name,
+                self._extract_use_cases, UseCaseSet
+            )))
 
         if self.config.enable_competitive:
-            tasks.append(("competitive", self._analyze_competitive(combined_content, product_name)))
+            tasks.append(("competitive", self._cached_extract(
+                "competitive", content_hash, combined_content, product_name,
+                self._analyze_competitive, CompetitiveAnalysis
+            )))
 
         if self.config.enable_audience:
-            tasks.append(("audience", self._analyze_audience(combined_content, product_name)))
+            tasks.append(("audience", self._cached_extract(
+                "audience", content_hash, combined_content, product_name,
+                self._analyze_audience, AudienceAnalysis
+            )))
 
         if self.config.enable_pricing:
-            tasks.append(("pricing", self._extract_pricing(combined_content, product_name)))
+            tasks.append(("pricing", self._cached_extract(
+                "pricing", content_hash, combined_content, product_name,
+                self._extract_pricing, PricingInfo
+            )))
 
         if self.config.enable_technical:
-            tasks.append(("technical", self._extract_technical(combined_content, product_name)))
+            tasks.append(("technical", self._cached_extract(
+                "technical", content_hash, combined_content, product_name,
+                self._extract_technical, TechnicalSpecs
+            )))
 
         # Always generate summary
-        tasks.append(("summary", self._generate_summary(combined_content, product_name)))
+        tasks.append(("summary", self._cached_extract(
+            "summary", content_hash, combined_content, product_name,
+            self._generate_summary, ContentSummary
+        )))
 
         # Execute with concurrency control
         results: dict[str, ProcessingResult] = {}
@@ -288,6 +326,53 @@ class ContentProcessor:
             parts.append(chunk.content)
 
         return "\n\n---\n\n".join(parts)
+
+    async def _cached_extract(
+        self,
+        aspect: str,
+        content_hash: str,
+        content: str,
+        product_name: str,
+        extractor_func,
+        model_class: type,
+    ) -> ProcessingResult:
+        """
+        Extract with caching support.
+
+        Checks cache first, calls extractor on miss, caches result.
+        """
+        # Try cache first
+        if self._cache:
+            cached_data = self._cache.get(aspect, content_hash, model_class)
+            if cached_data is not None:
+                logger.info(f"Cache hit for {aspect}")
+                return ProcessingResult(
+                    success=True,
+                    data=cached_data,
+                    tokens_used=0,
+                    cost_usd=0.0,
+                    latency_ms=0.0,
+                )
+
+        # Cache miss - call extractor
+        result = await extractor_func(content, product_name)
+
+        # Cache successful results
+        if result.success and result.data and self._cache:
+            self._cache.set(aspect, content_hash, result.data)
+
+        return result
+
+    def get_cache_stats(self) -> Optional[dict[str, Any]]:
+        """Get cache statistics if caching is enabled."""
+        if self._cache:
+            return self._cache.get_stats().to_dict()
+        return None
+
+    def clear_cache(self) -> None:
+        """Clear the processing cache."""
+        if self._cache:
+            self._cache.clear()
 
     async def _detect_product_name(self, content: str) -> str:
         """Auto-detect the product name from content."""

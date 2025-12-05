@@ -783,6 +783,259 @@ def display_batch_results(result) -> None:
             console.print(f"  - {item.item_id} ({item.processing_time_ms:.0f}ms)")
 
 
+@app.command()
+def generate(
+    input_file: str = typer.Argument(..., help="Path to processed content JSON file"),
+    output: Optional[str] = typer.Option(
+        None, "--output", "-o", help="Output file path for generated pitch (JSON)"
+    ),
+    output_format: str = typer.Option(
+        "json", "--format", "-f", help="Output format: json, markdown, or text"
+    ),
+    tone: str = typer.Option(
+        "professional", "--tone", "-t",
+        help="Pitch tone: professional, conversational, technical, executive, enthusiastic, consultative"
+    ),
+    length: str = typer.Option(
+        "standard", "--length", "-l",
+        help="Pitch length: elevator, short, standard, detailed, comprehensive"
+    ),
+    audience: Optional[str] = typer.Option(
+        None, "--audience", "-a", help="Target audience for customization"
+    ),
+    include_pricing: bool = typer.Option(
+        True, "--pricing/--no-pricing", help="Include pricing section"
+    ),
+    include_technical: bool = typer.Option(
+        False, "--technical/--no-technical", help="Include technical details section"
+    ),
+    model: str = typer.Option(
+        "sonnet", "--model", "-m", help="Model to use (haiku, sonnet, opus)"
+    ),
+    verbose: bool = typer.Option(
+        False, "--verbose", "-v", help="Enable verbose logging"
+    ),
+) -> None:
+    """
+    Generate a sales pitch from processed content.
+
+    Takes processed content JSON and generates a complete sales pitch
+    with customizable tone, length, and audience targeting.
+
+    Example:
+        pitch-gen generate processed.json --output pitch.json --tone executive
+        pitch-gen generate processed.json --format markdown --length detailed
+    """
+    setup_logging(verbose)
+
+    input_path = Path(input_file)
+    if not input_path.exists():
+        console.print(f"[red]Input file not found: {input_file}[/red]")
+        sys.exit(1)
+
+    console.print(Panel.fit(
+        f"[bold blue]Pitch Generation Engine[/bold blue]\n"
+        f"Generating from: {input_file}",
+        title="Sales Pitch Generator",
+    ))
+
+    # Load processed content
+    try:
+        with open(input_path) as f:
+            data = json.load(f)
+        from src.models.processed import ProcessedContent
+        processed_content = ProcessedContent.model_validate(data)
+    except Exception as e:
+        console.print(f"[red]Failed to load processed content: {e}[/red]")
+        sys.exit(1)
+
+    # Import generation modules
+    from src.generation import PitchGenerator, GenerationConfig
+    from src.models.pitch import PitchConfig, PitchTone, PitchLength
+    from src.llm import LLMConfig, ModelSettings, ModelName
+
+    # Map CLI options to enums
+    tone_map = {
+        "professional": PitchTone.PROFESSIONAL,
+        "conversational": PitchTone.CONVERSATIONAL,
+        "technical": PitchTone.TECHNICAL,
+        "executive": PitchTone.EXECUTIVE,
+        "enthusiastic": PitchTone.ENTHUSIASTIC,
+        "consultative": PitchTone.CONSULTATIVE,
+    }
+    length_map = {
+        "elevator": PitchLength.ELEVATOR,
+        "short": PitchLength.SHORT,
+        "standard": PitchLength.STANDARD,
+        "detailed": PitchLength.DETAILED,
+        "comprehensive": PitchLength.COMPREHENSIVE,
+    }
+    model_map = {
+        "haiku": ModelName.HAIKU,
+        "sonnet": ModelName.SONNET,
+        "opus": ModelName.OPUS,
+    }
+
+    selected_tone = tone_map.get(tone.lower(), PitchTone.PROFESSIONAL)
+    selected_length = length_map.get(length.lower(), PitchLength.STANDARD)
+    selected_model = model_map.get(model.lower(), ModelName.SONNET)
+
+    # Configure pitch
+    pitch_config = PitchConfig(
+        tone=selected_tone,
+        length=selected_length,
+        target_audience=audience,
+        include_pricing=include_pricing,
+        include_technical=include_technical,
+    )
+
+    # Configure generation
+    llm_config = LLMConfig()
+    model_settings = ModelSettings(model=selected_model)
+    gen_config = GenerationConfig(
+        llm_config=llm_config,
+        model_settings=model_settings,
+        verbose=verbose,
+    )
+
+    async def run_generation():
+        async with PitchGenerator(gen_config) as generator:
+            with Progress(
+                SpinnerColumn(),
+                TextColumn("[progress.description]{task.description}"),
+                TimeElapsedColumn(),
+                console=console,
+            ) as progress:
+                task = progress.add_task("Generating pitch...", total=None)
+                result = await generator.generate(processed_content, pitch_config)
+                progress.update(task, completed=True)
+            return result
+
+    try:
+        result = asyncio.run(run_generation())
+
+        # Display results
+        display_generation_results(result)
+
+        # Save output
+        if output or output_format != "json":
+            output_path = Path(output) if output else input_path.with_suffix(f".pitch.{output_format}")
+
+            if output_format == "json":
+                with open(output_path, "w") as f:
+                    json.dump(result.pitch.model_dump(), f, default=str, indent=2)
+            elif output_format == "markdown":
+                with open(output_path, "w") as f:
+                    f.write(result.pitch.get_full_content())
+            elif output_format == "text":
+                with open(output_path, "w") as f:
+                    # Plain text version
+                    f.write(f"{result.pitch.title}\n")
+                    f.write("=" * len(result.pitch.title) + "\n\n")
+                    if result.pitch.subtitle:
+                        f.write(f"{result.pitch.subtitle}\n\n")
+                    f.write(f"{result.pitch.executive_summary}\n\n")
+                    for section in sorted(result.pitch.sections, key=lambda s: s.order):
+                        f.write(f"{section.title}\n")
+                        f.write("-" * len(section.title) + "\n")
+                        f.write(f"{section.content}\n\n")
+                        if section.key_points:
+                            for point in section.key_points:
+                                f.write(f"  • {point}\n")
+                            f.write("\n")
+
+            console.print(f"\n[green]Pitch saved to: {output_path}[/green]")
+
+    except KeyboardInterrupt:
+        console.print("\n[yellow]Generation cancelled by user[/yellow]")
+        sys.exit(1)
+    except Exception as e:
+        console.print(f"\n[red]Generation failed: {e}[/red]")
+        if verbose:
+            console.print_exception()
+        sys.exit(1)
+
+
+def display_generation_results(result) -> None:
+    """Display pitch generation results."""
+    console.print("\n")
+    pitch = result.pitch
+
+    # Summary panel
+    summary = f"""
+[bold]Product:[/bold] {pitch.product_name}
+[bold]Pitch ID:[/bold] {pitch.pitch_id}
+[bold]Tone:[/bold] {pitch.config.tone.value}
+[bold]Length:[/bold] {pitch.config.length.value}
+[bold]Sections:[/bold] {len(pitch.sections)}
+[bold]Word Count:[/bold] {pitch.word_count():,}
+[bold]Duration:[/bold] ~{result.total_duration_ms / 1000:.1f}s to generate
+[bold]Est. Presentation:[/bold] ~{pitch.estimated_duration_minutes():.1f} minutes
+[bold]Tokens Used:[/bold] {result.total_tokens_used:,}
+[bold]Cost:[/bold] ${result.total_cost_usd:.4f}
+[bold]Confidence:[/bold] {pitch.overall_confidence * 100:.0f}%
+"""
+    console.print(Panel(summary, title="Generation Summary", border_style="green"))
+
+    # One-liner and elevator pitch
+    if pitch.one_liner:
+        console.print(Panel(
+            pitch.one_liner,
+            title="One-Liner",
+            border_style="cyan",
+        ))
+
+    if pitch.elevator_pitch:
+        console.print(Panel(
+            pitch.elevator_pitch,
+            title="Elevator Pitch (30 seconds)",
+            border_style="blue",
+        ))
+
+    # Key messages
+    if pitch.key_messages:
+        console.print("\n[bold]Key Messages:[/bold]")
+        for i, msg in enumerate(pitch.key_messages, 1):
+            console.print(f"  {i}. {msg}")
+
+    # Sections overview
+    console.print("\n[bold]Pitch Sections:[/bold]")
+    for section in sorted(pitch.sections, key=lambda s: s.order):
+        console.print(f"  [{section.order}] [cyan]{section.title}[/cyan] ({section.section_type.value})")
+        if section.key_points:
+            for point in section.key_points[:2]:
+                console.print(f"      • {point[:80]}...")
+
+    # Feature highlights
+    if pitch.feature_highlights:
+        console.print(f"\n[bold]Feature Highlights ({len(pitch.feature_highlights)}):[/bold]")
+        for feature in pitch.feature_highlights[:5]:
+            console.print(f"  • [cyan]{feature.name}[/cyan]: {feature.headline[:60]}...")
+
+    # Benefit statements
+    if pitch.benefit_statements:
+        console.print(f"\n[bold]Benefit Statements ({len(pitch.benefit_statements)}):[/bold]")
+        for benefit in pitch.benefit_statements[:5]:
+            console.print(f"  • [green]{benefit.headline}[/green]")
+
+    # Objection handling
+    if pitch.common_objections:
+        console.print(f"\n[bold]Objection Responses ({len(pitch.common_objections)}):[/bold]")
+        for objection in list(pitch.common_objections.keys())[:3]:
+            console.print(f"  • [yellow]\"{objection}\"[/yellow]")
+
+    # Warnings/Errors
+    if result.warnings:
+        console.print("\n[yellow]Warnings:[/yellow]")
+        for warning in result.warnings:
+            console.print(f"  - {warning}")
+
+    if result.errors:
+        console.print("\n[red]Errors:[/red]")
+        for error in result.errors:
+            console.print(f"  - {error}")
+
+
 @app.callback()
 def main():
     """

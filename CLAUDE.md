@@ -33,8 +33,12 @@ src/
 │   └── parser.py    # Structured output parsing
 ├── processing/      # Content understanding (LLM-powered)
 │   ├── processor.py # Main content processor orchestrator
-│   └── chunker.py   # Content chunking strategies
-├── generation/      # Pitch generation [TODO]
+│   ├── chunker.py   # Content chunking strategies
+│   ├── cache.py     # LLM result caching (memory + disk)
+│   └── batch.py     # Batch processing with concurrency
+├── generation/      # Pitch generation
+│   ├── generator.py # Main pitch generator orchestrator
+│   └── templates.py # Section templates and prompts
 ├── update/          # Incremental updates [TODO]
 ├── refinement/      # Conversational refinement [TODO]
 └── main.py          # CLI entry point
@@ -113,6 +117,22 @@ Options:
 - `--model, -m`: Model to use (haiku, sonnet, opus)
 - `--verbose, -v`: Enable debug logging
 
+### Generate a sales pitch
+```bash
+python -m src.main generate processed.json --output pitch.json --tone executive
+```
+
+Options:
+- `--output, -o`: Output file path
+- `--format, -f`: Output format (json, markdown, text)
+- `--tone, -t`: Pitch tone (professional, conversational, technical, executive, enthusiastic, consultative)
+- `--length, -l`: Pitch length (elevator, short, standard, detailed, comprehensive)
+- `--audience, -a`: Target audience for customization
+- `--pricing/--no-pricing`: Include pricing section
+- `--technical/--no-technical`: Include technical details
+- `--model, -m`: Model to use (haiku, sonnet, opus)
+- `--verbose, -v`: Enable debug logging
+
 ## Development
 
 ### Running Tests
@@ -162,6 +182,24 @@ async with ContentProcessor(config) as processor:
     print(f"Executive summary: {result.summary.executive_summary}")
 ```
 
+**Pitch Generation:**
+```python
+from src.generation import PitchGenerator, GenerationConfig
+from src.models.pitch import PitchConfig, PitchTone, PitchLength
+
+gen_config = GenerationConfig()
+pitch_config = PitchConfig(
+    tone=PitchTone.EXECUTIVE,
+    length=PitchLength.STANDARD,
+    target_audience="CTOs and IT Directors",
+)
+
+async with PitchGenerator(gen_config) as generator:
+    result = await generator.generate(processed_content, pitch_config)
+    print(f"Generated {len(result.pitch.sections)} sections")
+    print(f"Elevator pitch: {result.pitch.elevator_pitch}")
+```
+
 ## Project Status
 
 ### Completed (Phase 1)
@@ -200,8 +238,19 @@ async with ContentProcessor(config) as processor:
   - Batch processing with concurrency control
   - CLI `batch-process` command
 
+### Completed (Phase 3)
+- [x] Pitch Generation Engine
+  - PitchGenerator orchestrator
+  - Section templates for 14 section types (hook, problem, solution, features, benefits, etc.)
+  - Tone customization (professional, conversational, technical, executive, enthusiastic, consultative)
+  - Length presets (elevator, short, standard, detailed, comprehensive)
+  - Audience-specific pitch variants
+  - Elevator pitch and one-liner generation
+  - Key messages and objection handling
+  - Presentation outline export
+  - CLI `generate` command with multiple output formats (JSON, Markdown, text)
+
 ### TODO
-- [ ] Pitch Generation Engine
 - [ ] Incremental Update System
 - [ ] Refinement Engine (conversational)
 - [ ] Output composers (PPTX, PDF)

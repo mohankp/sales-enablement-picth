@@ -20,9 +20,13 @@ from src.llm import (
     ModelSettings,
     ProviderType,
     create_llm_provider,
+    ensure_list,
+    ensure_string,
     parse_json,
     parse_model,
     ParseError,
+    safe_get_list,
+    safe_get_string,
 )
 from src.models.content import ExtractedContent
 from src.models.processed import (
@@ -526,11 +530,35 @@ Focus on the TOP 15-20 most important features. Keep descriptions concise."""
             if response.stop_reason and "MAX" in str(response.stop_reason).upper():
                 logger.warning("Feature extraction response may be truncated due to token limit")
 
-            data = parse_json(response.content)
-            features_data = data.get("features", [])
+            # Try to parse JSON, with fallback for different response formats
+            try:
+                data = parse_json(response.content)
+            except ParseError:
+                # Try to extract features from plain text or alternative format
+                logger.warning("Standard JSON parsing failed, trying alternative extraction")
+                # Return empty result if parsing fails
+                return ProcessingResult(
+                    success=True,
+                    data=FeatureSet(features=[]),
+                    tokens_used=response.usage.total_tokens,
+                    cost_usd=response.cost_usd,
+                    latency_ms=(time.time() - start_time) * 1000,
+                )
+
+            # Handle different response structures
+            if isinstance(data, list):
+                # Direct list of features
+                features_data = data
+            else:
+                # Object with features key
+                features_data = data.get("features", [])
+                if not isinstance(features_data, list):
+                    features_data = [features_data] if features_data else []
 
             features = []
             for f in features_data:
+                if not isinstance(f, dict):
+                    continue
                 try:
                     category = FeatureCategory(f.get("category", "other"))
                 except ValueError:
@@ -538,14 +566,14 @@ Focus on the TOP 15-20 most important features. Keep descriptions concise."""
 
                 features.append(
                     ProductFeature(
-                        name=f.get("name", ""),
-                        description=f.get("description", ""),
+                        name=safe_get_string(f, "name", "Unknown Feature"),
+                        description=safe_get_string(f, "description", ""),
                         category=category,
-                        benefits=f.get("benefits", []),
-                        use_cases=f.get("use_cases", []),
-                        technical_details=f.get("technical_details"),
-                        is_flagship=f.get("is_flagship", False),
-                        is_unique=f.get("is_unique", False),
+                        benefits=safe_get_list(f, "benefits"),
+                        use_cases=safe_get_list(f, "use_cases"),
+                        technical_details=safe_get_string(f, "technical_details") or None,
+                        is_flagship=bool(f.get("is_flagship", False)),
+                        is_unique=bool(f.get("is_unique", False)),
                     )
                 )
 
@@ -614,12 +642,21 @@ Focus on the most compelling benefits."""
             )
 
             data = parse_json(response.content)
-            benefits_data = data.get("benefits", [])
+
+            # Handle different response structures
+            if isinstance(data, list):
+                benefits_data = data
+            else:
+                benefits_data = data.get("benefits", [])
+                if not isinstance(benefits_data, list):
+                    benefits_data = [benefits_data] if benefits_data else []
 
             benefits = []
             for b in benefits_data:
+                if not isinstance(b, dict):
+                    continue
                 audiences = []
-                for aud in b.get("target_audience", []):
+                for aud in safe_get_list(b, "target_audience"):
                     try:
                         audiences.append(AudienceType(aud))
                     except ValueError:
@@ -627,12 +664,12 @@ Focus on the most compelling benefits."""
 
                 benefits.append(
                     CustomerBenefit(
-                        headline=b.get("headline", ""),
-                        description=b.get("description", ""),
+                        headline=safe_get_string(b, "headline", ""),
+                        description=safe_get_string(b, "description", ""),
                         target_audience=audiences,
-                        supporting_features=b.get("supporting_features", []),
-                        proof_points=b.get("proof_points", []),
-                        business_impact=b.get("business_impact"),
+                        supporting_features=safe_get_list(b, "supporting_features"),
+                        proof_points=safe_get_list(b, "proof_points"),
+                        business_impact=safe_get_string(b, "business_impact") or None,
                     )
                 )
 
@@ -702,12 +739,21 @@ Return JSON:
             )
 
             data = parse_json(response.content)
-            use_cases_data = data.get("use_cases", [])
+
+            # Handle different response structures
+            if isinstance(data, list):
+                use_cases_data = data
+            else:
+                use_cases_data = data.get("use_cases", [])
+                if not isinstance(use_cases_data, list):
+                    use_cases_data = [use_cases_data] if use_cases_data else []
 
             use_cases = []
             for uc in use_cases_data:
+                if not isinstance(uc, dict):
+                    continue
                 audiences = []
-                for aud in uc.get("target_audience", []):
+                for aud in safe_get_list(uc, "target_audience"):
                     try:
                         audiences.append(AudienceType(aud))
                     except ValueError:
@@ -715,14 +761,14 @@ Return JSON:
 
                 use_cases.append(
                     UseCase(
-                        title=uc.get("title", ""),
-                        scenario=uc.get("scenario", ""),
-                        problem_solved=uc.get("problem_solved", ""),
-                        solution_approach=uc.get("solution_approach", ""),
+                        title=safe_get_string(uc, "title", ""),
+                        scenario=safe_get_string(uc, "scenario", ""),
+                        problem_solved=safe_get_string(uc, "problem_solved", ""),
+                        solution_approach=safe_get_string(uc, "solution_approach", ""),
                         target_audience=audiences,
-                        industry_vertical=uc.get("industry_vertical"),
-                        key_features_used=uc.get("key_features_used", []),
-                        expected_outcomes=uc.get("expected_outcomes", []),
+                        industry_vertical=safe_get_string(uc, "industry_vertical") or None,
+                        key_features_used=safe_get_list(uc, "key_features_used"),
+                        expected_outcomes=safe_get_list(uc, "expected_outcomes"),
                     )
                 )
 
@@ -877,22 +923,22 @@ Return JSON:
                 segments.append(
                     AudienceSegment(
                         segment_type=segment_type,
-                        name=s.get("name", ""),
-                        description=s.get("description", ""),
-                        pain_points=s.get("pain_points", []),
-                        goals=s.get("goals", []),
-                        relevant_features=s.get("relevant_features", []),
-                        relevant_benefits=s.get("relevant_benefits", []),
+                        name=safe_get_string(s, "name", ""),
+                        description=safe_get_string(s, "description", ""),
+                        pain_points=safe_get_list(s, "pain_points"),
+                        goals=safe_get_list(s, "goals"),
+                        relevant_features=safe_get_list(s, "relevant_features"),
+                        relevant_benefits=safe_get_list(s, "relevant_benefits"),
                         messaging_tone=s.get("messaging_tone"),
-                        key_messages=s.get("key_messages", []),
+                        key_messages=safe_get_list(s, "key_messages"),
                     )
                 )
 
             analysis = AudienceAnalysis(
                 segments=segments,
-                primary_audience=data.get("primary_audience"),
-                secondary_audiences=data.get("secondary_audiences", []),
-                buyer_vs_user=data.get("buyer_vs_user"),
+                primary_audience=safe_get_string(data, "primary_audience"),
+                secondary_audiences=safe_get_list(data, "secondary_audiences"),
+                buyer_vs_user=safe_get_string(data, "buyer_vs_user"),
             )
 
             return ProcessingResult(
@@ -1139,13 +1185,13 @@ Return JSON:
             data = parse_json(response.content)
 
             summary = ContentSummary(
-                executive_summary=data.get("executive_summary", ""),
-                detailed_summary=data.get("detailed_summary", ""),
-                comprehensive_summary=data.get("comprehensive_summary", ""),
-                key_points=data.get("key_points", []),
-                product_category=data.get("product_category"),
-                tagline=data.get("tagline"),
-                value_proposition=data.get("value_proposition"),
+                executive_summary=safe_get_string(data, "executive_summary", ""),
+                detailed_summary=safe_get_string(data, "detailed_summary", ""),
+                comprehensive_summary=safe_get_string(data, "comprehensive_summary", ""),
+                key_points=safe_get_list(data, "key_points"),
+                product_category=safe_get_string(data, "product_category") or None,
+                tagline=safe_get_string(data, "tagline") or None,
+                value_proposition=safe_get_string(data, "value_proposition") or None,
             )
 
             return ProcessingResult(

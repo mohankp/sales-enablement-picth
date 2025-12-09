@@ -435,6 +435,108 @@ class SectionContent(BaseModel):
     suggested_visuals: list[str] = []
 
 
+def ensure_list(value: Any, separator: str = ",") -> list[str]:
+    """
+    Ensure a value is a list.
+
+    Handles:
+    - None -> []
+    - list -> list
+    - str -> [str] or split by separator
+    - dict -> list of values
+
+    Args:
+        value: The value to convert
+        separator: Separator to split strings (if they contain it)
+
+    Returns:
+        A list
+    """
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return [str(item) if not isinstance(item, str) else item for item in value]
+    if isinstance(value, str):
+        # If string contains separator, split it
+        if separator in value:
+            return [s.strip() for s in value.split(separator) if s.strip()]
+        return [value]
+    if isinstance(value, dict):
+        # Convert dict values to list
+        return list(str(v) for v in value.values())
+    return [str(value)]
+
+
+def ensure_string(value: Any, join_separator: str = "\n\n") -> str:
+    """
+    Ensure a value is a string.
+
+    Handles:
+    - None -> ""
+    - str -> str
+    - list -> joined string
+    - dict -> formatted string with sections
+
+    Args:
+        value: The value to convert
+        join_separator: Separator for joining list/dict items
+
+    Returns:
+        A string
+    """
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        return value
+    if isinstance(value, list):
+        return join_separator.join(str(item) for item in value)
+    if isinstance(value, dict):
+        # Format dict as sections
+        parts = []
+        for key, val in value.items():
+            if isinstance(val, (list, dict)):
+                val = ensure_string(val, "\n")
+            parts.append(f"**{key}**:\n{val}")
+        return join_separator.join(parts)
+    return str(value)
+
+
+def safe_get_list(data: dict, key: str, default: Optional[list] = None) -> list:
+    """
+    Safely get a list value from a dict with type coercion.
+
+    Args:
+        data: Source dictionary
+        key: Key to retrieve
+        default: Default value if key missing
+
+    Returns:
+        A list value
+    """
+    value = data.get(key)
+    if value is None:
+        return default if default is not None else []
+    return ensure_list(value)
+
+
+def safe_get_string(data: dict, key: str, default: str = "") -> str:
+    """
+    Safely get a string value from a dict with type coercion.
+
+    Args:
+        data: Source dictionary
+        key: Key to retrieve
+        default: Default value if key missing
+
+    Returns:
+        A string value
+    """
+    value = data.get(key)
+    if value is None:
+        return default
+    return ensure_string(value)
+
+
 def get_json_schema(model_class: Type[BaseModel]) -> dict[str, Any]:
     """
     Get JSON schema for a Pydantic model.

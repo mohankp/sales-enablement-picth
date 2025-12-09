@@ -77,6 +77,8 @@ from .parser import (
     ParseError,
     SectionContent,
     create_output_instructions,
+    ensure_list,
+    ensure_string,
     extract_json,
     get_json_schema,
     parse_bullet_points,
@@ -86,6 +88,8 @@ from .parser import (
     parse_markdown_sections,
     parse_model,
     parse_numbered_list,
+    safe_get_list,
+    safe_get_string,
 )
 from .prompts import (
     PromptRegistry,
@@ -136,6 +140,10 @@ __all__ = [
     "extract_json",
     "get_json_schema",
     "create_output_instructions",
+    "ensure_list",
+    "ensure_string",
+    "safe_get_list",
+    "safe_get_string",
     "ParseError",
     "ExtractedEntity",
     "ExtractedFeature",

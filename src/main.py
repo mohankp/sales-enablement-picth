@@ -7,7 +7,11 @@ import sys
 from pathlib import Path
 from typing import Optional
 
+from dotenv import load_dotenv
 import typer
+
+# Load environment variables from .env file
+load_dotenv()
 from rich.console import Console
 from rich.logging import RichHandler
 from rich.panel import Panel
@@ -413,7 +417,10 @@ def process(
         help="Comma-separated aspects to process (features,benefits,use_cases,competitive,audience,pricing,technical,summary)"
     ),
     model: str = typer.Option(
-        "sonnet", "--model", "-m", help="Model to use (haiku, sonnet, opus)"
+        "sonnet", "--model", "-m", help="Model to use (haiku, sonnet, opus for Anthropic; pro, flash for Gemini)"
+    ),
+    provider: str = typer.Option(
+        "anthropic", "--provider", "-p", help="LLM provider to use (anthropic, gemini)"
     ),
     verbose: bool = typer.Option(
         False, "--verbose", "-v", help="Enable verbose logging"
@@ -429,6 +436,7 @@ def process(
     Example:
         pitch-gen process extraction.json --output processed.json
         pitch-gen process extraction.json --aspects features,benefits
+        pitch-gen process extraction.json --provider gemini --model pro
     """
     setup_logging(verbose)
 
@@ -439,7 +447,8 @@ def process(
 
     console.print(Panel.fit(
         f"[bold blue]Content Processing Engine[/bold blue]\n"
-        f"Processing: {input_file}",
+        f"Processing: {input_file}\n"
+        f"Provider: {provider}",
         title="Sales Pitch Generator",
     ))
 
@@ -454,21 +463,46 @@ def process(
 
     # Import processing modules
     from src.processing import ContentProcessor, ProcessingConfig
-    from src.llm import ModelName
+    from src.llm import ModelName, ProviderType
 
-    # Configure processing
-    model_map = {
-        "haiku": ModelName.HAIKU,
-        "sonnet": ModelName.SONNET,
-        "opus": ModelName.OPUS,
+    # Determine provider
+    provider_map = {
+        "anthropic": ProviderType.ANTHROPIC,
+        "gemini": ProviderType.GEMINI,
     }
-    selected_model = model_map.get(model.lower(), ModelName.SONNET)
+    selected_provider = provider_map.get(provider.lower(), ProviderType.ANTHROPIC)
 
-    config = ProcessingConfig(
-        default_model=selected_model,
-        analysis_model=selected_model,
-        extraction_model=selected_model,
-    )
+    # Configure processing based on provider
+    if selected_provider == ProviderType.GEMINI:
+        # Map model names for Gemini
+        gemini_model_map = {
+            "pro": "gemini-3-pro-preview",  # Gemini 3 Pro (most intelligent)
+            "flash": "gemini-2.5-flash",
+            "fast": "gemini-2.5-flash",
+            "lite": "gemini-2.5-flash-lite",
+            "2.5-pro": "gemini-2.5-pro",
+        }
+        gemini_model = gemini_model_map.get(model.lower(), "gemini-3-pro-preview")
+        config = ProcessingConfig(
+            provider=selected_provider,
+            gemini_default_model=gemini_model,
+            gemini_analysis_model=gemini_model,
+            gemini_extraction_model=gemini_model,
+        )
+    else:
+        # Anthropic models
+        model_map = {
+            "haiku": ModelName.HAIKU,
+            "sonnet": ModelName.SONNET,
+            "opus": ModelName.OPUS,
+        }
+        selected_model = model_map.get(model.lower(), ModelName.SONNET)
+        config = ProcessingConfig(
+            provider=selected_provider,
+            default_model=selected_model,
+            analysis_model=selected_model,
+            extraction_model=selected_model,
+        )
 
     # Disable aspects not requested
     if aspects:
@@ -634,13 +668,16 @@ def batch_process(
         None, "--output", "-o", help="Output directory for processed files"
     ),
     pattern: str = typer.Option(
-        "*.json", "--pattern", "-p", help="Glob pattern for input files"
+        "*.json", "--pattern", "-pt", help="Glob pattern for input files"
     ),
     concurrency: int = typer.Option(
         3, "--concurrency", "-c", help="Maximum concurrent processing (1-10)"
     ),
     model: str = typer.Option(
-        "sonnet", "--model", "-m", help="Model to use (haiku, sonnet, opus)"
+        "sonnet", "--model", "-m", help="Model to use (haiku, sonnet, opus for Anthropic; pro, flash for Gemini)"
+    ),
+    provider: str = typer.Option(
+        "anthropic", "--provider", "-p", help="LLM provider to use (anthropic, gemini)"
     ),
     verbose: bool = typer.Option(
         False, "--verbose", "-v", help="Enable verbose logging"
@@ -654,6 +691,7 @@ def batch_process(
 
     Example:
         pitch-gen batch-process ./extractions --output ./processed --concurrency 5
+        pitch-gen batch-process ./extractions --provider gemini --model flash
     """
     setup_logging(verbose)
 
@@ -670,27 +708,51 @@ def batch_process(
 
     console.print(Panel.fit(
         f"[bold blue]Batch Processing Engine[/bold blue]\n"
-        f"Processing {len(input_files)} files from: {input_dir}",
+        f"Processing {len(input_files)} files from: {input_dir}\n"
+        f"Provider: {provider}",
         title="Sales Pitch Generator",
     ))
 
     # Import processing modules
     from src.processing import BatchProcessor, BatchConfig, ProcessingConfig
-    from src.llm import ModelName
+    from src.llm import ModelName, ProviderType
 
-    # Configure
-    model_map = {
-        "haiku": ModelName.HAIKU,
-        "sonnet": ModelName.SONNET,
-        "opus": ModelName.OPUS,
+    # Determine provider
+    provider_map = {
+        "anthropic": ProviderType.ANTHROPIC,
+        "gemini": ProviderType.GEMINI,
     }
-    selected_model = model_map.get(model.lower(), ModelName.SONNET)
+    selected_provider = provider_map.get(provider.lower(), ProviderType.ANTHROPIC)
 
-    processing_config = ProcessingConfig(
-        default_model=selected_model,
-        analysis_model=selected_model,
-        extraction_model=selected_model,
-    )
+    # Configure based on provider
+    if selected_provider == ProviderType.GEMINI:
+        gemini_model_map = {
+            "pro": "gemini-3-pro-preview",  # Gemini 3 Pro (most intelligent)
+            "flash": "gemini-2.5-flash",
+            "fast": "gemini-2.5-flash",
+            "lite": "gemini-2.5-flash-lite",
+            "2.5-pro": "gemini-2.5-pro",
+        }
+        gemini_model = gemini_model_map.get(model.lower(), "gemini-3-pro-preview")
+        processing_config = ProcessingConfig(
+            provider=selected_provider,
+            gemini_default_model=gemini_model,
+            gemini_analysis_model=gemini_model,
+            gemini_extraction_model=gemini_model,
+        )
+    else:
+        model_map = {
+            "haiku": ModelName.HAIKU,
+            "sonnet": ModelName.SONNET,
+            "opus": ModelName.OPUS,
+        }
+        selected_model = model_map.get(model.lower(), ModelName.SONNET)
+        processing_config = ProcessingConfig(
+            provider=selected_provider,
+            default_model=selected_model,
+            analysis_model=selected_model,
+            extraction_model=selected_model,
+        )
 
     batch_config = BatchConfig(
         max_concurrent_items=min(max(1, concurrency), 10),
@@ -810,7 +872,10 @@ def generate(
         False, "--technical/--no-technical", help="Include technical details section"
     ),
     model: str = typer.Option(
-        "sonnet", "--model", "-m", help="Model to use (haiku, sonnet, opus)"
+        "sonnet", "--model", "-m", help="Model to use (haiku, sonnet, opus for Anthropic; pro, flash for Gemini)"
+    ),
+    provider: str = typer.Option(
+        "anthropic", "--provider", "-p", help="LLM provider to use (anthropic, gemini)"
     ),
     verbose: bool = typer.Option(
         False, "--verbose", "-v", help="Enable verbose logging"
@@ -825,6 +890,7 @@ def generate(
     Example:
         pitch-gen generate processed.json --output pitch.json --tone executive
         pitch-gen generate processed.json --format markdown --length detailed
+        pitch-gen generate processed.json --provider gemini --model pro
     """
     setup_logging(verbose)
 
@@ -835,7 +901,8 @@ def generate(
 
     console.print(Panel.fit(
         f"[bold blue]Pitch Generation Engine[/bold blue]\n"
-        f"Generating from: {input_file}",
+        f"Generating from: {input_file}\n"
+        f"Provider: {provider}",
         title="Sales Pitch Generator",
     ))
 
@@ -852,7 +919,7 @@ def generate(
     # Import generation modules
     from src.generation import PitchGenerator, GenerationConfig
     from src.models.pitch import PitchConfig, PitchTone, PitchLength
-    from src.llm import LLMConfig, ModelSettings, ModelName
+    from src.llm import LLMConfig, ModelSettings, ModelName, ProviderType
 
     # Map CLI options to enums
     tone_map = {
@@ -870,15 +937,16 @@ def generate(
         "detailed": PitchLength.DETAILED,
         "comprehensive": PitchLength.COMPREHENSIVE,
     }
-    model_map = {
-        "haiku": ModelName.HAIKU,
-        "sonnet": ModelName.SONNET,
-        "opus": ModelName.OPUS,
+
+    # Determine provider
+    provider_map = {
+        "anthropic": ProviderType.ANTHROPIC,
+        "gemini": ProviderType.GEMINI,
     }
+    selected_provider = provider_map.get(provider.lower(), ProviderType.ANTHROPIC)
 
     selected_tone = tone_map.get(tone.lower(), PitchTone.PROFESSIONAL)
     selected_length = length_map.get(length.lower(), PitchLength.STANDARD)
-    selected_model = model_map.get(model.lower(), ModelName.SONNET)
 
     # Configure pitch
     pitch_config = PitchConfig(
@@ -889,14 +957,38 @@ def generate(
         include_technical=include_technical,
     )
 
-    # Configure generation
+    # Configure generation based on provider
     llm_config = LLMConfig()
-    model_settings = ModelSettings(model=selected_model)
-    gen_config = GenerationConfig(
-        llm_config=llm_config,
-        model_settings=model_settings,
-        verbose=verbose,
-    )
+
+    if selected_provider == ProviderType.GEMINI:
+        gemini_model_map = {
+            "pro": "gemini-3-pro-preview",  # Gemini 3 Pro (most intelligent)
+            "flash": "gemini-2.5-flash",
+            "fast": "gemini-2.5-flash",
+            "lite": "gemini-2.5-flash-lite",
+            "2.5-pro": "gemini-2.5-pro",
+        }
+        gemini_model = gemini_model_map.get(model.lower(), "gemini-3-pro-preview")
+        gen_config = GenerationConfig(
+            provider=selected_provider,
+            llm_config=llm_config,
+            gemini_model=gemini_model,
+            verbose=verbose,
+        )
+    else:
+        model_map = {
+            "haiku": ModelName.HAIKU,
+            "sonnet": ModelName.SONNET,
+            "opus": ModelName.OPUS,
+        }
+        selected_model = model_map.get(model.lower(), ModelName.SONNET)
+        model_settings = ModelSettings(model=selected_model)
+        gen_config = GenerationConfig(
+            provider=selected_provider,
+            llm_config=llm_config,
+            model_settings=model_settings,
+            verbose=verbose,
+        )
 
     async def run_generation():
         async with PitchGenerator(gen_config) as generator:

@@ -21,6 +21,87 @@ class ParseError(Exception):
         self.errors = errors or []
 
 
+def repair_truncated_json(text: str) -> Optional[str]:
+    """
+    Attempt to repair truncated JSON by adding missing closing brackets.
+
+    This handles cases where LLM output is cut off due to token limits,
+    leaving incomplete JSON structures.
+    """
+    if not text or not text.strip():
+        return None
+
+    text = text.strip()
+
+    # Remove trailing incomplete elements (e.g., partial strings, keys)
+    # Look for the last complete element
+    while text:
+        # Remove trailing comma if present
+        if text.endswith(','):
+            text = text[:-1].rstrip()
+            continue
+        # Remove incomplete string (ends with unclosed quote)
+        if text.count('"') % 2 == 1:
+            # Find and remove the last incomplete string
+            last_quote = text.rfind('"')
+            if last_quote > 0:
+                # Find the start of this incomplete element
+                # Look backwards for a comma, colon, or bracket
+                search_pos = last_quote - 1
+                while search_pos >= 0 and text[search_pos] not in ',:{}[]':
+                    search_pos -= 1
+                if search_pos >= 0:
+                    text = text[:search_pos + 1].rstrip()
+                    if text.endswith(','):
+                        text = text[:-1].rstrip()
+                    continue
+            break
+        break
+
+    # Count unmatched brackets
+    open_braces = text.count('{') - text.count('}')
+    open_brackets = text.count('[') - text.count(']')
+
+    if open_braces <= 0 and open_brackets <= 0:
+        return None  # Not truncated or already balanced
+
+    # Clean up any trailing incomplete content
+    # Remove trailing partial key-value or array element
+    if text and text[-1] not in '{}[],"\'0123456789nulltruefalse'[-1:]:
+        # Find last complete structure
+        for i in range(len(text) - 1, -1, -1):
+            if text[i] in '}],"':
+                text = text[:i + 1]
+                break
+
+    # Remove any trailing comma before we add closing brackets
+    text = text.rstrip().rstrip(',')
+
+    # Add missing closing brackets in reverse order
+    closing = ']' * open_brackets + '}' * open_braces
+    repaired = text + closing
+
+    # Verify the repair worked
+    try:
+        json.loads(repaired)
+        logger.info(f"Successfully repaired truncated JSON (added {len(closing)} brackets)")
+        return repaired
+    except json.JSONDecodeError:
+        # Try a simpler approach: just close at array level if we have features
+        if '"features"' in text and open_braces > 0:
+            # Find the last complete feature object
+            last_complete = text.rfind('},')
+            if last_complete > 0:
+                repaired = text[:last_complete + 1] + ']}'
+                try:
+                    json.loads(repaired)
+                    logger.info("Repaired truncated JSON by closing at last complete feature")
+                    return repaired
+                except json.JSONDecodeError:
+                    pass
+        return None
+
+
 def extract_json(text: str) -> Optional[str]:
     """
     Extract JSON from text that may contain markdown code blocks or other content.
@@ -30,6 +111,7 @@ def extract_json(text: str) -> Optional[str]:
     - ``` ... ``` blocks
     - Raw JSON objects/arrays
     - JSON embedded in text
+    - Truncated JSON (attempts repair)
     """
     # Try to find JSON in code blocks first
     code_block_patterns = [
@@ -59,6 +141,22 @@ def extract_json(text: str) -> Optional[str]:
                 return match
             except json.JSONDecodeError:
                 continue
+
+    # Try to repair truncated JSON from code blocks
+    for pattern in code_block_patterns:
+        match = re.search(pattern.replace(r"\s*```", r"[\s\S]*"), text)
+        if match:
+            content = match.group(1).strip() if match.lastindex else text
+            if content.startswith(("{", "[")):
+                repaired = repair_truncated_json(content)
+                if repaired:
+                    return repaired
+
+    # Try to repair truncated raw JSON
+    if text.strip().startswith(("{", "[")):
+        repaired = repair_truncated_json(text.strip())
+        if repaired:
+            return repaired
 
     return None
 

@@ -11,8 +11,16 @@ from typing import Any, Optional
 
 from pydantic import BaseModel
 
-from src.llm.client import AnthropicClient, LLMResponse
-from src.llm.config import LLMConfig, ModelSettings
+from src.llm import (
+    AnthropicClient,
+    LLMConfig,
+    LLMProvider,
+    LLMResponse,
+    ModelSettings,
+    ProviderType,
+    create_llm_provider,
+    parse_json,
+)
 from src.models.pitch import (
     BenefitStatement,
     CallToAction,
@@ -48,9 +56,16 @@ logger = logging.getLogger(__name__)
 class GenerationConfig:
     """Configuration for pitch generation."""
 
+    # Provider selection
+    provider: ProviderType = ProviderType.ANTHROPIC
+
     # LLM settings
     llm_config: Optional[LLMConfig] = None
     model_settings: Optional[ModelSettings] = None
+
+    # Model names for different providers
+    default_model: Optional[str] = None  # Uses provider default if not set
+    gemini_model: str = "gemini-3-pro-preview"  # Model to use with Gemini
 
     # Generation settings
     max_concurrent_sections: int = 3
@@ -103,6 +118,8 @@ class PitchGenerator:
     Uses LLM to generate each section based on templates, then
     assembles them into a complete pitch document.
 
+    Supports multiple LLM providers (Anthropic Claude, Google Gemini).
+
     Usage:
         generator = PitchGenerator()
         async with generator:
@@ -111,11 +128,17 @@ class PitchGenerator:
                 config=PitchConfig(tone=PitchTone.PROFESSIONAL),
             )
             print(result.pitch.get_full_content())
+
+        # Using Gemini
+        config = GenerationConfig(provider=ProviderType.GEMINI)
+        generator = PitchGenerator(config)
+        async with generator:
+            result = await generator.generate(processed_content)
     """
 
     def __init__(self, config: Optional[GenerationConfig] = None):
         self.config = config or GenerationConfig()
-        self._client: Optional[AnthropicClient] = None
+        self._client: Optional[LLMProvider] = None
         self._cache: Optional[Any] = None
         self._visual_matcher: Optional[SectionVisualMatcher] = None
 
@@ -131,7 +154,29 @@ class PitchGenerator:
     async def start(self) -> None:
         """Initialize resources."""
         llm_config = self.config.llm_config or LLMConfig()
-        self._client = AnthropicClient(llm_config)
+
+        # Determine model based on provider
+        if self.config.provider == ProviderType.GEMINI:
+            default_model = self.config.gemini_model
+        else:
+            default_model = self.config.default_model or (
+                self.config.model_settings.model.value
+                if self.config.model_settings
+                else "claude-sonnet-4-20250514"
+            )
+
+        # Create provider using factory
+        self._client = create_llm_provider(
+            provider=self.config.provider,
+            api_key=llm_config.get_api_key_value(),
+            default_model=default_model,
+            timeout_seconds=llm_config.timeout_seconds,
+            max_retries=llm_config.retry.max_retries,
+            requests_per_minute=llm_config.requests_per_minute,
+            track_costs=llm_config.track_costs,
+            log_requests=llm_config.log_requests,
+            log_responses=llm_config.log_responses,
+        )
         await self._client.start()
 
         # Initialize visual matcher if enabled
@@ -143,7 +188,7 @@ class PitchGenerator:
 
             self._cache = ProcessingCache(cache_dir=self.config.cache_dir)
 
-        logger.info("PitchGenerator initialized")
+        logger.info(f"PitchGenerator initialized with {self.config.provider.value} provider")
 
     async def stop(self) -> None:
         """Clean up resources."""
@@ -152,7 +197,7 @@ class PitchGenerator:
             self._client = None
         logger.info("PitchGenerator stopped")
 
-    def _ensure_client(self) -> AnthropicClient:
+    def _ensure_client(self) -> LLMProvider:
         """Ensure LLM client is available."""
         if self._client is None:
             raise RuntimeError(
@@ -470,10 +515,18 @@ Target audience: {context.get('target_audience', 'business professionals')}
 Return valid JSON only. No markdown formatting."""
 
         try:
+            # Get model settings
+            max_tokens = 4096
+            temperature = 0.7
+            if self.config.model_settings:
+                max_tokens = self.config.model_settings.max_tokens
+                temperature = self.config.model_settings.temperature
+
             response = await client.complete(
                 prompt,
                 system=system_prompt,
-                settings=self.config.model_settings,
+                max_tokens=max_tokens,
+                temperature=temperature,
             )
 
             # Parse response
@@ -567,9 +620,10 @@ Return valid JSON only. No markdown formatting."""
 
         try:
             response = await client.complete(prompt)
-            messages = json.loads(response.content.strip())
+            # Use parse_json to handle markdown code blocks and other formatting
+            messages = parse_json(response.content, strict=False)
             if isinstance(messages, list):
-                return messages[:5]
+                return [str(m) for m in messages[:5]]
         except Exception as e:
             logger.warning(f"Error generating key messages: {e}")
 
@@ -584,9 +638,10 @@ Return valid JSON only. No markdown formatting."""
 
         try:
             response = await client.complete(prompt)
-            objections = json.loads(response.content.strip())
+            # Use parse_json to handle markdown code blocks and other formatting
+            objections = parse_json(response.content, strict=False)
             if isinstance(objections, dict):
-                return objections
+                return {str(k): str(v) for k, v in objections.items()}
         except Exception as e:
             logger.warning(f"Error generating objection responses: {e}")
 

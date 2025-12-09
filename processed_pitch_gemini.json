@@ -1,0 +1,367 @@
+{
+  "product_name": "ADP SecurTime",
+  "product_url": "https://in.adp.com/what-we-offer/products/adp-securtime.aspx",
+  "pitch_id": "89cfe291-7fe2-4a79-be97-72320c117a2b",
+  "config": {
+    "target_audience": "CEO",
+    "tone": "professional",
+    "length": "standard",
+    "include_pricing": true,
+    "include_technical": false,
+    "include_competitors": true,
+    "max_features": 5,
+    "max_benefits": 5,
+    "max_use_cases": 3,
+    "sections_to_include": null,
+    "use_statistics": true,
+    "use_questions": true,
+    "use_stories": false,
+    "formality_level": 3,
+    "company_name": null,
+    "industry": null,
+    "pain_points": []
+  },
+  "title": "ADP SecurTime: Effortlessly manage employee time, attendance, and payroll in one simple solution.",
+  "subtitle": null,
+  "executive_summary": "ADP SecurTime is a workforce management solution designed to streamline attendance tracking, timesheets, payroll, and leave management. It offers real-time visibility into employee data, helping businesses improve productivity, reduce costs, and ensure compliance.",
+  "sections": [
+    {
+      "section_type": "hook",
+      "title": "Opening Hook",
+      "content": "Your company's most valuable asset is time, yet it's often the least accurately measured and the largest source of hidden operational costs. How confident are you that every dollar on your payroll is directly tied to productive, accounted-for work?",
+      "key_points": [],
+      "talking_points": [
+        "Pause to let the question sink in, establishing it as a strategic, high-level concern.",
+        "This isn't about individual performance, but about the systemic inefficiencies that create financial leakage and compliance risk\u2014challenges that can only be solved with true visibility."
+      ],
+      "visual_suggestions": [],
+      "visual_assets": [
+        {
+          "asset_id": "2167f6759b48",
+          "asset_type": "image",
+          "url": "https://in.adp.com/-/media/adpglobal/insights/good-payroll-is-good-business/nav_promo_gpgb.jpg?rev=0ccbd4eb31314e47948aa8ed36802c1b&hash=9BD11BF410466C1988507F7E86BC6D3F",
+          "local_path": "data/media/images/2167f6759b48.jpg",
+          "caption": null,
+          "alt_text": "Nav Good Payroll is Good Business",
+          "placement": "hero",
+          "relevance_reason": "Fallback selection",
+          "table_markdown": null
+        }
+      ],
+      "duration_seconds": null,
+      "order": 1
+    },
+    {
+      "section_type": "problem",
+      "title": "The Challenge: Navigating Workforce Complexity",
+      "content": "In today's competitive landscape, managing an organization's most valuable asset\u2014its people\u2014has become increasingly complex. Reliance on disparate systems or manual processes for time tracking, leave management, and payroll preparation creates significant operational friction. This lack of a unified system results in data silos, preventing leadership from gaining a clear, real-time view of labor costs, productivity trends, and potential compliance exposures. Consequently, strategic decisions are often based on outdated information, valuable resources are consumed by administrative tasks, and the organization remains vulnerable to costly errors and regulatory penalties.",
+      "key_points": [
+        "Lack of real-time visibility into labor costs and employee productivity, hindering strategic resource allocation.",
+        "Increased operational overhead and financial leakage resulting from manual data entry and payroll inaccuracies.",
+        "Significant compliance risks associated with evolving labor laws, overtime calculation, and leave management."
+      ],
+      "talking_points": [
+        "Many leaders find that by the time they receive workforce reports, the data is already obsolete. This latency can lead to budget overruns from uncontrolled overtime or misallocated project resources.",
+        "Does your executive team have immediate access to accurate, consolidated data to confidently assess labor costs against revenue and make agile operational adjustments?"
+      ],
+      "visual_suggestions": [],
+      "visual_assets": [
+        {
+          "asset_id": "2167f6759b48",
+          "asset_type": "image",
+          "url": "https://in.adp.com/-/media/adpglobal/insights/good-payroll-is-good-business/nav_promo_gpgb.jpg?rev=0ccbd4eb31314e47948aa8ed36802c1b&hash=9BD11BF410466C1988507F7E86BC6D3F",
+          "local_path": "data/media/images/2167f6759b48.jpg",
+          "caption": null,
+          "alt_text": "Nav Good Payroll is Good Business",
+          "placement": "inline",
+          "relevance_reason": "Fallback selection",
+          "table_markdown": null
+        }
+      ],
+      "duration_seconds": null,
+      "order": 2
+    },
+    {
+      "section_type": "solution",
+      "title": "The Solution: ADP SecurTime",
+      "content": "Addressing the complexities of modern workforce management requires a solution that delivers both precision and strategic insight. ADP SecurTime is engineered to meet this need, providing a unified platform to streamline and automate essential processes, including time and attendance, scheduling, and leave management. By centralizing workforce data and ensuring its accuracy, ADP SecurTime empowers leadership with real-time visibility into labor costs and productivity. This transforms workforce management from a reactive, administrative function into a proactive, strategic advantage, enabling the organization to optimize resource allocation, control expenses, and maintain rigorous compliance.",
+      "key_points": [
+        "Achieve real-time visibility into workforce data to optimize labor costs and enhance productivity.",
+        "Ensure regulatory compliance and reduce administrative overhead through automated time, attendance, and leave management."
+      ],
+      "talking_points": [
+        "Emphasize the transformation from manual, error-prone processes to an automated, data-driven strategy for managing the organization's workforce.",
+        "Connect the solution's capabilities directly to primary executive concerns: controlling labor costs, mitigating compliance risks, and improving operational efficiency."
+      ],
+      "visual_suggestions": [
+        "A dashboard screenshot showcasing key performance indicators (KPIs) like overtime costs, absenteeism rates, and labor distribution.",
+        "A high-level workflow diagram illustrating the streamlined process from employee clock-in to payroll processing."
+      ],
+      "visual_assets": [
+        {
+          "asset_id": "0255d68573a1",
+          "asset_type": "image",
+          "url": "https://in.adp.com/-/media/adpglobal/images/what-we-offer/products/adp-securtime/demo-scheduling-st.png?rev=8c0cd36d0aed4799a9f641670ef12419&hash=0E213EF7884984151AB9D542639305AD",
+          "local_path": "data/media/images/0255d68573a1.png",
+          "caption": null,
+          "alt_text": "Demo-Scheduling",
+          "placement": "hero",
+          "relevance_reason": "Fallback selection",
+          "table_markdown": null
+        },
+        {
+          "asset_id": "85758738b340",
+          "asset_type": "image",
+          "url": "https://in.adp.com/-/media/adpglobal/images/what-we-offer/products/adp-securtime/demo-compliance-st.png?rev=81f40fce711049349c69481f670e5910&hash=DBC25C7A57DC4B97A7DFAFB262BC97E8",
+          "local_path": "data/media/images/85758738b340.png",
+          "caption": null,
+          "alt_text": "Demo-Compliance",
+          "placement": "inline",
+          "relevance_reason": "Fallback selection",
+          "table_markdown": null
+        }
+      ],
+      "duration_seconds": null,
+      "order": 3
+    },
+    {
+      "section_type": "benefits",
+      "title": "Achieve Greater Control and Drive Strategic Growth",
+      "content": "ADP SecurTime transitions time and attendance from a routine administrative task into a strategic business function. By providing unparalleled accuracy in time tracking, the platform delivers direct, measurable impact on profitability. It equips leadership with real-time workforce visibility, enabling data-driven decisions that enhance productivity and optimize resource allocation. This comprehensive solution not only mitigates significant compliance risks but also fosters a safer, more resilient work environment, ultimately providing the control and confidence needed to lead the organization forward.",
+      "key_points": [
+        "Protect Profitability by Eliminating Payroll Inflation: Eradicate time theft, ghost employees, and time leakage to reduce overall labor costs. Organizations typically realize a 2-5% reduction in payroll expenses by ensuring they only pay for time actually worked.",
+        "Enhance Strategic Oversight with Real-Time Data: Gain a unified, accurate view of your entire workforce's attendance and productivity. This clarity allows leadership to optimize team deployment, identify performance trends, and make informed strategic decisions with confidence.",
+        "Increase Operational Agility for Modern Workforces: Seamlessly manage any combination of employee types and work arrangements\u2014from on-premise to remote and contract. Automation reduces administrative burden, freeing up resources to focus on high-value initiatives that drive growth.",
+        "Safeguard the Organization from Compliance Risks: Automate adherence to complex and evolving labor laws. The system provides an robust audit trail and accurate calculations, minimizing the threat of costly litigation and protecting the company's reputation.",
+        "Strengthen Business Resilience and Employee Trust: Implement advanced health and safety measures, including contactless and thermal scanning options. Demonstrating a commitment to employee well-being enhances trust, reduces absenteeism, and ensures operational continuity."
+      ],
+      "talking_points": [
+        "Share a customer success story where a similar-sized company reduced payroll errors by over 90% and reallocated administrative headcount to more strategic roles.",
+        "Quantify the impact: 'Based on your current workforce size, a conservative 2% savings on payroll could translate to an estimated $[X] in annual bottom-line impact.'",
+        "Discuss the peace of mind that comes from knowing your organization is protected against wage and hour lawsuits, which have become increasingly common and costly.",
+        "Explain how real-time visibility empowers leaders to address productivity or attendance issues proactively, rather than discovering them weeks later."
+      ],
+      "visual_suggestions": [],
+      "visual_assets": [
+        {
+          "asset_id": "0255d68573a1",
+          "asset_type": "image",
+          "url": "https://in.adp.com/-/media/adpglobal/images/what-we-offer/products/adp-securtime/demo-scheduling-st.png?rev=8c0cd36d0aed4799a9f641670ef12419&hash=0E213EF7884984151AB9D542639305AD",
+          "local_path": "data/media/images/0255d68573a1.png",
+          "caption": null,
+          "alt_text": "Demo-Scheduling",
+          "placement": "inline",
+          "relevance_reason": "Fallback selection",
+          "table_markdown": null
+        },
+        {
+          "asset_id": "85758738b340",
+          "asset_type": "image",
+          "url": "https://in.adp.com/-/media/adpglobal/images/what-we-offer/products/adp-securtime/demo-compliance-st.png?rev=81f40fce711049349c69481f670e5910&hash=DBC25C7A57DC4B97A7DFAFB262BC97E8",
+          "local_path": "data/media/images/85758738b340.png",
+          "caption": null,
+          "alt_text": "Demo-Compliance",
+          "placement": "inline",
+          "relevance_reason": "Fallback selection",
+          "table_markdown": null
+        }
+      ],
+      "duration_seconds": null,
+      "order": 5
+    },
+    {
+      "section_type": "differentiators",
+      "title": "The ADP SecurTime Advantage",
+      "content": "ADP SecurTime delivers a comprehensive workforce management platform designed for the complexities of the modern enterprise. It moves beyond standard time and attendance to provide a unified solution that enhances operational agility, security, and cost control. The platform's distinct advantage lies in its unparalleled flexibility, accommodating any hardware strategy\u2014from our advanced biometric devices with integrated health screening capabilities to your organization's existing systems (BYOD). This adaptability, combined with a robust mobile-first architecture for managing distributed teams and industry-specific configurations, ensures that ADP SecurTime is not merely a tool for today, but a strategic asset that scales with your business objectives.",
+      "key_points": [
+        "Unmatched Hardware Flexibility and Advanced Biometric Security: Integrates a comprehensive suite of advanced biometric options, including facial recognition with temperature and mask detection, while also supporting the integration of an organization's existing hardware. This unique 'Bring Your Own Device' capability minimizes capital expenditure and deployment friction.",
+        "Secure, Mobile-First Management for Distributed Workforces: Provides a robust mobile platform engineered for remote and field-based teams, featuring advanced geo-fencing, geo-tagging, and anti-fraud measures like camera validation and IMEI tagging to ensure data integrity and accurate payroll processing, regardless of employee location.",
+        "Unified, Industry-Tailored Platform for Strategic Optimization: Consolidates all critical workforce management functions\u2014from scheduling and leave to overtime and compliance\u2014onto a single, integrated platform. This is further enhanced by pre-configured solutions tailored to the specific operational challenges and regulatory requirements of industries such as Manufacturing, Logistics, and Healthcare."
+      ],
+      "talking_points": [
+        "When compared to other time and attendance providers, it is important to note the strategic difference in scope. While many systems offer effective point solutions for time tracking, ADP SecurTime is engineered as a comprehensive workforce management platform. Our ability to unify scheduling, leave, and compliance on a single system provides a single source of truth for critical labor data. Furthermore, our unique flexibility in hardware integration and our specialized, industry-specific solutions deliver a level of operational efficiency and risk mitigation that standalone systems cannot match."
+      ],
+      "visual_suggestions": [],
+      "visual_assets": [
+        {
+          "asset_id": "2167f6759b48",
+          "asset_type": "image",
+          "url": "https://in.adp.com/-/media/adpglobal/insights/good-payroll-is-good-business/nav_promo_gpgb.jpg?rev=0ccbd4eb31314e47948aa8ed36802c1b&hash=9BD11BF410466C1988507F7E86BC6D3F",
+          "local_path": "data/media/images/2167f6759b48.jpg",
+          "caption": null,
+          "alt_text": "Nav Good Payroll is Good Business",
+          "placement": "inline",
+          "relevance_reason": "Fallback selection",
+          "table_markdown": null
+        },
+        {
+          "asset_id": "4fdabc89ffcc",
+          "asset_type": "image",
+          "url": "https://in.adp.com/-/media/adpglobal/insights/paw-2025/paw25-nav.png?rev=864bb8bc97054e7b8c15e61c065818a1&hash=0318971380B5581532254B48959F23A4",
+          "local_path": "data/media/images/4fdabc89ffcc.png",
+          "caption": null,
+          "alt_text": "Navigation PaW25",
+          "placement": "inline",
+          "relevance_reason": "Fallback selection",
+          "table_markdown": null
+        }
+      ],
+      "duration_seconds": null,
+      "order": 7
+    },
+    {
+      "section_type": "cta",
+      "title": "Enhance Your Workforce Efficiency",
+      "content": "Optimizing labor costs while ensuring regulatory compliance is a key driver of profitability. ADP SecurTime provides the advanced tools necessary to achieve these objectives. To understand the direct impact on your organization's operational efficiency, we invite you to a personalized demonstration. This brief executive overview will illustrate how our platform can streamline time and attendance tracking, mitigate compliance risks, and provide actionable insights for strategic decision-making. If now is not the ideal time for a meeting, we would be pleased to provide a detailed overview of our tiered pricing structure and relevant case studies for your review.",
+      "key_points": [
+        "Schedule a personalized demonstration to see ADP SecurTime in action.",
+        "Request a detailed overview of our tiered pricing and relevant case studies."
+      ],
+      "talking_points": [
+        "Ask for a brief 15-minute executive briefing to demonstrate how ADP SecurTime directly addresses their top-line goals for labor cost control and operational efficiency.",
+        "If they are not available for a demonstration, offer to send a concise information package including our tiered pricing model and a one-page case study relevant to their industry, making it easy for them to delegate the initial review."
+      ],
+      "visual_suggestions": [],
+      "visual_assets": [
+        {
+          "asset_id": "2167f6759b48",
+          "asset_type": "image",
+          "url": "https://in.adp.com/-/media/adpglobal/insights/good-payroll-is-good-business/nav_promo_gpgb.jpg?rev=0ccbd4eb31314e47948aa8ed36802c1b&hash=9BD11BF410466C1988507F7E86BC6D3F",
+          "local_path": "data/media/images/2167f6759b48.jpg",
+          "caption": null,
+          "alt_text": "Nav Good Payroll is Good Business",
+          "placement": "inline",
+          "relevance_reason": "Fallback selection",
+          "table_markdown": null
+        }
+      ],
+      "duration_seconds": null,
+      "order": 13
+    }
+  ],
+  "feature_highlights": [
+    {
+      "name": "Time and Attendance Tracking",
+      "headline": "Accurately tracks employee time and attendance, reducing errors and time fraud. Provides a real-time",
+      "description": "Accurately tracks employee time and attendance, reducing errors and time fraud. Provides a real-time view of attendance data.",
+      "benefit": "Reduce time tracking errors",
+      "proof_point": null
+    },
+    {
+      "name": "Shift Scheduling",
+      "headline": "Enables creation and management of employee shift schedules, including automated shift scheduling ba",
+      "description": "Enables creation and management of employee shift schedules, including automated shift scheduling based on employee availability and skills.",
+      "benefit": "Optimize resource allocation",
+      "proof_point": null
+    },
+    {
+      "name": "Leave Management",
+      "headline": "Automates leave request and approval processes, defining leave policies for different employee group",
+      "description": "Automates leave request and approval processes, defining leave policies for different employee groups.  Provides employees with on-the-go leave application and approval.",
+      "benefit": "Streamline leave requests",
+      "proof_point": null
+    },
+    {
+      "name": "Overtime Management",
+      "headline": "Tracks and manages employee overtime, including defining overtime policies for specific employee gro",
+      "description": "Tracks and manages employee overtime, including defining overtime policies for specific employee groups. Helps control overtime costs and ensure compliance with labor laws.",
+      "benefit": "Control overtime costs",
+      "proof_point": null
+    },
+    {
+      "name": "Biometric Authentication",
+      "headline": "Offers biometric authentication options, including facial recognition, fingerprint scanning, and the",
+      "description": "Offers biometric authentication options, including facial recognition, fingerprint scanning, and thermal scanning, to ensure accurate time recording and improve security.",
+      "benefit": "Prevent time fraud",
+      "proof_point": null
+    }
+  ],
+  "benefit_statements": [
+    {
+      "headline": "Eliminate Time Theft and Reduce Payroll Costs",
+      "description": "ADP SecurTime helps prevent time fraud, ghost employees, and time leakage, leading to significant cost savings. By accurately tracking employee time and attendance, businesses can avoid overpaying for unworked hours and reduce overall payroll expenses.",
+      "supporting_feature": "Biometric authentication",
+      "target_audience": "business, executive"
+    },
+    {
+      "headline": "Improve Workforce Visibility and Productivity",
+      "description": "Gain a single, accurate, real-time view of your workforce's attendance, performance, and productivity. This enhanced visibility allows for better management of teams, optimized resource allocation, and improved overall productivity across multiple locations and diverse workforces.",
+      "supporting_feature": "Real-time attendance tracking",
+      "target_audience": "business, executive"
+    },
+    {
+      "headline": "Simplify Time and Attendance Management for Diverse Workforces",
+      "description": "ADP SecurTime streamlines time and attendance tracking for various employee types (full-time, part-time, contract, gig) and work arrangements (on-premise, remote, mobile). It automates processes, reduces administrative burden, and ensures compliance with labor laws, regardless of workforce complexity.",
+      "supporting_feature": "Flexible plans",
+      "target_audience": "business, executive"
+    },
+    {
+      "headline": "Ensure Compliance and Minimize Legal Risks",
+      "description": "ADP SecurTime helps businesses comply with labor laws and regulations by accurately tracking employee hours, overtime, and leave. The system's automated calculations and reporting capabilities minimize the risk of compliance violations and potential legal issues.",
+      "supporting_feature": "Overtime Management",
+      "target_audience": "business, executive"
+    },
+    {
+      "headline": "Improve Employee Safety and Hygiene",
+      "description": "ADP SecurTime offers advanced biometric capabilities like mask detection, temperature detection, and thermal scanning to ensure a safer and healthier work environment. Contactless options minimize physical contact and promote better hygiene, contributing to employee well-being and reducing the spread of illness.",
+      "supporting_feature": "Facial recognition",
+      "target_audience": "business, executive"
+    }
+  ],
+  "competitive_points": [
+    {
+      "claim": "Comprehensive Biometric Options, Including Advanced Features",
+      "explanation": "Offers a wide range of biometric options, including facial recognition, fingerprint, RFID, mask detection, temperature detection, and thermal scanning, catering to diverse organizational needs and security requirements.  The inclusion of mask and temperature detection is particularly relevant in the current environment.",
+      "compared_to": "Competitors with limited biometric options, Traditional time and attendance systems"
+    },
+    {
+      "claim": "Flexible Deployment Options: BYOD and Integration with Existing Systems",
+      "explanation": "Supports both a suite of biometric devices and the ability to integrate with existing biometric devices (BYOD - Bring Your Own Device). This provides flexibility and reduces the cost of implementation.",
+      "compared_to": "Vendors requiring proprietary hardware, Systems that don't integrate with existing infrastructure"
+    },
+    {
+      "claim": "Mobile-First Approach with Geo-Fencing and Geo-Tagging",
+      "explanation": "Strong emphasis on mobile capabilities, including geo-fencing and geo-tagging, making it suitable for managing remote, on-the-go, and distributed workforces.  Features like front camera self-validation and IMEI number tagging enhance security and prevent fraud.",
+      "compared_to": "Traditional systems lacking robust mobile capabilities, Competitors with limited geo-location features"
+    },
+    {
+      "claim": "Comprehensive Workforce Management Features on a Single Platform",
+      "explanation": "Offers a wide range of features beyond basic time and attendance, including shift scheduling, leave management, overtime management, role-based dashboards, approval workflows, and employee engagement tools, all integrated into a single platform.",
+      "compared_to": "Point solutions that only address time and attendance, Systems requiring multiple integrations"
+    },
+    {
+      "claim": "Industry-Specific Solutions",
+      "explanation": "Offers tailored solutions for various industries, including Manufacturing, Transport & Logistics, Banking and Financial Services, Healthcare, Professional & Technical Services, and Construction, addressing their specific challenges and compliance requirements.",
+      "compared_to": "Generic time and attendance systems, Solutions not optimized for specific industry needs"
+    }
+  ],
+  "call_to_action": {
+    "primary_cta": "Schedule a personalized demonstration to see ADP SecurTime in action.",
+    "secondary_cta": "Request a detailed overview of our tiered pricing and relevant case studies.",
+    "urgency_statement": null,
+    "next_steps": []
+  },
+  "elevator_pitch": "ADP SecurTime provides complete, real-time visibility into your workforce by automating everything from attendance to payroll. This eliminates costly time theft and inaccuracies, allowing you to significantly reduce labor costs and improve overall productivity.",
+  "one_liner": "Effortlessly manage employee time, attendance, and payroll in one simple solution.",
+  "key_messages": [
+    "Eliminate time theft and payroll errors with advanced biometrics.",
+    "Manage time, schedules, and leave on one simple, unified platform.",
+    "Securely track your entire workforce, from the office to the field."
+  ],
+  "common_objections": {
+    "It's too expensive": "I understand that budget is a top priority. Most of our clients look at ADP SecurTime not as a cost, but as an investment that pays for itself. By automating manual tasks and eliminating common errors like incorrect overtime calculations, businesses typically see a 2-5% reduction in payroll costs. Would you be open to a 15-minute call where we can use our ROI calculator with your numbers to project your specific savings?",
+    "We're already using a competitor": "That's great you already have a system in place; it shows you value efficient workforce management. What we often hear from businesses who switch from [competitor] is that they're seeking a more seamlessly integrated solution. Because SecurTime is built into the ADP ecosystem, it eliminates manual data transfers between time tracking and payroll, which saves time and prevents costly errors. I'm not asking you to switch today, but would you be open to a brief demo to see how that integration could benefit your team?",
+    "We don't have time to implement something new": "I hear that a lot. The idea of a new implementation can feel overwhelming when you're already busy. That's why we pair you with a dedicated implementation specialist who manages the heavy lifting, from data migration to setup. The goal is a short-term time investment that frees up hours of administrative work every week for the long term. Could I share a sample implementation plan? It shows just how much of the process we handle for you.",
+    "We need to think about it": "Of course, that's completely understandable. It\u2019s an important decision. To make sure you have all the information you need, could you share what specific aspects you'll be discussing? Whether it\u2019s the budget, functionality, or implementation timeline, I can provide more detailed resources to help guide your internal conversation. How about we schedule a brief follow-up for later this week to address any new questions that come up?",
+    "Can you prove the ROI?": "Absolutely. That's a critical question. The return on investment with SecurTime comes from tangible savings in three key areas: reduced payroll leakage, increased productivity through automation, and mitigation of compliance risks. We have a straightforward ROI calculator we can use together. Would you have 20 minutes next week to plug in your own numbers? We can build a custom business case that clearly outlines your potential payback period and long-term savings."
+  },
+  "source_processed_id": "15870a9562db",
+  "generated_at": "2025-12-07 11:29:14.012178+00:00",
+  "generation_duration_ms": 87553,
+  "total_llm_tokens_used": 4041,
+  "total_llm_cost_usd": 0.01262625,
+  "overall_confidence": 0.8571428571428571,
+  "warnings": [
+    "5 validation errors for PitchSection\nkey_points.0\n  Input should be a valid string [type=string_type, input_value={'benefit_statement': 'En...oll processing errors.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type\nkey_points.1\n  Input should be a valid string [type=string_type, input_value={'benefit_statement': 'Co... trail for compliance.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type\nkey_points.2\n  Input should be a valid string [type=string_type, input_value={'benefit_statement': 'Dr...or workforce planning.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type\nkey_points.3\n  Input should be a valid string [type=string_type, input_value={'benefit_statement': 'St... manual data transfer.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type\nkey_points.4\n  Input should be a valid string [type=string_type, input_value={'benefit_statement': 'St...all facility security.\"}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type"
+  ]
+}

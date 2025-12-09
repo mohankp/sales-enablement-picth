@@ -1,0 +1,208 @@
+{
+  "product_name": "Welcome to Python.org",
+  "product_url": "https://python.org",
+  "processing_id": "32957709ec8c",
+  "summary": {
+    "executive_summary": "",
+    "detailed_summary": "",
+    "comprehensive_summary": "",
+    "key_points": [],
+    "product_category": null,
+    "tagline": null,
+    "value_proposition": null
+  },
+  "features": {
+    "features": [],
+    "flagship_features": [],
+    "feature_count_by_category": {}
+  },
+  "benefits": {
+    "benefits": [
+      {
+        "headline": "Ensure content accessibility in restricted environments",
+        "description": "The platform is designed with graceful degradation, allowing users to access core information even when JavaScript is disabled due to security policies, legacy browsers, or accessibility tools.",
+        "target_audience": [
+          "technical",
+          "end_user"
+        ],
+        "supporting_features": [
+          "Non-essential JavaScript dependency",
+          "Static content rendering"
+        ],
+        "proof_points": [
+          "Statement: 'JavaScript is not essential for this website'"
+        ],
+        "emotional_appeal": null,
+        "business_impact": "Broadens audience reach to include users in high-security environments or with limited technical resources."
+      },
+      {
+        "headline": "Unlock full interactive capabilities",
+        "description": "By utilizing standard client-side scripting, users gain access to the complete, dynamic feature set of the platform, moving beyond static content to a fully immersive interface.",
+        "target_audience": [
+          "end_user"
+        ],
+        "supporting_features": [
+          "JavaScript-enabled interface",
+          "Dynamic content loading"
+        ],
+        "proof_points": [
+          "Statement: 'Please turn JavaScript on for the full experience'"
+        ],
+        "emotional_appeal": null,
+        "business_impact": "Maximizes user engagement and usability through a responsive interface."
+      }
+    ],
+    "top_benefits": [
+      "Ensure content accessibility in restricted environments",
+      "Unlock full interactive capabilities"
+    ],
+    "benefits_by_audience": {
+      "technical": [
+        "Ensure content accessibility in restricted environments"
+      ],
+      "end_user": [
+        "Ensure content accessibility in restricted environments",
+        "Unlock full interactive capabilities"
+      ]
+    }
+  },
+  "use_cases": {
+    "use_cases": [
+      {
+        "title": "Static Content Access (Security/Legacy Mode)",
+        "scenario": "A user is accessing the website from a high-security environment where JavaScript is disabled, or via a text-based browser/screen reader on a legacy system.",
+        "problem_solved": "Users in restricted environments or with accessibility tools often cannot access modern websites that rely entirely on client-side rendering.",
+        "solution_approach": "The website is designed with progressive enhancement, ensuring that core content remains accessible even when JavaScript is turned off.",
+        "target_audience": [],
+        "industry_vertical": "Information Technology",
+        "key_features_used": [
+          "No-JS Fallback",
+          "Static HTML Rendering"
+        ],
+        "expected_outcomes": [
+          "Successful access to core documentation",
+          "Compliance with strict security protocols"
+        ],
+        "complexity": null
+      },
+      {
+        "title": "Interactive Platform Exploration",
+        "scenario": "A developer or student visits the website to utilize dynamic tools (such as the interactive Python shell often hosted on the homepage) or navigate complex documentation menus.",
+        "problem_solved": "Static browsing limits the user's ability to engage with dynamic content, test code snippets, or navigate efficiently.",
+        "solution_approach": "The platform utilizes JavaScript to provide a 'full experience,' enabling dynamic interactions and advanced UI features.",
+        "target_audience": [],
+        "industry_vertical": "Software Development",
+        "key_features_used": [
+          "JavaScript Execution",
+          "Dynamic Content Rendering"
+        ],
+        "expected_outcomes": [
+          "Full access to interactive tools",
+          "Enhanced navigation and user experience"
+        ],
+        "complexity": null
+      }
+    ],
+    "primary_use_cases": [
+      "Static Content Access (Security/Legacy Mode)",
+      "Interactive Platform Exploration"
+    ],
+    "industries_served": [
+      "Information Technology",
+      "Software Development"
+    ]
+  },
+  "competitive_analysis": {
+    "differentiators": [],
+    "unique_capabilities": [],
+    "market_position": "Not stated in provided text",
+    "mentioned_competitors": [],
+    "competitive_advantages": [],
+    "potential_weaknesses": []
+  },
+  "audience_analysis": {
+    "segments": [],
+    "primary_audience": null,
+    "secondary_audiences": [],
+    "buyer_vs_user": null
+  },
+  "pricing": {
+    "pricing_model": "contact_sales",
+    "has_free_tier": false,
+    "has_free_trial": false,
+    "trial_duration": null,
+    "tiers": [],
+    "currency": "USD",
+    "pricing_page_url": null,
+    "notes": [
+      "Pricing not publicly available"
+    ]
+  },
+  "technical_specs": {
+    "platforms_supported": [
+      "Web"
+    ],
+    "deployment_options": [],
+    "integrations": [],
+    "api_available": false,
+    "api_type": null,
+    "security_certifications": [],
+    "compliance_standards": [],
+    "system_requirements": {
+      "Browser Settings": "JavaScript enabled (recommended for full experience)"
+    },
+    "performance_metrics": {},
+    "data_residency_options": []
+  },
+  "visual_inventory": {
+    "images": [
+      {
+        "asset_id": "ae79195affa1",
+        "asset_type": "image",
+        "url": "https://www.python.org/static/img/python-logo.png",
+        "local_path": "data/media/images/ae79195affa1.png",
+        "alt_text": "python\u2122",
+        "caption": null,
+        "title": "",
+        "source_context": null,
+        "is_logo": true,
+        "is_screenshot": false,
+        "is_diagram": false,
+        "is_icon": false,
+        "width": 580,
+        "height": 164,
+        "table_headers": [],
+        "table_row_count": 0,
+        "table_markdown": null,
+        "is_comparison_table": false,
+        "is_pricing_table": false,
+        "video_platform": null,
+        "video_duration": null,
+        "thumbnail_url": null
+      }
+    ],
+    "tables": [],
+    "videos": [],
+    "screenshots": [],
+    "diagrams": [],
+    "logos": [
+      "ae79195affa1"
+    ],
+    "comparison_tables": [],
+    "pricing_tables": []
+  },
+  "feature_visuals": {},
+  "source_extraction_id": "test-media-fix_20251205_165801",
+  "source_content_hash": "3613c70b881d989c1090700789ad2f7193e8dfd5f8475f37a7ba158a4bb4dacf",
+  "processed_at": "2025-12-09 16:16:41.405237+00:00",
+  "processing_duration_ms": 70115,
+  "total_llm_tokens_used": 2501,
+  "total_llm_cost_usd": 0.011587499999999999,
+  "overall_confidence": 0.625,
+  "warnings": [],
+  "errors": [
+    "features: No valid JSON found in response",
+    "audience: 1 validation error for AudienceSegment\nkey_messages\n  Input should be a valid list [type=list_type, input_value='Python is a powerful, fa...grates with everything.', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/list_type",
+    "summary: 1 validation error for ContentSummary\ncomprehensive_summary\n  Input should be a valid string [type=string_type, input_value={'Introduction': \"The pro...for website usability.'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/string_type"
+  ]
+}

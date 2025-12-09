@@ -3,7 +3,7 @@
 import logging
 from typing import Optional
 
-from src.llm import AnthropicClient, ModelSettings, ModelName, parse_json
+from src.llm import LLMProvider, parse_json
 from src.models.pitch import SectionType, SectionVisualAsset
 from src.models.processed import VisualAssetReference, VisualInventory
 
@@ -16,6 +16,8 @@ class SectionVisualMatcher:
 
     Uses intelligent matching based on section content and visual metadata
     to determine which visuals best support each section.
+
+    Works with any LLM provider (Anthropic, Gemini, etc.).
     """
 
     # Default max visuals per section type
@@ -50,12 +52,12 @@ class SectionVisualMatcher:
         SectionType.ROI: ["diagram", "comparison_table"],
     }
 
-    def __init__(self, llm_client: AnthropicClient):
+    def __init__(self, llm_client: LLMProvider):
         """
         Initialize the visual matcher.
 
         Args:
-            llm_client: Anthropic API client for LLM calls
+            llm_client: LLM provider for API calls (Anthropic, Gemini, etc.)
         """
         self.client = llm_client
 
@@ -241,12 +243,12 @@ placement guide:
 - comparison: For tables/comparisons"""
 
         try:
-            settings = ModelSettings(
-                model=ModelName.HAIKU,
+            # Use fast model with low temperature for structured output
+            response = await self.client.complete(
+                prompt,
                 max_tokens=1000,
                 temperature=0.1,
             )
-            response = await self.client.complete(prompt, settings=settings)
 
             data = parse_json(response.content)
             selections = data.get("selections", [])

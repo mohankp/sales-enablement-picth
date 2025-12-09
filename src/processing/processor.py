@@ -15,8 +15,11 @@ from pydantic import BaseModel, Field
 from src.llm import (
     AnthropicClient,
     LLMConfig,
+    LLMProvider,
     ModelName,
     ModelSettings,
+    ProviderType,
+    create_llm_provider,
     parse_json,
     parse_model,
     ParseError,
@@ -54,12 +57,21 @@ logger = logging.getLogger(__name__)
 class ProcessingConfig(BaseModel):
     """Configuration for content processing."""
 
+    # Provider selection
+    provider: ProviderType = ProviderType.ANTHROPIC
+
     # LLM Settings
     llm_config: Optional[LLMConfig] = None
     default_model: ModelName = ModelName.SONNET
     analysis_model: ModelName = ModelName.SONNET  # For deep analysis
     extraction_model: ModelName = ModelName.SONNET  # For data extraction
     summarization_model: ModelName = ModelName.HAIKU  # For summaries
+
+    # Gemini model equivalents (used when provider is GEMINI)
+    gemini_default_model: str = "gemini-3-pro-preview"
+    gemini_analysis_model: str = "gemini-3-pro-preview"  # For deep analysis
+    gemini_extraction_model: str = "gemini-3-pro-preview"  # For data extraction
+    gemini_summarization_model: str = "gemini-2.5-flash"  # For summaries (fast)
 
     # Processing options
     enable_features: bool = True
@@ -107,15 +119,22 @@ class ContentProcessor:
     Takes extracted website content and produces structured
     product information suitable for pitch generation.
 
+    Supports multiple LLM providers (Anthropic Claude, Google Gemini).
+
     Usage:
         config = ProcessingConfig()
+        async with ContentProcessor(config) as processor:
+            result = await processor.process(extracted_content)
+
+        # Using Gemini
+        config = ProcessingConfig(provider=ProviderType.GEMINI)
         async with ContentProcessor(config) as processor:
             result = await processor.process(extracted_content)
     """
 
     def __init__(self, config: Optional[ProcessingConfig] = None):
         self.config = config or ProcessingConfig()
-        self._client: Optional[AnthropicClient] = None
+        self._client: Optional[LLMProvider] = None
         self._chunker = ContentChunker(
             strategy=self.config.chunking_strategy,
             max_chars=self.config.max_chunk_chars,
@@ -143,10 +162,28 @@ class ContentProcessor:
     async def start(self) -> None:
         """Initialize the processor and LLM client."""
         llm_config = self.config.llm_config or LLMConfig()
-        self._client = AnthropicClient(llm_config)
+
+        # Get default model based on provider
+        if self.config.provider == ProviderType.GEMINI:
+            default_model = self.config.gemini_default_model
+        else:
+            default_model = self.config.default_model.value
+
+        # Create provider using factory
+        self._client = create_llm_provider(
+            provider=self.config.provider,
+            api_key=llm_config.get_api_key_value(),
+            default_model=default_model,
+            timeout_seconds=llm_config.timeout_seconds,
+            max_retries=llm_config.retry.max_retries,
+            requests_per_minute=llm_config.requests_per_minute,
+            track_costs=llm_config.track_costs,
+            log_requests=llm_config.log_requests,
+            log_responses=llm_config.log_responses,
+        )
         await self._client.start()
         self._semaphore = asyncio.Semaphore(self.config.max_concurrent_requests)
-        logger.info("ContentProcessor initialized")
+        logger.info(f"ContentProcessor initialized with {self.config.provider.value} provider")
 
     async def stop(self) -> None:
         """Shutdown the processor."""
@@ -155,13 +192,31 @@ class ContentProcessor:
             self._client = None
         logger.info("ContentProcessor stopped")
 
-    def _ensure_client(self) -> AnthropicClient:
+    def _ensure_client(self) -> LLMProvider:
         """Ensure client is initialized."""
         if self._client is None:
             raise RuntimeError(
                 "Processor not initialized. Use 'async with ContentProcessor()' or call start()."
             )
         return self._client
+
+    def _get_model_for_task(self, task: str) -> str:
+        """Get the appropriate model name for a task based on provider."""
+        if self.config.provider == ProviderType.GEMINI:
+            model_map = {
+                "extraction": self.config.gemini_extraction_model,
+                "analysis": self.config.gemini_analysis_model,
+                "summarization": self.config.gemini_summarization_model,
+                "default": self.config.gemini_default_model,
+            }
+        else:
+            model_map = {
+                "extraction": self.config.extraction_model.value,
+                "analysis": self.config.analysis_model.value,
+                "summarization": self.config.summarization_model.value,
+                "default": self.config.default_model.value,
+            }
+        return model_map.get(task, model_map["default"])
 
     async def process(
         self,
@@ -416,12 +471,14 @@ Content (first 2000 chars):
 Product name:"""
 
         try:
-            settings = ModelSettings(
-                model=ModelName.HAIKU,
+            # Use appropriate fast model based on provider
+            model = self._get_model_for_task("summarization")
+            response = await client.complete(
+                prompt,
                 max_tokens=50,
                 temperature=0.0,
+                model=model,
             )
-            response = await client.complete(prompt, settings=settings)
             return response.content.strip().strip('"').strip("'")
         except Exception as e:
             logger.warning(f"Failed to detect product name: {e}")
@@ -434,47 +491,40 @@ Product name:"""
         client = self._ensure_client()
         start_time = time.time()
 
-        prompt = f"""Analyze this product documentation for {product_name} and extract ALL product features.
+        # Use a more concise prompt to avoid output truncation
+        prompt = f"""Analyze this product documentation for {product_name} and extract product features.
 
 ## Content
-{content[:80000]}
+{content[:60000]}
 
 ## Instructions
-For each feature found, provide:
-1. name: Clear, concise feature name
-2. description: What the feature does
-3. category: One of [core, integration, security, performance, usability, analytics, collaboration, automation, customization, support, other]
-4. benefits: List of customer benefits
-5. use_cases: When/how to use it
-6. technical_details: Any specs or requirements
-7. is_flagship: true if this is a headline/major feature
-8. is_unique: true if this appears to be unique to this product
+For each feature, provide CONCISE info:
+- name: Short feature name (max 5 words)
+- description: Brief description (1-2 sentences max)
+- category: [core|integration|security|performance|usability|analytics|collaboration|automation|customization|support|other]
+- benefits: 1-3 short benefit phrases
+- use_cases: 1-2 brief use cases
+- technical_details: Optional, only if mentioned
+- is_flagship: true if major/headline feature
+- is_unique: true if unique to this product
 
-Return a JSON object with this structure:
-{{
-  "features": [
-    {{
-      "name": "Feature Name",
-      "description": "Description",
-      "category": "core",
-      "benefits": ["benefit1", "benefit2"],
-      "use_cases": ["use case 1"],
-      "technical_details": "optional tech details",
-      "is_flagship": false,
-      "is_unique": false
-    }}
-  ]
-}}
+Return JSON:
+{{"features": [{{"name": "...", "description": "...", "category": "...", "benefits": [...], "use_cases": [...], "technical_details": null, "is_flagship": false, "is_unique": false}}]}}
 
-Extract ALL features you can find. Be thorough."""
+Focus on the TOP 15-20 most important features. Keep descriptions concise."""
 
         try:
-            settings = ModelSettings(
-                model=self.config.extraction_model,
-                max_tokens=8000,
+            model = self._get_model_for_task("extraction")
+            response = await client.complete(
+                prompt,
+                max_tokens=12000,  # Increased for feature extraction
                 temperature=0.2,
+                model=model,
             )
-            response = await client.complete(prompt, settings=settings)
+
+            # Log warning if response may be truncated
+            if response.stop_reason and "MAX" in str(response.stop_reason).upper():
+                logger.warning("Feature extraction response may be truncated due to token limit")
 
             data = parse_json(response.content)
             features_data = data.get("features", [])
@@ -555,12 +605,13 @@ Return JSON:
 Focus on the most compelling benefits."""
 
         try:
-            settings = ModelSettings(
-                model=self.config.extraction_model,
+            model = self._get_model_for_task("extraction")
+            response = await client.complete(
+                prompt,
                 max_tokens=6000,
                 temperature=0.3,
+                model=model,
             )
-            response = await client.complete(prompt, settings=settings)
 
             data = parse_json(response.content)
             benefits_data = data.get("benefits", [])
@@ -642,12 +693,13 @@ Return JSON:
 }}"""
 
         try:
-            settings = ModelSettings(
-                model=self.config.extraction_model,
+            model = self._get_model_for_task("extraction")
+            response = await client.complete(
+                prompt,
                 max_tokens=6000,
                 temperature=0.3,
+                model=model,
             )
-            response = await client.complete(prompt, settings=settings)
 
             data = parse_json(response.content)
             use_cases_data = data.get("use_cases", [])
@@ -728,12 +780,13 @@ Return JSON:
 strength can be: strong, moderate, weak"""
 
         try:
-            settings = ModelSettings(
-                model=self.config.analysis_model,
+            model = self._get_model_for_task("analysis")
+            response = await client.complete(
+                prompt,
                 max_tokens=4000,
                 temperature=0.3,
+                model=model,
             )
-            response = await client.complete(prompt, settings=settings)
 
             data = parse_json(response.content)
 
@@ -804,12 +857,13 @@ Return JSON:
 }}"""
 
         try:
-            settings = ModelSettings(
-                model=self.config.analysis_model,
+            model = self._get_model_for_task("analysis")
+            response = await client.complete(
+                prompt,
                 max_tokens=5000,
                 temperature=0.3,
+                model=model,
             )
-            response = await client.complete(prompt, settings=settings)
 
             data = parse_json(response.content)
 
@@ -899,12 +953,13 @@ pricing_model options: free, freemium, subscription, usage_based, per_seat, tier
 If no pricing found, return {{"pricing_model": "contact_sales", "notes": ["Pricing not publicly available"]}}"""
 
         try:
-            settings = ModelSettings(
-                model=self.config.extraction_model,
+            model = self._get_model_for_task("extraction")
+            response = await client.complete(
+                prompt,
                 max_tokens=4000,
                 temperature=0.1,
+                model=model,
             )
-            response = await client.complete(prompt, settings=settings)
 
             data = parse_json(response.content)
 
@@ -992,12 +1047,13 @@ Return JSON:
 }}"""
 
         try:
-            settings = ModelSettings(
-                model=self.config.extraction_model,
+            model = self._get_model_for_task("extraction")
+            response = await client.complete(
+                prompt,
                 max_tokens=4000,
                 temperature=0.1,
+                model=model,
             )
-            response = await client.complete(prompt, settings=settings)
 
             data = parse_json(response.content)
 
@@ -1072,12 +1128,13 @@ Return JSON:
 }}"""
 
         try:
-            settings = ModelSettings(
-                model=self.config.summarization_model,
+            model = self._get_model_for_task("summarization")
+            response = await client.complete(
+                prompt,
                 max_tokens=4000,
                 temperature=0.4,
+                model=model,
             )
-            response = await client.complete(prompt, settings=settings)
 
             data = parse_json(response.content)
 
@@ -1198,12 +1255,14 @@ Return JSON:
 Only include features that have relevant visuals."""
 
         try:
-            settings = ModelSettings(
-                model=ModelName.HAIKU,  # Use fast model for this
+            # Use fast model for this task
+            model = self._get_model_for_task("summarization")
+            response = await client.complete(
+                prompt,
                 max_tokens=2000,
                 temperature=0.1,
+                model=model,
             )
-            response = await client.complete(prompt, settings=settings)
 
             data = parse_json(response.content)
             mappings = data.get("mappings", {})

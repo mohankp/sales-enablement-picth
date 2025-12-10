@@ -1362,6 +1362,412 @@ def export_pdf(
         sys.exit(1)
 
 
+@app.command()
+def refine(
+    input_file: str = typer.Argument(..., help="Path to generated pitch JSON file"),
+    instruction: Optional[str] = typer.Option(
+        None, "--instruction", "-i", help="Refinement instruction"
+    ),
+    section: Optional[str] = typer.Option(
+        None, "--section", "-s",
+        help="Target section: hook, problem, solution, features, benefits, use_cases, differentiators, social_proof, pricing, cta, objection_handling, technical, roi, closing"
+    ),
+    refinement_type: Optional[str] = typer.Option(
+        None, "--type", "-t",
+        help="Refinement type: tone, section, length, audience, custom"
+    ),
+    target_tone: Optional[str] = typer.Option(
+        None, "--target-tone",
+        help="Target tone for tone refinements: professional, conversational, technical, executive, enthusiastic, consultative"
+    ),
+    interactive: bool = typer.Option(
+        False, "--interactive", "-I", help="Enter interactive refinement mode"
+    ),
+    output: Optional[str] = typer.Option(
+        None, "--output", "-o", help="Output file path for refined pitch"
+    ),
+    model: str = typer.Option(
+        "gemini-2.0-flash", "--model", "-m", help="Model to use"
+    ),
+    provider: str = typer.Option(
+        "gemini", "--provider", "-p", help="LLM provider to use (anthropic, gemini)"
+    ),
+    verbose: bool = typer.Option(
+        False, "--verbose", "-v", help="Enable verbose logging"
+    ),
+) -> None:
+    """
+    Refine a generated pitch with natural language instructions.
+
+    Supports both single-shot refinements and interactive mode for
+    iterative improvements with undo/redo support.
+
+    Examples:
+        pitch-gen refine pitch.json --instruction "make it more technical"
+        pitch-gen refine pitch.json --section hook --instruction "add urgency"
+        pitch-gen refine pitch.json --interactive
+        pitch-gen refine pitch.json --target-tone executive
+    """
+    setup_logging(verbose)
+
+    input_path = Path(input_file)
+    if not input_path.exists():
+        console.print(f"[red]Input file not found: {input_file}[/red]")
+        sys.exit(1)
+
+    # Load pitch
+    try:
+        with open(input_path) as f:
+            data = json.load(f)
+        from src.models.pitch import Pitch
+        pitch = Pitch.model_validate(data)
+    except Exception as e:
+        console.print(f"[red]Failed to load pitch file: {e}[/red]")
+        sys.exit(1)
+
+    # Check if we need interactive mode or instruction
+    if interactive:
+        # Run interactive REPL
+        run_interactive_refinement(input_path, pitch, provider, model, verbose)
+        return
+
+    if not instruction and not target_tone:
+        console.print("[red]Either --instruction or --target-tone is required (or use --interactive)[/red]")
+        sys.exit(1)
+
+    console.print(Panel.fit(
+        f"[bold blue]Pitch Refinement Engine[/bold blue]\n"
+        f"Refining: {input_file}\n"
+        f"Provider: {provider}",
+        title="Sales Pitch Generator",
+    ))
+
+    # Import refinement modules
+    from src.refinement import (
+        RefinementEngine,
+        RefinementConfig,
+        RefinementRequest,
+        RefinementType,
+        RefinementHistory,
+    )
+    from src.models.pitch import PitchTone, SectionType
+    from src.llm import ProviderType
+
+    # Map provider
+    provider_map = {
+        "anthropic": ProviderType.ANTHROPIC,
+        "gemini": ProviderType.GEMINI,
+    }
+    selected_provider = provider_map.get(provider.lower(), ProviderType.GEMINI)
+
+    # Build refinement config
+    config = RefinementConfig(
+        provider=selected_provider,
+        model=model,
+        verbose=verbose,
+    )
+
+    # Build refinement request
+    req_type = RefinementType.CUSTOM
+    if refinement_type:
+        try:
+            req_type = RefinementType(refinement_type.lower())
+        except ValueError:
+            console.print(f"[yellow]Unknown refinement type: {refinement_type}, using 'custom'[/yellow]")
+
+    target_section_type = None
+    if section:
+        try:
+            target_section_type = SectionType(section.lower())
+            req_type = RefinementType.SECTION
+        except ValueError:
+            console.print(f"[yellow]Unknown section type: {section}[/yellow]")
+
+    target_pitch_tone = None
+    if target_tone:
+        try:
+            target_pitch_tone = PitchTone(target_tone.lower())
+            req_type = RefinementType.TONE
+            if not instruction:
+                instruction = f"Change the tone to {target_tone}"
+        except ValueError:
+            console.print(f"[yellow]Unknown tone: {target_tone}[/yellow]")
+
+    request = RefinementRequest(
+        instruction=instruction or "",
+        refinement_type=req_type,
+        target_section=target_section_type,
+        target_tone=target_pitch_tone,
+    )
+
+    # Load or create history
+    history = RefinementHistory.load_for_pitch(input_path)
+    if not history:
+        history = RefinementHistory.create_for_pitch(pitch, input_path)
+
+    async def run_refinement():
+        async with RefinementEngine(config) as engine:
+            with Progress(
+                SpinnerColumn(),
+                TextColumn("[progress.description]{task.description}"),
+                TimeElapsedColumn(),
+                console=console,
+            ) as progress:
+                task = progress.add_task("Refining pitch...", total=None)
+                result = await engine.refine(pitch, request, history)
+                progress.update(task, completed=True)
+            return result
+
+    try:
+        result = asyncio.run(run_refinement())
+
+        # Display results
+        display_refinement_results(result)
+
+        if result.success:
+            # Save refined pitch
+            output_path = Path(output) if output else input_path
+            with open(output_path, "w") as f:
+                json.dump(result.refined_pitch.model_dump(), f, default=str, indent=2)
+            console.print(f"\n[green]Refined pitch saved to: {output_path}[/green]")
+
+            # Save history
+            history.save()
+            console.print(f"[green]History saved to: {history._file_path}[/green]")
+        else:
+            console.print(f"\n[red]Refinement failed: {result.error}[/red]")
+            sys.exit(1)
+
+    except KeyboardInterrupt:
+        console.print("\n[yellow]Refinement cancelled by user[/yellow]")
+        sys.exit(1)
+    except Exception as e:
+        console.print(f"\n[red]Refinement failed: {e}[/red]")
+        if verbose:
+            console.print_exception()
+        sys.exit(1)
+
+
+def display_refinement_results(result) -> None:
+    """Display refinement results."""
+    console.print("\n")
+
+    if result.success:
+        # Summary panel
+        summary = f"""
+[bold]Status:[/bold] Success
+[bold]Refinement Type:[/bold] {result.refinement_type.value}
+[bold]Tokens Used:[/bold] {result.tokens_used:,}
+[bold]Cost:[/bold] ${result.cost_usd:.4f}
+[bold]Duration:[/bold] {result.latency_ms / 1000:.1f}s
+"""
+        console.print(Panel(summary, title="Refinement Result", border_style="green"))
+
+        # Changes made
+        if result.changes_summary:
+            console.print("\n[bold]Changes Made:[/bold]")
+            for change in result.changes_summary:
+                console.print(f"  • {change}")
+
+        # Rationale
+        if result.refinement_rationale:
+            console.print(Panel(
+                result.refinement_rationale,
+                title="Rationale",
+                border_style="blue",
+            ))
+    else:
+        console.print(Panel(
+            f"[red]{result.error}[/red]",
+            title="Refinement Failed",
+            border_style="red",
+        ))
+
+
+def run_interactive_refinement(
+    pitch_path: Path,
+    pitch,
+    provider: str,
+    model: str,
+    verbose: bool,
+) -> None:
+    """Run interactive refinement REPL."""
+    from src.refinement import (
+        RefinementEngine,
+        RefinementConfig,
+        RefinementRequest,
+        RefinementHistory,
+    )
+    from src.llm import ProviderType
+
+    # Map provider
+    provider_map = {
+        "anthropic": ProviderType.ANTHROPIC,
+        "gemini": ProviderType.GEMINI,
+    }
+    selected_provider = provider_map.get(provider.lower(), ProviderType.GEMINI)
+
+    config = RefinementConfig(
+        provider=selected_provider,
+        model=model,
+        verbose=verbose,
+    )
+
+    # Load or create history
+    history = RefinementHistory.load_for_pitch(pitch_path)
+    if not history:
+        history = RefinementHistory.create_for_pitch(pitch, pitch_path)
+
+    current_pitch = history.get_current_pitch(pitch)
+
+    # Display header
+    console.print(Panel(
+        f"[bold]{current_pitch.product_name}[/bold]\n"
+        f"Sections: {len(current_pitch.sections)} | "
+        f"History: {len(history.entries)} refinements",
+        title="Refinement Session",
+        border_style="blue",
+    ))
+    console.print("\n[dim]Commands: undo, redo, history, save, sections, help, exit[/dim]\n")
+
+    async def async_refine(engine, pitch_to_refine, instruction):
+        request = RefinementRequest(instruction=instruction)
+        return await engine.refine(pitch_to_refine, request, history)
+
+    async def run_repl():
+        async with RefinementEngine(config) as engine:
+            nonlocal current_pitch
+
+            while True:
+                try:
+                    # Get user input
+                    user_input = console.input("[bold cyan]refine>[/bold cyan] ").strip()
+
+                    if not user_input:
+                        continue
+
+                    # Handle commands
+                    cmd = user_input.lower()
+
+                    if cmd in ("exit", "quit", "q"):
+                        console.print("\n[dim]Session ended. History preserved.[/dim]")
+                        break
+
+                    elif cmd == "help":
+                        console.print("""
+[bold]Commands:[/bold]
+  undo              Undo the last refinement
+  redo              Redo the last undone refinement
+  history           Show refinement history
+  save [path]       Save current pitch
+  sections          List pitch sections
+  export pptx|pdf   Export to format
+  help              Show this help
+  exit/quit         End session
+
+[bold]Refinement:[/bold]
+  Type any instruction to refine the pitch:
+  - "make it more technical"
+  - "update the hook to be more compelling"
+  - "change tone to executive"
+  - "expand the benefits section"
+""")
+
+                    elif cmd == "undo":
+                        prev_pitch = history.undo()
+                        if prev_pitch:
+                            current_pitch = prev_pitch
+                            console.print("[green]✓ Undone[/green]")
+                        else:
+                            console.print("[yellow]Nothing to undo[/yellow]")
+
+                    elif cmd == "redo":
+                        next_pitch = history.redo()
+                        if next_pitch:
+                            current_pitch = next_pitch
+                            console.print("[green]✓ Redone[/green]")
+                        else:
+                            console.print("[yellow]Nothing to redo[/yellow]")
+
+                    elif cmd == "history":
+                        entries = history.list_entries()
+                        if entries:
+                            console.print("\n[bold]Refinement History:[/bold]")
+                            for i, entry in enumerate(entries):
+                                marker = "→" if i == history.current_index else " "
+                                console.print(f"  {marker} {i + 1}. {entry}")
+                        else:
+                            console.print("[dim]No refinement history[/dim]")
+
+                    elif cmd == "sections":
+                        console.print("\n[bold]Pitch Sections:[/bold]")
+                        for section in sorted(current_pitch.sections, key=lambda s: s.order):
+                            console.print(f"  [{section.order}] {section.section_type.value}: {section.title}")
+
+                    elif cmd.startswith("save"):
+                        parts = cmd.split(maxsplit=1)
+                        save_path = Path(parts[1]) if len(parts) > 1 else pitch_path
+                        with open(save_path, "w") as f:
+                            json.dump(current_pitch.model_dump(), f, default=str, indent=2)
+                        history.save()
+                        console.print(f"[green]✓ Saved to {save_path}[/green]")
+                        console.print(f"[green]✓ History saved to {history._file_path}[/green]")
+
+                    elif cmd.startswith("export"):
+                        parts = cmd.split()
+                        if len(parts) < 2:
+                            console.print("[yellow]Usage: export pptx|pdf [output_path][/yellow]")
+                            continue
+                        export_format = parts[1].lower()
+                        export_path = Path(parts[2]) if len(parts) > 2 else pitch_path.with_suffix(f".{export_format}")
+
+                        if export_format == "pptx":
+                            from src.generation.composers import PPTXComposer, PPTXConfig
+                            composer = PPTXComposer(PPTXConfig())
+                            result = composer.compose(current_pitch, export_path)
+                            if result.success:
+                                console.print(f"[green]✓ Exported to {export_path} ({result.page_count} slides)[/green]")
+                            else:
+                                console.print(f"[red]Export failed: {result.errors}[/red]")
+                        elif export_format == "pdf":
+                            from src.generation.composers import PDFComposer, PDFConfig
+                            composer = PDFComposer(PDFConfig())
+                            result = composer.compose(current_pitch, export_path)
+                            if result.success:
+                                console.print(f"[green]✓ Exported to {export_path} ({result.page_count} pages)[/green]")
+                            else:
+                                console.print(f"[red]Export failed: {result.errors}[/red]")
+                        else:
+                            console.print(f"[yellow]Unknown format: {export_format}[/yellow]")
+
+                    else:
+                        # Treat as refinement instruction
+                        console.print("[dim]Refining...[/dim]")
+                        result = await async_refine(engine, current_pitch, user_input)
+
+                        if result.success:
+                            current_pitch = result.refined_pitch
+                            console.print("[green]✓ Refined[/green]")
+                            if result.changes_summary:
+                                console.print("\n[bold]Changes:[/bold]")
+                                for change in result.changes_summary[:3]:
+                                    console.print(f"  • {change}")
+                        else:
+                            console.print(f"[red]Failed: {result.error}[/red]")
+
+                except KeyboardInterrupt:
+                    console.print("\n[dim]Use 'exit' to quit[/dim]")
+                except EOFError:
+                    break
+
+    try:
+        asyncio.run(run_repl())
+    except Exception as e:
+        console.print(f"\n[red]Error: {e}[/red]")
+        if verbose:
+            console.print_exception()
+
+
 @app.callback()
 def main():
     """

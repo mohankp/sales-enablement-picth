@@ -164,6 +164,32 @@ Options:
 - `--justified/--no-justified`: Use justified text (default: yes)
 - `--verbose, -v`: Enable debug logging
 
+### Refine a generated pitch
+```bash
+# Single refinement
+python -m src.main refine pitch.json --instruction "make it more technical"
+
+# Section-specific refinement
+python -m src.main refine pitch.json --section hook --instruction "add urgency"
+
+# Change tone
+python -m src.main refine pitch.json --target-tone executive
+
+# Interactive mode
+python -m src.main refine pitch.json --interactive
+```
+
+Options:
+- `--instruction, -i`: Natural language refinement instruction
+- `--section, -s`: Target section (hook, problem, solution, features, benefits, etc.)
+- `--type, -t`: Refinement type (tone, section, length, audience, custom)
+- `--target-tone`: Target tone for tone refinements
+- `--interactive, -I`: Enter interactive REPL mode
+- `--output, -o`: Output file path
+- `--model, -m`: Model to use (default: gemini-2.0-flash)
+- `--provider, -p`: LLM provider (anthropic, gemini)
+- `--verbose, -v`: Enable debug logging
+
 ## Development
 
 ### Running Tests
@@ -258,6 +284,49 @@ result = pdf_composer.compose(pitch, Path("document.pdf"))
 print(f"Created {result.page_count} pages")
 ```
 
+**Pitch Refinement:**
+```python
+from src.refinement import RefinementEngine, RefinementConfig, RefinementRequest, RefinementHistory
+from src.models.pitch import PitchTone, SectionType
+
+# Load existing pitch and history
+pitch = Pitch.model_validate(json.load(open("pitch.json")))
+history = RefinementHistory.load_for_pitch(Path("pitch.json"))
+
+# Configure refinement engine
+config = RefinementConfig(
+    provider=ProviderType.GEMINI,
+    model="gemini-2.0-flash",
+)
+
+async with RefinementEngine(config) as engine:
+    # Simple refinement
+    request = RefinementRequest(instruction="make it more technical")
+    result = await engine.refine(pitch, request, history)
+    print(f"Changes: {result.changes_summary}")
+
+    # Section-specific refinement
+    result = await engine.refine_section(
+        result.refined_pitch,
+        SectionType.HOOK,
+        "add more urgency and a compelling statistic"
+    )
+
+    # Tone change
+    result = await engine.change_tone(
+        result.refined_pitch,
+        PitchTone.EXECUTIVE,
+        history=history
+    )
+
+# Undo/redo support
+previous_pitch = history.undo()
+next_pitch = history.redo()
+
+# Save history
+history.save()
+```
+
 ## Project Status
 
 ### Completed (Phase 1)
@@ -318,9 +387,17 @@ print(f"Created {result.page_count} pages")
   - Visual asset embedding
   - CLI `export-pptx` and `export-pdf` commands
 
+### Completed (Phase 5)
+- [x] Refinement Engine
+  - RefinementEngine orchestrator with async support
+  - Multiple refinement types (tone, section, length, audience, custom)
+  - Auto-classification of refinement instructions
+  - Persistent history with undo/redo support
+  - Interactive REPL mode for iterative refinement
+  - CLI `refine` command with single-shot and interactive modes
+
 ### TODO
 - [ ] Incremental Update System
-- [ ] Refinement Engine (conversational)
 
 ## Key Design Decisions
 
